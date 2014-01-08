@@ -25,3 +25,17 @@ shared_context "not expect to convert" do
     expect(converter.rewrite(source_buffer, ast)).to eq source
   end
 end
+
+shared_context "interesting file" do
+  it "interests file" do
+    converter = described_class.new
+    expect(converter.interesting_files.any? { |file_pattern| filename =~ file_pattern }).to eq true
+  end
+end
+
+shared_context "not interesting file" do
+  it "does not interest file" do
+    converter = described_class.new
+    expect(converter.interesting_files.none? { |file_pattern| filename =~ file_pattern }).to eq true
+  end
+end
