@@ -1,5 +1,7 @@
+# coding: utf-8
 require "synvert/version"
 
 module Synvert
-  # Your code goes here...
+  autoload :CheckingVisitor, 'synvert/checking_visitor'
+  autoload :FactoryGirl, 'synvert/factory_girl'
 end
