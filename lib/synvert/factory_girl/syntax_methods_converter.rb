@@ -1,6 +1,4 @@
 # coding: utf-8
-require 'parser'
-require 'ast'
 
 module Synvert
   module FactoryGirl
