@@ -5,43 +5,46 @@ describe Synvert::FactoryGirl::SyntaxMethodsConverter do
   describe "#interesting_files" do
     context "spec/spec_helper.rb" do
       let(:filename) { "spec/spec_helper.rb" }
-
       include_context "interesting file"
     end
 
     context "test/test_helper.rb" do
       let(:filename) { "test/test_helper.rb" }
+      include_context "interesting file"
+    end
 
+    context "features/support/env.rb" do
+      let(:filename) { "features/support/env.rb" }
       include_context "interesting file"
     end
 
     context "spec/support/shared_context.rb" do
       let(:filename) { "spec/support/shared_context.rb" }
-
       include_context "interesting file"
     end
 
     context "test/support/shared_context.rb" do
       let(:filename) { "test/support/shared_context.rb" }
-
       include_context "interesting file"
     end
 
     context "spec/models/post_spec.rb" do
       let(:filename) { "spec/models/post_spec.rb" }
-
       include_context "interesting file"
     end
 
     context "test/unit/post_test.rb" do
       let(:filename) { "test/unit/post_test.rb" }
+      include_context "interesting file"
+    end
 
+    context "features/step_definitions/post_steps.rb" do
+      let(:filename) { "features/step_definitions/post_steps.rb" }
       include_context "interesting file"
     end
 
     context "app/models/post.rb" do
       let(:filename) { "app/models/post.rb" }
-
       include_context "not interesting file"
     end
   end
@@ -63,7 +66,6 @@ describe Synvert::FactoryGirl::SyntaxMethodsConverter do
       end
       EOF
     }
-
     include_context "expect to convert"
   end
 
@@ -83,7 +85,6 @@ describe Synvert::FactoryGirl::SyntaxMethodsConverter do
         end
         EOF
       }
-
       include_context "expect to convert"
     end
 
@@ -104,9 +105,24 @@ describe Synvert::FactoryGirl::SyntaxMethodsConverter do
         end
         EOF
       }
-
       include_context "expect to convert"
     end
+  end
+
+  context "features/support/env.rb" do
+    let(:filename) { "features/support/env.rb" }
+    let(:source) {
+      <<-EOF
+      require 'cucumber/rails'
+      EOF
+    }
+    let(:expected_source) {
+      <<-EOF
+      require 'cucumber/rails'
+      World(FactoryGirl::Syntax::Methods)
+      EOF
+    }
+    include_context "expect to convert"
   end
 
   context "FactoryGirl.create" do

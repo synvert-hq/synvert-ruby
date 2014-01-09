@@ -7,12 +7,21 @@ module Synvert
 
       def interesting_files
         [/spec\/spec_helper\.rb/, /spec\/support\/.*\.rb/, /spec\/.*_spec\.rb/] +
-          [/test\/test_helper\.rb/, /test\/support\/.*\.rb/, /test\/.*_test\.rb/]
+          [/test\/test_helper\.rb/, /test\/support\/.*\.rb/, /test\/.*_test\.rb/] +
+          [/features\/support\/env\.rb/, /features\/.*\.rb/]
+      end
+
+      def rewrite(source_buffer, ast)
+        super
+
+        @filename = source_buffer.name
+        @ast = ast
+        final_check
       end
 
       def on_class(node)
         if (class_name(node) == to_ast("ActiveSupport::TestCase") || class_name(node) == to_ast("Test::Unit::TestCase")) &&
-           contains_statement?(class_body(node), "include FactoryGirl::Syntax::Methods")
+           !contains_statement?(class_body(node), "include FactoryGirl::Syntax::Methods")
           class_indent = node.loc.expression.column
           new_code_indent = class_indent + 2
           insert_after node.children[0].loc.expression, "\n#{' '*new_code_indent}include FactoryGirl::Syntax::Methods"
@@ -24,7 +33,7 @@ module Synvert
       def on_block(node)
         if block_send_receiver(node) == to_ast("RSpec") &&
            block_send_message(node) == :configure &&
-           contains_statement?(block_body(node), "config.include FactoryGirl::Syntax::Methods")
+           !contains_statement?(block_body(node), "config.include FactoryGirl::Syntax::Methods")
           block_indent = node.loc.expression.column
           new_code_indent = block_indent + 2
           insert_after node.children[1].loc.expression, "\n#{' '*new_code_indent}config.include FactoryGirl::Syntax::Methods"
@@ -40,6 +49,14 @@ module Synvert
         end
 
         super
+      end
+
+      def final_check
+        if @filename == "features/support/env.rb" && !contains_statement?(@ast, "World(FactoryGirl::Syntax::Methods)")
+          default_indent = @ast.loc.expression.column
+          @source_rewriter.insert_after @ast.loc.expression, "\n#{' '*default_indent}World(FactoryGirl::Syntax::Methods)"
+        end
+        @source_rewriter.process
       end
 
     private
@@ -72,7 +89,7 @@ module Synvert
       end
 
       def contains_statement?(node, statement)
-        !node || (node.type == :begin ? node.children : [node]).none? { |child_node|
+        node && (node.type == :begin ? node.children : [node]).any? { |child_node|
           child_node == to_ast(statement)
         }
       end
