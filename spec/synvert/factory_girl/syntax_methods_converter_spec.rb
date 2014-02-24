@@ -3,44 +3,13 @@ require 'spec_helper'
 
 describe Synvert::FactoryGirl::SyntaxMethodsConverter do
   describe "#interesting_files" do
-    context "spec/spec_helper.rb" do
-      let(:filename) { "spec/spec_helper.rb" }
-      include_context "interesting file"
-    end
-
-    context "test/test_helper.rb" do
-      let(:filename) { "test/test_helper.rb" }
-      include_context "interesting file"
-    end
-
-    context "features/support/env.rb" do
-      let(:filename) { "features/support/env.rb" }
-      include_context "interesting file"
-    end
-
-    context "spec/support/shared_context.rb" do
-      let(:filename) { "spec/support/shared_context.rb" }
-      include_context "interesting file"
-    end
-
-    context "test/support/shared_context.rb" do
-      let(:filename) { "test/support/shared_context.rb" }
-      include_context "interesting file"
-    end
-
-    context "spec/models/post_spec.rb" do
-      let(:filename) { "spec/models/post_spec.rb" }
-      include_context "interesting file"
-    end
-
-    context "test/unit/post_test.rb" do
-      let(:filename) { "test/unit/post_test.rb" }
-      include_context "interesting file"
-    end
-
-    context "features/step_definitions/post_steps.rb" do
-      let(:filename) { "features/step_definitions/post_steps.rb" }
-      include_context "interesting file"
+    ["spec/spec_helper.rb", "test/test_helper.rb", "features/support/env.rb",
+    "spec/support/shared_context.rb", "test/support/shared_context.rb",
+    "spec/models/post_spec.rb", "test/unit/post_test.rb", "features/step_definitions/post_steps.rb"].each do |file_path|
+      context file_path do
+        let(:filename) { file_path }
+        include_context "interesting file"
+      end
     end
 
     context "app/models/post.rb" do
@@ -61,8 +30,8 @@ describe Synvert::FactoryGirl::SyntaxMethodsConverter do
     let(:expected_source) {
       <<-EOF
       RSpec.configure do |config|
-        config.include FactoryGirl::Syntax::Methods
         config.include EmailSpec::Helpers
+        config.include FactoryGirl::Syntax::Methods
       end
       EOF
     }
@@ -100,8 +69,8 @@ describe Synvert::FactoryGirl::SyntaxMethodsConverter do
       let(:expected_source) {
         <<-EOF
         class ActiveSupport::TestCase
-          include FactoryGirl::Syntax::Methods
           include EmailSpec::Helpers
+          include FactoryGirl::Syntax::Methods
         end
         EOF
       }
@@ -125,91 +94,55 @@ describe Synvert::FactoryGirl::SyntaxMethodsConverter do
     include_context "expect to convert"
   end
 
-  context "FactoryGirl.create" do
-    let(:filename) { "spec/models/post_spec.rb" }
-    let(:source) {
-      <<-EOF
-      it "valids post" do
-        post = FactoryGirl.create(:post)
-        expect(post).to be_valid
-      end
-      EOF
-    }
-    let(:expected_source) {
-      <<-EOF
-      it "valids post" do
-        post = create(:post)
-        expect(post).to be_valid
-      end
-      EOF
-    }
+  [:create, :build, :attributes_for, :build_stubbed].each do |method|
+    class_eval do
+      context "FactoryGirl.#{method}" do
+        let(:filename) { "spec/models/post_spec.rb" }
+        let(:source) {
+          <<-EOF
+          it "valids post" do
+            post = FactoryGirl.#{method}(:post)
+            expect(post).to be_valid
+          end
+          EOF
+        }
+        let(:expected_source) {
+          <<-EOF
+          it "valids post" do
+            post = #{method}(:post)
+            expect(post).to be_valid
+          end
+          EOF
+        }
 
-    include_context "expect to convert"
+        include_context "expect to convert"
+      end
+    end
   end
 
-  context "FactoryGirl.build" do
-    let(:filename) { "spec/models/post_spec.rb" }
-    let(:source) {
-      <<-EOF
-      it "valids post" do
-        post = FactoryGirl.build(:post)
-        expect(post).to be_valid
-      end
-      EOF
-    }
-    let(:expected_source) {
-      <<-EOF
-      it "valids post" do
-        post = build(:post)
-        expect(post).to be_valid
-      end
-      EOF
-    }
+  [:create_list, :build_list, :create_pair, :build_pair].each do |method|
+    class_eval do
+      context "FactoryGirl.#{method}" do
+        let(:filename) { "spec/models/post_spec.rb" }
+        let(:source) {
+          <<-EOF
+          it "valids posts" do
+            posts = FactoryGirl.#{method}(:post)
+            expect(posts).to be_valid
+          end
+          EOF
+        }
+        let(:expected_source) {
+          <<-EOF
+          it "valids posts" do
+            posts = #{method}(:post)
+            expect(posts).to be_valid
+          end
+          EOF
+        }
 
-    include_context "expect to convert"
-  end
-
-  context "FactoryGirl.attributes_for" do
-    let(:filename) { "spec/models/post_spec.rb" }
-    let(:source) {
-      <<-EOF
-      it "valids post" do
-        post = FactoryGirl.attributes_for(:post)
-        expect(post).to be_valid
+        include_context "expect to convert"
       end
-      EOF
-    }
-    let(:expected_source) {
-      <<-EOF
-      it "valids post" do
-        post = attributes_for(:post)
-        expect(post).to be_valid
-      end
-      EOF
-    }
-
-    include_context "expect to convert"
-  end
-
-  context "FactoryGirl.build_stubbed" do
-    let(:filename) { "spec/models/post_spec.rb" }
-    let(:source) {
-      <<-EOF
-      it "valids post" do
-        post = FactoryGirl.build_stubbed(:post)
-        expect(post).to be_valid
-      end
-      EOF
-    }
-    let(:expected_source) {
-      <<-EOF
-      it "valids post" do
-        post = build_stubbed(:post)
-        expect(post).to be_valid
-      end
-      EOF
-    }
-
-    include_context "expect to convert"
+    end
   end
 end

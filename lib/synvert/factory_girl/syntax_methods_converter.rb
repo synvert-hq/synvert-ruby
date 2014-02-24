@@ -2,100 +2,47 @@
 
 module Synvert
   module FactoryGirl
-    class SyntaxMethodsConverter < Parser::Rewriter
-      include AST::Sexp
-
+    class SyntaxMethodsConverter < BaseConverter
       def interesting_files
         [/spec\/spec_helper\.rb/, /spec\/support\/.*\.rb/, /spec\/.*_spec\.rb/] +
           [/test\/test_helper\.rb/, /test\/support\/.*\.rb/, /test\/.*_test\.rb/] +
           [/features\/support\/env\.rb/, /features\/.*\.rb/]
       end
 
-      def rewrite(source_buffer, ast)
-        super
-
-        @filename = source_buffer.name
-        @ast = ast
-        final_check
-      end
-
       def on_class(node)
-        if (class_name(node) == to_ast("ActiveSupport::TestCase") || class_name(node) == to_ast("Test::Unit::TestCase")) &&
-           !contains_statement?(class_body(node), "include FactoryGirl::Syntax::Methods")
-          class_indent = node.loc.expression.column
-          new_code_indent = class_indent + 2
-          insert_after node.children[0].loc.expression, "\n#{' '*new_code_indent}include FactoryGirl::Syntax::Methods"
+        if (name(node) == to_ast("ActiveSupport::TestCase") || name(node) == to_ast("Test::Unit::TestCase")) &&
+           !contains_statement?(body(node), "include FactoryGirl::Syntax::Methods")
+          append_to node, "include FactoryGirl::Syntax::Methods"
         end
 
         super
       end
 
       def on_block(node)
-        if block_send_receiver(node) == to_ast("RSpec") &&
-           block_send_message(node) == :configure &&
-           !contains_statement?(block_body(node), "config.include FactoryGirl::Syntax::Methods")
-          block_indent = node.loc.expression.column
-          new_code_indent = block_indent + 2
-          insert_after node.children[1].loc.expression, "\n#{' '*new_code_indent}config.include FactoryGirl::Syntax::Methods"
+        if receiver(node) == to_ast("RSpec") &&
+           message(node) == :configure &&
+           !contains_statement?(body(node), "config.include FactoryGirl::Syntax::Methods")
+          append_to node, "config.include FactoryGirl::Syntax::Methods"
         end
 
         super
       end
 
       def on_send(node)
-        if send_receiver(node) == to_ast("FactoryGirl") &&
-           [:create, :build, :attributes_for, :build_stubbed].include?(send_message(node))
-          replace node.children[0].loc.expression.resize(12), ''
+        if receiver(node) == to_ast("FactoryGirl") &&
+           [:create, :build, :attributes_for, :build_stubbed, :create_list, :build_list, :create_pair, :build_pair].include?(message(node))
+          replace node.loc.expression.resize("FactoryGirl.".size), ''
         end
 
         super
       end
 
-      def final_check
-        if @filename == "features/support/env.rb" && !contains_statement?(@ast, "World(FactoryGirl::Syntax::Methods)")
-          default_indent = @ast.loc.expression.column
-          @source_rewriter.insert_after @ast.loc.expression, "\n#{' '*default_indent}World(FactoryGirl::Syntax::Methods)"
+      def on_program(node)
+        if filename == "features/support/env.rb" && !contains_statement?(node, "World(FactoryGirl::Syntax::Methods)")
+          append_after node.children[0], "World(FactoryGirl::Syntax::Methods)"
         end
-        @source_rewriter.process
-      end
 
-    private
-      def class_name(node)
-        node.children[0]
-      end
-
-      def class_body(node)
-        node.children[1]
-      end
-
-      def block_send_receiver(node)
-        send_receiver(node.children[0])
-      end
-
-      def block_send_message(node)
-        send_message(node.children[0])
-      end
-
-      def block_body(node)
-        node.children[2]
-      end
-
-      def send_receiver(node)
-        node.children[0]
-      end
-
-      def send_message(node)
-        node.children[1]
-      end
-
-      def contains_statement?(node, statement)
-        node && (node.type == :begin ? node.children : [node]).any? { |child_node|
-          child_node == to_ast(statement)
-        }
-      end
-
-      def to_ast(str)
-        Parser::CurrentRuby.parse(str)
+        node.updated(nil, process_all(node))
       end
     end
   end
