@@ -6,9 +6,9 @@ Dir[File.join(File.dirname(__FILE__), 'support', '*')].each do |path|
   require path
 end
 
-require 'mocha/api'
-
 RSpec.configure do |config|
+  config.include ParserHelper
+
   config.treat_symbols_as_metadata_keys_with_true_values = true
   config.run_all_when_everything_filtered = true
   config.filter_run :focus
