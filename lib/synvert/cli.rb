@@ -10,6 +10,7 @@ module Synvert
 
     def run(args)
       optparse = OptionParser.new do |opts|
+        opts.banner = "Usage: synvert path"
       end
       paths = optparse.parse(args)
       Configuration.instance.set :path, paths.first || Dir.pwd

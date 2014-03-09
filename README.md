@@ -1,6 +1,9 @@
 # Synvert
 
-TODO: Write a gem description
+synvert = syntax + convert, makes it easy to rewrite ruby code
+automatically.
+
+**synvert is still in alpha stage**
 
 ## Installation
 
@@ -18,7 +21,11 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+    synvert PROJECT_PATH
+
+Currently it supports
+
+* FactoryGirl short syntax
 
 ## Contributing
 
