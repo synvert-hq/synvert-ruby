@@ -51,6 +51,10 @@ class Parser::AST::Node
     when :str, :arg, :lvar, :ivar
       self.children[0].to_s
     else
+      if self == Parser::CurrentRuby.parse('self')
+        'self'
+      else
+      end
     end
   end
 

@@ -77,6 +77,11 @@ describe Parser::AST::Node do
       node = parse("RSpec.configure do |config|; end").grep_node(type: 'arg')
       expect(node.to_s).to eq 'config'
     end
+
+    it 'gets for self node' do
+      node = parse('self')
+      expect(node.to_s).to eq 'self'
+    end
   end
 
   describe '#indent' do
