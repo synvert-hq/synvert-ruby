@@ -109,6 +109,8 @@ private
       actual.to_s == expected
     when Array
       actual.zip(expected).all? { |a, e| match_value?(a, e) }
+    when NilClass
+      actual.nil?
     else
       raise NotImplementedError.new "#{expected.class} is not handled for match_value?"
     end
