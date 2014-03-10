@@ -86,7 +86,7 @@ class Parser::AST::Node
   end
 
   def to_source(code)
-    code.gsub(/{{(.*)}}/) do
+    code.gsub(/{{(.*?)}}/) do
       node = self # node is used in eval
       evaluated = eval($1)
       if Parser::AST::Node === evaluated
