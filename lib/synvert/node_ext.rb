@@ -98,13 +98,15 @@ class Parser::AST::Node
 private
 
   def match_value?(actual, expected)
-    case actual
+    case expected
     when Symbol
-      actual == expected.to_sym
+      actual.to_sym == expected
+    when String
+      actual.to_s == expected
     when Array
       actual.zip(expected).all? { |a, e| match_value?(a, e) }
     else
-      actual.to_s == expected
+      raise NotImplementedError.new "#{expected.class} is not handled for match_value?"
     end
   end
 
@@ -121,14 +123,10 @@ private
   end
 
   def actual_value(node, multi_keys)
-    multi_keys.inject(node) { |n, key| n.send(key) }
+    multi_keys.inject(node) { |n, key| n.send(key) if n }
   end
 
   def expected_value(options, multi_keys)
     multi_keys.inject(options) { |o, key| o[key] }
   end
-
-  #def to_ast(str)
-    #Parser::CurrentRuby.parse(str)
-  #end
 end

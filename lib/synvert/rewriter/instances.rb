@@ -63,5 +63,9 @@ module Synvert
     def replace_with(code)
       @action = Rewriter::ReplaceWithAction.new(code)
     end
+
+    def remove
+      @action = Rewriter::RemoveAction.new
+    end
   end
 end

@@ -45,4 +45,29 @@ module Synvert
       end
     end
   end
+
+  class Rewriter::RemoveAction < Rewriter::Action
+    def initialize
+    end
+
+    def rewrite(source, node)
+      begin_pos = node.loc.expression.begin_pos
+      end_pos = node.loc.expression.end_pos
+      line = node.loc.expression.line
+      source[begin_pos...end_pos] = ''
+      remove_code_or_whole_line(source, line)
+    end
+
+  private
+    def remove_code_or_whole_line(source, line)
+      newline_at_end_of_line = source[-1] == "\n"
+      source_arr = source.split("\n")
+      if source_arr[line - 1] && source_arr[line - 1].strip.empty?
+        source_arr.delete_at(line - 1)
+        source_arr.join("\n") + (newline_at_end_of_line ? "\n" : '')
+      else
+        source
+      end
+    end
+  end
 end

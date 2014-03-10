@@ -48,4 +48,16 @@ module Synvert
       end
     end
   end
+
+  describe Rewriter::RemoveAction do
+    describe '#rewrite' do
+      it 'remove code' do
+        action = Rewriter::RemoveAction.new
+        source = "user = User.new params[:user]\nuser.save\nrender\n"
+        send_node = Parser::CurrentRuby.parse(source).children[1]
+        output = action.rewrite(source, send_node)
+        expect(output).to eq "user = User.new params[:user]\nrender\n"
+      end
+    end
+  end
 end

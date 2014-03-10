@@ -36,6 +36,13 @@ module Synvert
       end
     end
 
+    describe '#remove' do
+      it 'sets an action' do
+        expect(Rewriter::RemoveAction).to receive(:new)
+        instance.remove
+      end
+    end
+
     describe '#process' do
       before { Configuration.instance.set :path, '.' }
 
@@ -106,6 +113,19 @@ end
         expect(Dir).to receive(:glob).with('./spec/spec_helper.rb').and_return(['spec/spec_helper.rb'])
         expect(File).to receive(:read).with('spec/spec_helper.rb').and_return(input)
         expect(File).to receive(:write).with('spec/spec_helper.rb', output)
+        instance.process
+      end
+
+      it 'process nested send nodes' do
+        instance = Rewriter::Instance.new('config/*.rb')
+        instance.with_node type: 'send', receiver: {type: 'send', receiver: {type: 'send', message: 'config'}, message: 'active_record'}, message: 'identity_map=' do
+          remove
+        end
+        input = 'config.active_record.identity_map = true'
+        output = ''
+        expect(Dir).to receive(:glob).with('./config/*.rb').and_return(['config/environments/production.rb'])
+        expect(File).to receive(:read).with('config/environments/production.rb').and_return(input)
+        expect(File).to receive(:write).with('config/environments/production.rb', output)
         instance.process
       end
     end
