@@ -1,5 +1,5 @@
-Synvert::Rewriter.new "use short syntax" do
-  from_version '2.0.0'
+Synvert::Rewriter.new "FactoryGirl uses short syntax" do
+  gem_spec 'factory_girl', '2.0.0'
 
   within_file 'spec/spec_helper.rb' do
     within_node type: 'block', caller: {receiver: 'RSpec', message: 'configure'} do

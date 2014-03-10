@@ -13,7 +13,9 @@ module Synvert
     autoload :Condition, 'synvert/rewriter/conditions'
     autoload :UnlessExistCondition, 'synvert/rewriter/conditions'
 
-    attr_reader :description, :version, :instances
+    autoload :GemSpec, 'synvert/rewriter/gem_spec'
+
+    attr_reader :description
 
     def initialize(description, &block)
       @description = description
@@ -22,11 +24,11 @@ module Synvert
     end
 
     def process
-      @instances.process
+      @instances.process if @gem_spec.match?
     end
 
-    def from_version(version)
-      @version = Version.from_string(version)
+    def gem_spec(name, version)
+      @gem_spec = Rewriter::GemSpec.new(name, version)
     end
 
     def within_file(file, &block)
@@ -35,22 +37,6 @@ module Synvert
 
     def within_files(files, &block)
       @instances.add(files, &block)
-    end
-
-    class Version
-      def self.from_string(version)
-        self.new *version.split('.')
-      end
-
-      def initialize(major, minor, patch)
-        @major = major
-        @minor = minor
-        @patch = patch
-      end
-
-      def to_s
-        [@major, @minor, @patch].join('.')
-      end
     end
   end
 end
