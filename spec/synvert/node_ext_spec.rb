@@ -60,7 +60,7 @@ describe Parser::AST::Node do
 
     it 'gets for str node' do
       node = parse("'synvert'")
-      expect(node.to_s).to eq 'synvert'
+      expect(node.to_s).to eq "'synvert'"
     end
 
     it 'gets for lvar node' do

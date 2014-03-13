@@ -48,7 +48,9 @@ class Parser::AST::Node
       self.children.compact.map(&:to_s).join('::')
     when :sym
       ':' + self.children[0].to_s
-    when :str, :arg, :lvar, :ivar
+    when :str
+      "'" + self.children[0].to_s + "'"
+    when :arg, :lvar, :ivar
       self.children[0].to_s
     else
       if self == Parser::CurrentRuby.parse('self')
@@ -106,7 +108,7 @@ private
     when Symbol
       actual.to_sym == expected
     when String
-      actual.to_s == expected
+      actual.to_s == expected || actual.to_s == "'#{expected}'"
     when Array
       actual.zip(expected).all? { |a, e| match_value?(a, e) }
     when NilClass
