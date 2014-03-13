@@ -92,10 +92,16 @@ class Parser::AST::Node
   end
 
   def match?(options)
-    flat_hash(options).keys.all? do |key|
-      actual = actual_value(self, key)
-      expected = expected_value(options, key)
-      match_value?(actual, expected)
+    flat_hash(options).keys.all? do |multi_keys|
+      if multi_keys.last == :any
+        actual_values = actual_value(self, multi_keys[0...-1])
+        expected = expected_value(options, multi_keys)
+        actual_values.any? { |actual| match_value?(actual, expected) }
+      else
+        actual = actual_value(self, multi_keys)
+        expected = expected_value(options, multi_keys)
+        match_value?(actual, expected)
+      end
     end
   end
 
