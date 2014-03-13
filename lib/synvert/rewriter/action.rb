@@ -46,6 +46,17 @@ module Synvert
     end
   end
 
+  class Rewriter::InsertAfterAction < Rewriter::Action
+    def rewrite(source, node)
+      source[node.loc.expression.end_pos, 0] = "\n" + insert_indent(node) + node.to_source(@code)
+      source
+    end
+
+    def insert_indent(node)
+      ' ' * node.indent
+    end
+  end
+
   class Rewriter::RemoveAction < Rewriter::Action
     def initialize
     end

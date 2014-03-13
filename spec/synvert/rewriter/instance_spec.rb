@@ -1,38 +1,27 @@
 require 'spec_helper'
 
 module Synvert
-  describe Rewriter::Instances do
-
-  end
-
   describe Rewriter::Instance do
     let(:instance) { Rewriter::Instance.new('file pattern') }
 
-    describe '#within_node' do
-      it 'adds a scope'do
-        expect_any_instance_of(Rewriter::Scopes).to receive(:add).with(type: 'block', caller: {receiver: 'RSpec', message: 'configure'})
-        instance.within_node type: 'block', caller: {receiver: 'RSpec', message: 'configure'} do; end
-      end
-    end
-
-    describe '#with_node' do
-      it 'adds a scope' do
-        expect_any_instance_of(Rewriter::Scopes).to receive(:add).with(type: 'send', receiver: 'FactoryGirl', message: 'create')
-        instance.with_node type: 'send', receiver: 'FactoryGirl', message: 'create' do; end
-      end
-    end
-
     describe '#insert' do
       it 'sets an action' do
-        expect(Rewriter::InsertAction).to receive(:new).with('{{node.arguments.first}}.include FactoryGirl::Syntax::Methods')
-        instance.insert "{{node.arguments.first}}.include FactoryGirl::Syntax::Methods"
+        expect(Rewriter::InsertAction).to receive(:new).with('{{self.arguments.first}}.include FactoryGirl::Syntax::Methods')
+        instance.insert "{{self.arguments.first}}.include FactoryGirl::Syntax::Methods"
+      end
+    end
+
+    describe '#insert_after' do
+      it 'sets an action' do
+        expect(Rewriter::InsertAfterAction).to receive(:new).with('{{self.arguments.first}}.include FactoryGirl::Syntax::Methods')
+        instance.insert_after "{{self.arguments.first}}.include FactoryGirl::Syntax::Methods"
       end
     end
 
     describe '#replace_with' do
       it 'sets an action' do
-        expect(Rewriter::ReplaceWithAction).to receive(:new).with('create {{node.arguments}}')
-        instance.replace_with 'create {{node.arguments}}'
+        expect(Rewriter::ReplaceWithAction).to receive(:new).with('create {{self.arguments}}')
+        instance.replace_with 'create {{self.arguments}}'
       end
     end
 
@@ -49,7 +38,7 @@ module Synvert
       it 'FactoryGirl uses short syntax' do
         instance = Rewriter::Instance.new('spec/**/*_spec.rb')
         instance.with_node type: 'send', receiver: 'FactoryGirl', message: 'create' do
-          replace_with 'create {{node.arguments}}'
+          replace_with 'create {{self.arguments}}'
         end
         input = """
 it 'uses factory_girl' do
@@ -75,7 +64,7 @@ end
         instance = Rewriter::Instance.new('spec/spec_helper.rb')
         instance.with_node type: 'block', caller: {receiver: 'RSpec', message: 'configure'} do
           unless_exist_node type: 'send', message: 'include', arguments: {first: {to_s: 'FactoryGirl::Syntax::Methods'}} do
-            insert "{{node.arguments.first}}.include FactoryGirl::Syntax::Methods"
+            insert "{{self.arguments.first}}.include FactoryGirl::Syntax::Methods"
           end
         end
         input = """
@@ -97,7 +86,7 @@ end
         instance = Rewriter::Instance.new('spec/spec_helper.rb')
         instance.with_node type: 'block', caller: {receiver: 'RSpec', message: 'configure'} do
           unless_exist_node type: 'send', message: 'include', arguments: {first: {to_s: 'FactoryGirl::Syntax::Methods'}} do
-            insert "{{node.arguments.first}}.include FactoryGirl::Syntax::Methods"
+            insert "{{self.arguments.first}}.include FactoryGirl::Syntax::Methods"
           end
         end
         input = """

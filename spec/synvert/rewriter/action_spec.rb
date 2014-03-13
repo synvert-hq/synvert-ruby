@@ -4,7 +4,7 @@ module Synvert
   describe Rewriter::ReplaceWithAction do
     describe '#rewrite' do
       it 'replaces code' do
-        action = Rewriter::ReplaceWithAction.new('create_list {{node.arguments}}')
+        action = Rewriter::ReplaceWithAction.new('create_list {{self.arguments}}')
         source = "post = FactoryGirl.create_list :post, 2"
         send_node = Parser::CurrentRuby.parse(source).children[1]
         output = action.rewrite(source, send_node)
@@ -16,7 +16,7 @@ module Synvert
   describe Rewriter::InsertAction do
     describe '#rewrite' do
       it 'insert code to block node' do
-        action = Rewriter::InsertAction.new('{{node.arguments.first}}.include FactoryGirl::Syntax::Methods')
+        action = Rewriter::InsertAction.new('{{self.arguments.first}}.include FactoryGirl::Syntax::Methods')
         source = "RSpec.configure do |config|\nend"
         block_node = Parser::CurrentRuby.parse(source)
         output = action.rewrite(source, block_node)
@@ -45,6 +45,18 @@ module Synvert
         block_node = Parser::CurrentRuby.parse(source)
         output = action.rewrite(source, block_node)
         expect(output).to eq "require 'cucumber/rails'\nWorld(FactoryGirl::Syntax::Methods)"
+      end
+    end
+  end
+
+  describe Rewriter::InsertAfterAction do
+    describe '#rewrite' do
+      it 'insert_after code' do
+        action = Rewriter::InsertAfterAction.new('include Bar')
+        source = "  include Foo"
+        node = Parser::CurrentRuby.parse(source)
+        output = action.rewrite(source, node)
+        expect(output).to eq "  include Foo\n  include Bar"
       end
     end
   end

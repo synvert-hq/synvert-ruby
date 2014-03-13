@@ -1,10 +1,6 @@
 require 'spec_helper'
 
 module Synvert
-  describe Rewriter::Conditions do
-
-  end
-
   describe Rewriter::UnlessExistCondition do
     let(:source) {
       """

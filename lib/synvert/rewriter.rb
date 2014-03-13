@@ -2,17 +2,17 @@ module Synvert
   class Rewriter
     autoload :Action, 'synvert/rewriter/action'
     autoload :InsertAction, 'synvert/rewriter/action'
+    autoload :InsertAfterAction, 'synvert/rewriter/action'
     autoload :ReplaceWithAction, 'synvert/rewriter/action'
     autoload :RemoveAction, 'synvert/rewriter/action'
 
-    autoload :Instances, 'synvert/rewriter/instances'
+    autoload :Instance, 'synvert/rewriter/instance'
 
-    autoload :Scopes, 'synvert/rewriter/scopes'
-    autoload :Scope, 'synvert/rewriter/scopes'
+    autoload :Scope, 'synvert/rewriter/scope'
 
-    autoload :Conditions, 'synvert/rewriter/conditions'
-    autoload :Condition, 'synvert/rewriter/conditions'
-    autoload :UnlessExistCondition, 'synvert/rewriter/conditions'
+    autoload :Condition, 'synvert/rewriter/condition'
+    autoload :UnlessExistCondition, 'synvert/rewriter/condition'
+    autoload :IfOnlyExistCondition, 'synvert/rewriter/condition'
 
     autoload :GemSpec, 'synvert/rewriter/gem_spec'
 
@@ -20,24 +20,26 @@ module Synvert
 
     def initialize(description, &block)
       @description = description
-      @instances = Instances.new
+      @instances = []
       instance_eval &block if block_given?
     end
 
     def process
-      @instances.process if @gem_spec.match?
+      if @gem_spec.match?
+        @instances.each { |instance| instance.process }
+      end
     end
 
     def gem_spec(name, version)
       @gem_spec = Rewriter::GemSpec.new(name, version)
     end
 
-    def within_file(file, &block)
-      @instances.add(file, &block)
+    def within_file(file_pattern, &block)
+      instance = Rewriter::Instance.new(file_pattern)
+      instance.instance_eval &block if block_given?
+      @instances << instance
     end
 
-    def within_files(files, &block)
-      @instances.add(files, &block)
-    end
+    alias within_files within_file
   end
 end
