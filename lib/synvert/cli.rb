@@ -15,11 +15,8 @@ module Synvert
       paths = optparse.parse(args)
       Configuration.instance.set :path, paths.first || Dir.pwd
 
-      rewriters = %w(factory_girl/syntax_methods.rb rails/upgrade_3_2_to_4_0.rb).map do |path|
-        File.read(File.join(File.dirname(__FILE__), path))
-      end
-      rewriters.each do |rewriter|
-        eval(rewriter).process
+      %w(factory_girl/syntax_methods.rb rails/upgrade_3_2_to_4_0.rb).each do |path|
+        eval(File.read(File.join(File.dirname(__FILE__), path))).process
       end
     end
   end

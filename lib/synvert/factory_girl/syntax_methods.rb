@@ -4,7 +4,7 @@ Synvert::Rewriter.new "FactoryGirl uses short syntax" do
   within_file 'spec/spec_helper.rb' do
     within_node type: 'block', caller: {receiver: 'RSpec', message: 'configure'} do
       unless_exist_node type: 'send', message: 'include', arguments: {first: {to_s: 'FactoryGirl::Syntax::Methods'}} do
-        insert "{{node.arguments.first}}.include FactoryGirl::Syntax::Methods"
+        insert "{{self.arguments.first}}.include FactoryGirl::Syntax::Methods"
       end
     end
   end
@@ -29,7 +29,7 @@ Synvert::Rewriter.new "FactoryGirl uses short syntax" do
     %w(create build attributes_for build_stubbed create_list build_list ccreate_pair build_pair).each do |message|
       within_files file_pattern do
         with_node type: 'send', receiver: 'FactoryGirl', message: message do
-          replace_with "#{message}({{node.arguments}})"
+          replace_with "#{message}({{self.arguments}})"
         end
       end
     end
