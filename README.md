@@ -25,7 +25,8 @@ Or install it yourself as:
 
 Currently it supports
 
-* FactoryGirl short syntax
+* convert to FactoryGirl short syntax
+* upgrade rails from 3.2.x to 4.0.0
 
 ## Contributing
 
