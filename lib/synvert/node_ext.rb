@@ -88,15 +88,19 @@ class Parser::AST::Node
   end
 
   def to_source(code)
-    code.gsub(/{{(.*?)}}/) do
-      node = self # node is used in eval
-      evaluated = eval($1)
-      if Parser::AST::Node === evaluated
+    code.gsub(/{{(.*?)}}/m) do
+      evaluated = self.instance_eval $1.gsub 'node.', 'self.'
+      case evaluated
+      when Parser::AST::Node
         source = evaluated.loc.expression.source_buffer.source
         source[evaluated.loc.expression.begin_pos...evaluated.loc.expression.end_pos]
-      else # Array
+      when Array
         source = evaluated.first.loc.expression.source_buffer.source
         source[evaluated.first.loc.expression.begin_pos...evaluated.last.loc.expression.end_pos]
+      when String
+        evaluated
+      else
+        raise NotImplementedError.new "to_source is not handled for #{evaluated.inspect}"
       end
     end
   end
@@ -109,6 +113,8 @@ private
       actual.to_sym == expected
     when String
       actual.to_s == expected || actual.to_s == "'#{expected}'"
+    when Regexp
+      actual.to_s =~ Regexp.new(expected.to_s, Regexp::MULTILINE)
     when Array
       actual.zip(expected).all? { |a, e| match_value?(a, e) }
     when NilClass
