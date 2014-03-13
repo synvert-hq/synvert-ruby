@@ -44,6 +44,13 @@ describe Parser::AST::Node do
     end
   end
 
+  describe '#body' do
+    it 'gets for block node' do
+      node = parse('RSpec.configure do |config|; include EmailSpec::Helpers; end')
+      expect(node.body).to eq parse('include EmailSpec::Helpers')
+    end
+  end
+
   describe '#to_s' do
     it 'gets for const node' do
       node = parse('Synvert')
@@ -81,6 +88,11 @@ describe Parser::AST::Node do
     it 'gets for self node' do
       node = parse('self')
       expect(node.to_s).to eq 'self'
+    end
+
+    it 'gets for send node' do
+      node = parse('email')
+      expect(node.to_s).to eq 'email'
     end
   end
 

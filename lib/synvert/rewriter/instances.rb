@@ -56,6 +56,11 @@ module Synvert
       instance_eval &block if block_given?
     end
 
+    def if_only_exist_node(options, &block)
+      @conditions.add(Rewriter::IfOnlyExistCondition.new(options))
+      instance_eval &block if block_given?
+    end
+
     def insert(code)
       @action = Rewriter::InsertAction.new(code)
     end

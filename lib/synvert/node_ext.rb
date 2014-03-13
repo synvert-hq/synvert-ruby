@@ -42,6 +42,18 @@ class Parser::AST::Node
     end
   end
 
+  def body
+    if :block == self.type
+      self.children[2]
+    else
+      raise NotImplementedError.new "body is not handled for #{self.inspect}"
+    end
+  end
+
+  def to_ast
+    self
+  end
+
   def to_s
     case self.type
     when :const
@@ -52,11 +64,11 @@ class Parser::AST::Node
       "'" + self.children[0].to_s + "'"
     when :arg, :lvar, :ivar
       self.children[0].to_s
+    when :self
+      'self'
+    when :send
+      self.children[1].to_s
     else
-      if self == Parser::CurrentRuby.parse('self')
-        'self'
-      else
-      end
     end
   end
 
@@ -89,7 +101,7 @@ class Parser::AST::Node
 
   def to_source(code)
     code.gsub(/{{(.*?)}}/m) do
-      evaluated = self.instance_eval $1.gsub 'node.', 'self.'
+      evaluated = self.instance_eval $1
       case evaluated
       when Parser::AST::Node
         source = evaluated.loc.expression.source_buffer.source
@@ -119,6 +131,8 @@ private
       actual.zip(expected).all? { |a, e| match_value?(a, e) }
     when NilClass
       actual.nil?
+    when Parser::AST::Node
+      actual == expected
     else
       raise NotImplementedError.new "#{expected.class} is not handled for match_value?"
     end

@@ -36,4 +36,12 @@ module Synvert
       }
     end
   end
+
+  class Rewriter::IfOnlyExistCondition < Rewriter::Condition
+    def matching_nodes(nodes)
+      nodes.find_all { |node|
+        :begin != node.body.type && node.body.match?(@options)
+      }
+    end
+  end
 end
