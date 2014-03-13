@@ -29,6 +29,8 @@ class Parser::AST::Node
       self.children[2..-1]
     when :block
       self.children[1].children
+    when :defined?
+      self.children
     else
       raise NotImplementedError.new "arguments is not handled for #{self.inspect}"
     end
@@ -47,6 +49,14 @@ class Parser::AST::Node
       self.children[2]
     else
       raise NotImplementedError.new "body is not handled for #{self.inspect}"
+    end
+  end
+
+  def condition
+    if :if == self.type
+      self.children[0]
+    else
+      raise NotImplementedError.new "condition is not handled for #{self.inspect}"
     end
   end
 

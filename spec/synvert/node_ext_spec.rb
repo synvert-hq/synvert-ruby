@@ -35,6 +35,11 @@ describe Parser::AST::Node do
       node = parse('RSpec.configure do |config|; end')
       expect(node.arguments.map(&:to_s)).to eq ['config']
     end
+
+    it 'gets for defined? node' do
+      node = parse('defined?(Bundler)')
+      expect(node.arguments).to eq [parse('Bundler')]
+    end
   end
 
   describe '#caller' do
@@ -48,6 +53,13 @@ describe Parser::AST::Node do
     it 'gets for block node' do
       node = parse('RSpec.configure do |config|; include EmailSpec::Helpers; end')
       expect(node.body).to eq parse('include EmailSpec::Helpers')
+    end
+  end
+
+  describe "#condition" do
+    it 'gets for if node' do
+      node = parse('if defined?(Bundler); end')
+      expect(node.condition).to eq parse('defined?(Bundler)')
     end
   end
 
