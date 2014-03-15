@@ -6,22 +6,22 @@ module Synvert
 
     describe '#insert' do
       it 'sets an action' do
-        expect(Rewriter::InsertAction).to receive(:new).with('{{self.arguments.first}}.include FactoryGirl::Syntax::Methods')
-        instance.insert "{{self.arguments.first}}.include FactoryGirl::Syntax::Methods"
+        expect(Rewriter::InsertAction).to receive(:new).with('{{arguments.first}}.include FactoryGirl::Syntax::Methods')
+        instance.insert "{{arguments.first}}.include FactoryGirl::Syntax::Methods"
       end
     end
 
     describe '#insert_after' do
       it 'sets an action' do
-        expect(Rewriter::InsertAfterAction).to receive(:new).with('{{self.arguments.first}}.include FactoryGirl::Syntax::Methods')
-        instance.insert_after "{{self.arguments.first}}.include FactoryGirl::Syntax::Methods"
+        expect(Rewriter::InsertAfterAction).to receive(:new).with('{{arguments.first}}.include FactoryGirl::Syntax::Methods')
+        instance.insert_after "{{arguments.first}}.include FactoryGirl::Syntax::Methods"
       end
     end
 
     describe '#replace_with' do
       it 'sets an action' do
-        expect(Rewriter::ReplaceWithAction).to receive(:new).with('create {{self.arguments}}')
-        instance.replace_with 'create {{self.arguments}}'
+        expect(Rewriter::ReplaceWithAction).to receive(:new).with('create {{arguments}}')
+        instance.replace_with 'create {{arguments}}'
       end
     end
 
@@ -36,9 +36,10 @@ module Synvert
       before { Configuration.instance.set :path, '.' }
 
       it 'FactoryGirl uses short syntax' do
-        instance = Rewriter::Instance.new('spec/**/*_spec.rb')
-        instance.with_node type: 'send', receiver: 'FactoryGirl', message: 'create' do
-          replace_with 'create {{self.arguments}}'
+        instance = Rewriter::Instance.new 'spec/**/*_spec.rb' do
+          with_node type: 'send', receiver: 'FactoryGirl', message: 'create' do
+            replace_with 'create {{arguments}}'
+          end
         end
         input = """
 it 'uses factory_girl' do
@@ -61,10 +62,11 @@ end
       end
 
       it 'includes FactoryGirl::Syntax::Methods' do
-        instance = Rewriter::Instance.new('spec/spec_helper.rb')
-        instance.with_node type: 'block', caller: {receiver: 'RSpec', message: 'configure'} do
-          unless_exist_node type: 'send', message: 'include', arguments: {first: {to_s: 'FactoryGirl::Syntax::Methods'}} do
-            insert "{{self.arguments.first}}.include FactoryGirl::Syntax::Methods"
+        instance = Rewriter::Instance.new 'spec/spec_helper.rb'  do
+          with_node type: 'block', caller: {receiver: 'RSpec', message: 'configure'} do
+            unless_exist_node type: 'send', message: 'include', arguments: {first: {to_s: 'FactoryGirl::Syntax::Methods'}} do
+              insert "{{arguments.first}}.include FactoryGirl::Syntax::Methods"
+            end
           end
         end
         input = """
@@ -83,10 +85,11 @@ end
       end
 
       it 'does not include FactoryGirl::Syntax::Methods' do
-        instance = Rewriter::Instance.new('spec/spec_helper.rb')
-        instance.with_node type: 'block', caller: {receiver: 'RSpec', message: 'configure'} do
-          unless_exist_node type: 'send', message: 'include', arguments: {first: {to_s: 'FactoryGirl::Syntax::Methods'}} do
-            insert "{{self.arguments.first}}.include FactoryGirl::Syntax::Methods"
+        instance = Rewriter::Instance.new 'spec/spec_helper.rb' do
+          with_node type: 'block', caller: {receiver: 'RSpec', message: 'configure'} do
+            unless_exist_node type: 'send', message: 'include', arguments: {first: {to_s: 'FactoryGirl::Syntax::Methods'}} do
+              insert "{{arguments.first}}.include FactoryGirl::Syntax::Methods"
+            end
           end
         end
         input = """
@@ -106,9 +109,10 @@ end
       end
 
       it 'process nested send nodes' do
-        instance = Rewriter::Instance.new('config/*.rb')
-        instance.with_node type: 'send', receiver: {type: 'send', receiver: {type: 'send', message: 'config'}, message: 'active_record'}, message: 'identity_map=' do
-          remove
+        instance = Rewriter::Instance.new 'config/*.rb'  do
+          with_node type: 'send', receiver: {type: 'send', receiver: {type: 'send', message: 'config'}, message: 'active_record'}, message: 'identity_map=' do
+            remove
+          end
         end
         input = 'config.active_record.identity_map = true'
         output = ''

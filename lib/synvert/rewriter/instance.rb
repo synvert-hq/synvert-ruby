@@ -2,12 +2,14 @@
 
 module Synvert
   class Rewriter::Instance
-    def initialize(file_pattern)
+    def initialize(file_pattern, &block)
       @file_pattern = file_pattern
       @scopes_or_conditions = []
+      @block = block
     end
 
     def process
+      instance_eval &@block
       parser = Parser::CurrentRuby.new
       file_pattern = File.join(Configuration.instance.get(:path), @file_pattern)
       Dir.glob(file_pattern).each do |path|
@@ -30,20 +32,17 @@ module Synvert
     end
 
     def within_node(options, &block)
-      @scopes_or_conditions << Rewriter::Scope.new(options)
-      instance_eval &block if block_given?
+      @scopes_or_conditions << Rewriter::Scope.new(self, options, &block)
     end
 
     alias with_node within_node
 
     def unless_exist_node(options, &block)
-      @scopes_or_conditions << Rewriter::UnlessExistCondition.new(options)
-      instance_eval &block if block_given?
+      @scopes_or_conditions << Rewriter::UnlessExistCondition.new(self, options, &block)
     end
 
     def if_only_exist_node(options, &block)
-      @scopes_or_conditions << Rewriter::IfOnlyExistCondition.new(options)
-      instance_eval &block if block_given?
+      @scopes_or_conditions << Rewriter::IfOnlyExistCondition.new(self, options, &block)
     end
 
     def insert(code)

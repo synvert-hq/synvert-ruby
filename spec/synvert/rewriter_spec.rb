@@ -7,13 +7,6 @@ module Synvert
       expect(rewriter.description).to eq 'this is description'
     end
 
-    it 'parses gem_spec' do
-      expect(Rewriter::GemSpec).to receive(:new).with('synvert', '1.0.0')
-      Rewriter.new 'description' do
-        gem_spec 'synvert', '1.0.0'
-      end
-    end
-
     describe '#process' do
       it 'does nothing if gem_spec not match' do
         expect_any_instance_of(Rewriter::GemSpec).to receive(:match?).and_return(false)

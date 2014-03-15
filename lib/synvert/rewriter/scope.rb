@@ -2,11 +2,14 @@
 
 module Synvert
   class Rewriter::Scope
-    def initialize(options)
+    def initialize(instance, options, &block)
+      @instance = instance
       @options = options
+      @block = block
     end
 
     def matching_nodes(nodes)
+      @instance.instance_eval &@block
       matching_nodes = []
       while node = nodes.shift
         matching_nodes << node if node.match?(@options)

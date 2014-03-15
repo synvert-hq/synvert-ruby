@@ -4,7 +4,7 @@ module Synvert
   describe Rewriter::ReplaceWithAction do
     describe '#rewrite' do
       it 'replaces code' do
-        action = Rewriter::ReplaceWithAction.new('create_list {{self.arguments}}')
+        action = Rewriter::ReplaceWithAction.new('create_list {{arguments}}')
         source = "post = FactoryGirl.create_list :post, 2"
         send_node = Parser::CurrentRuby.parse(source).children[1]
         output = action.rewrite(source, send_node)
@@ -16,7 +16,7 @@ module Synvert
   describe Rewriter::InsertAction do
     describe '#rewrite' do
       it 'insert code to block node' do
-        action = Rewriter::InsertAction.new('{{self.arguments.first}}.include FactoryGirl::Syntax::Methods')
+        action = Rewriter::InsertAction.new('{{arguments.first}}.include FactoryGirl::Syntax::Methods')
         source = "RSpec.configure do |config|\nend"
         block_node = Parser::CurrentRuby.parse(source)
         output = action.rewrite(source, block_node)

@@ -11,21 +11,24 @@ module Synvert
       """
     }
     let(:node) { Parser::CurrentRuby.parse(source) }
+    let(:instance) { double() }
 
     describe '#matching_nodes' do
       it 'gets empty array if does not matchi anything' do
-        condition = Rewriter::UnlessExistCondition.new type: 'send', message: 'include', arguments: {first: {to_s: 'FactoryGirl::Syntax::Methods'} }
+        condition = Rewriter::UnlessExistCondition.new instance, type: 'send', message: 'include', arguments: {first: {to_s: 'FactoryGirl::Syntax::Methods'} } do; end
         expect(condition.matching_nodes([node]).size).to eq 1
       end
 
       it 'gets matching nodes' do
-        condition = Rewriter::UnlessExistCondition.new type: 'send', message: 'include', arguments: {first: {to_s: 'EmailSpec::Helpers'} }
+        condition = Rewriter::UnlessExistCondition.new instance, type: 'send', message: 'include', arguments: {first: {to_s: 'EmailSpec::Helpers'} } do; end
         expect(condition.matching_nodes([node])).to eq []
       end
     end
   end
 
   describe Rewriter::IfOnlyExistCondition do
+    let(:instance) { double() }
+
     describe '#matching_nodes' do
       it 'gets matching nodes' do
         source = """
@@ -35,7 +38,7 @@ module Synvert
         """
         node = Parser::CurrentRuby.parse(source)
 
-        condition = Rewriter::IfOnlyExistCondition.new type: 'send', message: 'include', arguments: {first: 'EmailSpec::Helpers'}
+        condition = Rewriter::IfOnlyExistCondition.new instance, type: 'send', message: 'include', arguments: {first: 'EmailSpec::Helpers'} do; end
         expect(condition.matching_nodes([node])).to eq [node]
       end
 
@@ -48,7 +51,7 @@ module Synvert
         """
         node = Parser::CurrentRuby.parse(source)
 
-        condition = Rewriter::IfOnlyExistCondition.new type: 'send', message: 'include', arguments: {first: {to_s: 'EmailSpec::Helpers'} }
+        condition = Rewriter::IfOnlyExistCondition.new instance, type: 'send', message: 'include', arguments: {first: {to_s: 'EmailSpec::Helpers'} } do; end
         expect(condition.matching_nodes([node])).to eq []
       end
     end
