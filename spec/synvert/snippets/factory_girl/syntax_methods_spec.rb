@@ -51,7 +51,7 @@ end
     '''}
 
     it 'process' do
-      expect_any_instance_of(Synvert::Rewriter::GemSpec).to receive(:match?).and_return(true)
+      allow_any_instance_of(Synvert::Rewriter::GemSpec).to receive(:match?).and_return(true)
       FileUtils.mkdir 'spec'
       FileUtils.mkdir 'spec/models'
       File.write 'spec/spec_helper.rb', spec_helper_content
@@ -98,7 +98,7 @@ end
     '''}
 
     it 'process' do
-      expect_any_instance_of(Synvert::Rewriter::GemSpec).to receive(:match?).and_return(true)
+      allow_any_instance_of(Synvert::Rewriter::GemSpec).to receive(:match?).and_return(true)
       FileUtils.mkdir 'test'
       FileUtils.mkdir 'test/unit'
       File.write 'test/test_helper.rb', test_helper_content
@@ -143,7 +143,7 @@ end
     '''}
 
     it 'process' do
-      expect_any_instance_of(Synvert::Rewriter::GemSpec).to receive(:match?).and_return(true)
+      allow_any_instance_of(Synvert::Rewriter::GemSpec).to receive(:match?).and_return(true)
       FileUtils.mkdir_p 'features/support'
       FileUtils.mkdir_p 'features/step_definitions'
       File.write 'features/support/env.rb', env_content

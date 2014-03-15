@@ -7,27 +7,25 @@ module Synvert
       @options = options
       @block = block
     end
+
+    def process
+      @instance.instance_eval &@block if match?
+    end
   end
 
   class Rewriter::UnlessExistCondition < Rewriter::Condition
-    def matching_nodes(nodes)
-      @instance.instance_eval &@block
-      nodes.find_all { |node|
-        match = false
-        node.recursive_children do |child_node|
-          match = match || (child_node && child_node.match?(@options))
-        end
-        !match
-      }
+    def match?
+      match = false
+      @instance.current_node.recursive_children do |child_node|
+        match = match || (child_node && child_node.match?(@options))
+      end
+      !match
     end
   end
 
   class Rewriter::IfOnlyExistCondition < Rewriter::Condition
-    def matching_nodes(nodes)
-      @instance.instance_eval &@block
-      nodes.find_all { |node|
-        :begin != node.body.type && node.body.match?(@options)
-      }
+    def match?
+      :begin != @instance.current_node.body.type && @instance.current_node.body.match?(@options)
     end
   end
 end

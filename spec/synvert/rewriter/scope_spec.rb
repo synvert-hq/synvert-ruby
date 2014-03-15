@@ -17,22 +17,25 @@ end
 """
     }
     let(:node) { Parser::CurrentRuby.parse(source) }
-    let(:instance) { double() }
+    let(:instance) { double(:current_node => node, :current_node= => node) }
 
-    describe '#matching_nodes' do
-      it 'gets empty array if does not match anything' do
-        scope = Rewriter::Scope.new instance, type: 'send', message: 'missing' do; end
-        expect(scope.matching_nodes([node])).to eq []
+    describe '#process' do
+      it 'not call block if no matching node' do
+        run = false
+        scope = Rewriter::Scope.new instance, type: 'send', message: 'missing' do
+          run = true
+        end
+        scope.process
+        expect(run).to be_false
       end
 
-      it 'gets matching nodes' do
-        scope = Rewriter::Scope.new instance, type: 'send', receiver: 'FactoryGirl', message: 'create', arguments: [':post'] do; end
-        expect(scope.matching_nodes([node]).size).to eq 2
-      end
-
-      it 'gets matching nodes witch block caller' do
-        scope = Rewriter::Scope.new instance, type: 'block', caller: {message: 'it', arguments: ['gets posts']} do; end
-        expect(scope.matching_nodes([node]).size).to eq 1
+      it 'call block if there is matching node' do
+        run = false
+        scope = Rewriter::Scope.new instance, type: 'send', receiver: 'FactoryGirl', message: 'create', arguments: [':post'] do
+          run = true
+        end
+        scope.process
+        expect(run).to be_true
       end
     end
   end

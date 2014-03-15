@@ -8,16 +8,28 @@ module Synvert
       @block = block
     end
 
-    def matching_nodes(nodes)
-      @instance.instance_eval &@block
-      matching_nodes = []
-      while node = nodes.shift
-        matching_nodes << node if node.match?(@options)
-        node.recursive_children do |child_node|
-          matching_nodes << child_node if child_node.match?(@options)
+    def process
+      current_node = @instance.current_node
+      process_with_node current_node do
+        matching_nodes = []
+        matching_nodes << current_node if current_node.match? @options
+        current_node.recursive_children do |child_node|
+          matching_nodes << child_node if child_node.match? @options
+        end
+        matching_nodes.each do |matching_node|
+          process_with_node matching_node do
+            @instance.instance_eval &@block
+          end
         end
       end
-      matching_nodes
+    end
+
+  private
+
+    def process_with_node(node)
+      @instance.current_node = node
+      yield
+      @instance.current_node = node
     end
   end
 end

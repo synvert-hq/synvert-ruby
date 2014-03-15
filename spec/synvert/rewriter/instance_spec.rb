@@ -4,32 +4,56 @@ module Synvert
   describe Rewriter::Instance do
     let(:instance) { Rewriter::Instance.new('file pattern') }
 
-    describe '#insert' do
-      it 'sets an action' do
-        expect(Rewriter::InsertAction).to receive(:new).with('{{arguments.first}}.include FactoryGirl::Syntax::Methods')
-        instance.insert "{{arguments.first}}.include FactoryGirl::Syntax::Methods"
-      end
+    it 'parses within_node' do
+      scope = double()
+      block = Proc.new {}
+      expect(Rewriter::Scope).to receive(:new).with(instance, type: 'send', message: 'create', &block).and_return(scope)
+      expect(scope).to receive(:process)
+      instance.within_node(type: 'send', message: 'create', &block)
     end
 
-    describe '#insert_after' do
-      it 'sets an action' do
-        expect(Rewriter::InsertAfterAction).to receive(:new).with('{{arguments.first}}.include FactoryGirl::Syntax::Methods')
-        instance.insert_after "{{arguments.first}}.include FactoryGirl::Syntax::Methods"
-      end
+    it 'parses with_node' do
+      scope = double()
+      block = Proc.new {}
+      expect(Rewriter::Scope).to receive(:new).with(instance, type: 'send', message: 'create', &block).and_return(scope)
+      expect(scope).to receive(:process)
+      instance.with_node(type: 'send', message: 'create', &block)
     end
 
-    describe '#replace_with' do
-      it 'sets an action' do
-        expect(Rewriter::ReplaceWithAction).to receive(:new).with('create {{arguments}}')
-        instance.replace_with 'create {{arguments}}'
-      end
+    it 'parses unless_exist_node' do
+      condition = double()
+      block = Proc.new {}
+      expect(Rewriter::UnlessExistCondition).to receive(:new).with(instance, type: 'send', message: 'create', &block).and_return(condition)
+      expect(condition).to receive(:process)
+      instance.unless_exist_node(type: 'send', message: 'create', &block)
     end
 
-    describe '#remove' do
-      it 'sets an action' do
-        expect(Rewriter::RemoveAction).to receive(:new)
-        instance.remove
-      end
+    it 'parses if_only_exist_node' do
+      condition = double()
+      block = Proc.new {}
+      expect(Rewriter::IfOnlyExistCondition).to receive(:new).with(instance, type: 'send', message: 'create', &block).and_return(condition)
+      expect(condition).to receive(:process)
+      instance.if_only_exist_node(type: 'send', message: 'create', &block)
+    end
+
+    it 'parses insert' do
+      expect(Rewriter::InsertAction).to receive(:new).with(instance, '{{arguments.first}}.include FactoryGirl::Syntax::Methods')
+      instance.insert "{{arguments.first}}.include FactoryGirl::Syntax::Methods"
+    end
+
+    it 'parses insert_after' do
+      expect(Rewriter::InsertAfterAction).to receive(:new).with(instance, '{{arguments.first}}.include FactoryGirl::Syntax::Methods')
+      instance.insert_after "{{arguments.first}}.include FactoryGirl::Syntax::Methods"
+    end
+
+    it 'parses replace_with' do
+      expect(Rewriter::ReplaceWithAction).to receive(:new).with(instance, 'create {{arguments}}')
+      instance.replace_with 'create {{arguments}}'
+    end
+
+    it 'parses remove' do
+      expect(Rewriter::RemoveAction).to receive(:new).with(instance)
+      instance.remove
     end
 
     describe '#process' do

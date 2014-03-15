@@ -20,15 +20,11 @@ module Synvert
 
     def initialize(description, &block)
       @description = description
-      @instances = []
       @block = block
     end
 
     def process
       self.instance_eval &@block
-      if @gem_spec.match?
-        @instances.each { |instance| instance.process }
-      end
     end
 
     def gem_spec(name, version)
@@ -36,7 +32,9 @@ module Synvert
     end
 
     def within_file(file_pattern, &block)
-      @instances << Rewriter::Instance.new(file_pattern, &block)
+      if @gem_spec.match?
+        Rewriter::Instance.new(file_pattern, &block).process
+      end
     end
 
     alias within_files within_file

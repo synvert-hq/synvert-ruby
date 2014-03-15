@@ -2,29 +2,49 @@
 
 module Synvert
   class Rewriter::Action
-    def initialize(code)
+    def initialize(instance, code)
+      @instance = instance
       @code = code
+      @node = @instance.current_node
     end
 
-    def rewrite(source, node)
-      raise NotImplementedError.new 'rewrite method is not implemented'
+    def line
+      @node.loc.expression.line
+    end
+
+    def <=>(action)
+      self.begin_pos <=> action.begin_pos
     end
   end
 
   class Rewriter::ReplaceWithAction < Rewriter::Action
-    def rewrite(source, node)
-      begin_pos = node.loc.expression.begin_pos
-      end_pos = node.loc.expression.end_pos
-      source[begin_pos...end_pos] = node.to_source(@code)
-      source
+    def begin_pos
+      @node.loc.expression.begin_pos
+    end
+
+    def end_pos
+      @node.loc.expression.end_pos
+    end
+
+    def rewritten_code
+      @node.to_source(@code)
     end
   end
 
   class Rewriter::InsertAction < Rewriter::Action
-    def rewrite(source, node)
-      source[insert_position(node), 0] = "\n" + insert_indent(node) + node.to_source(@code)
-      source
+    def begin_pos
+      insert_position(@node)
     end
+
+    def end_pos
+      begin_pos
+    end
+
+    def rewritten_code
+      "\n" + insert_indent(@node) + @node.to_source(@code)
+    end
+
+  private
 
     def insert_position(node)
       case node.type
@@ -47,10 +67,19 @@ module Synvert
   end
 
   class Rewriter::InsertAfterAction < Rewriter::Action
-    def rewrite(source, node)
-      source[node.loc.expression.end_pos, 0] = "\n" + insert_indent(node) + node.to_source(@code)
-      source
+    def begin_pos
+      @node.loc.expression.end_pos
     end
+
+    def end_pos
+      begin_pos
+    end
+
+    def rewritten_code
+      insert_indent(@node) + @node.to_source(@code)
+    end
+
+  private
 
     def insert_indent(node)
       ' ' * node.indent
@@ -58,27 +87,20 @@ module Synvert
   end
 
   class Rewriter::RemoveAction < Rewriter::Action
-    def initialize
+    def initialize(instance, code=nil)
+      super
     end
 
-    def rewrite(source, node)
-      begin_pos = node.loc.expression.begin_pos
-      end_pos = node.loc.expression.end_pos
-      line = node.loc.expression.line
-      source[begin_pos...end_pos] = ''
-      remove_code_or_whole_line(source, line)
+    def begin_pos
+      @node.loc.expression.begin_pos
     end
 
-  private
-    def remove_code_or_whole_line(source, line)
-      newline_at_end_of_line = source[-1] == "\n"
-      source_arr = source.split("\n")
-      if source_arr[line - 1] && source_arr[line - 1].strip.empty?
-        source_arr.delete_at(line - 1)
-        source_arr.join("\n") + (newline_at_end_of_line ? "\n" : '')
-      else
-        source
-      end
+    def end_pos
+      @node.loc.expression.end_pos
+    end
+
+    def rewritten_code
+      ''
     end
   end
 end

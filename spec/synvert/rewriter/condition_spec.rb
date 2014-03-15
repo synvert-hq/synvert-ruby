@@ -11,25 +11,31 @@ module Synvert
       """
     }
     let(:node) { Parser::CurrentRuby.parse(source) }
-    let(:instance) { double() }
+    let(:instance) { double(:current_node => node) }
 
-    describe '#matching_nodes' do
-      it 'gets empty array if does not matchi anything' do
-        condition = Rewriter::UnlessExistCondition.new instance, type: 'send', message: 'include', arguments: {first: {to_s: 'FactoryGirl::Syntax::Methods'} } do; end
-        expect(condition.matching_nodes([node]).size).to eq 1
+    describe '#process' do
+      it 'call block if match anything' do
+        run = false
+        condition = Rewriter::UnlessExistCondition.new instance, type: 'send', message: 'include', arguments: ['FactoryGirl::Syntax::Methods'] do
+          run = true
+        end
+        condition.process
+        expect(run).to be_true
       end
 
-      it 'gets matching nodes' do
-        condition = Rewriter::UnlessExistCondition.new instance, type: 'send', message: 'include', arguments: {first: {to_s: 'EmailSpec::Helpers'} } do; end
-        expect(condition.matching_nodes([node])).to eq []
+      it 'not call block if not match anything' do
+        run = false
+        condition = Rewriter::UnlessExistCondition.new instance, type: 'send', message: 'include', arguments: ['EmailSpec::Helpers'] do
+          run = true
+        end
+        condition.process
+        expect(run).to be_false
       end
     end
   end
 
   describe Rewriter::IfOnlyExistCondition do
-    let(:instance) { double() }
-
-    describe '#matching_nodes' do
+    describe '#process' do
       it 'gets matching nodes' do
         source = """
           RSpec.configure do |config|
@@ -37,12 +43,16 @@ module Synvert
           end
         """
         node = Parser::CurrentRuby.parse(source)
-
-        condition = Rewriter::IfOnlyExistCondition.new instance, type: 'send', message: 'include', arguments: {first: 'EmailSpec::Helpers'} do; end
-        expect(condition.matching_nodes([node])).to eq [node]
+        instance = double(:current_node => node)
+        run = false
+        condition = Rewriter::IfOnlyExistCondition.new instance, type: 'send', message: 'include', arguments: ['EmailSpec::Helpers'] do
+          run = true
+        end
+        condition.process
+        expect(run).to be_true
       end
 
-      it 'gets empty array if does not match' do
+      it 'not call block if does not match' do
         source = """
           RSpec.configure do |config|
             config.include EmailSpec::Helpers
@@ -50,9 +60,13 @@ module Synvert
           end
         """
         node = Parser::CurrentRuby.parse(source)
-
-        condition = Rewriter::IfOnlyExistCondition.new instance, type: 'send', message: 'include', arguments: {first: {to_s: 'EmailSpec::Helpers'} } do; end
-        expect(condition.matching_nodes([node])).to eq []
+        instance = double(:current_node => node)
+        run = false
+        condition = Rewriter::IfOnlyExistCondition.new instance, type: 'send', message: 'include', arguments: ['EmailSpec::Helpers'] do
+          run = true
+        end
+        condition.process
+        expect(run).to be_false
       end
     end
   end
