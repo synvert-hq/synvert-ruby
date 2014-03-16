@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.0.4
+
+* Test snippets
+* Lazily execute blocks that allows executing any ruby code
+* Be able to save parsed data and use them later
+
 ## 0.0.3
 
 * Add snippet to upgrade rails 3.2 to rails 4.0
