@@ -23,23 +23,67 @@ module Synvert
   end
 
   describe Rewriter::InsertAction do
-    subject {
-      source = "RSpec.configure do |config|\nend"
-      block_node = Parser::CurrentRuby.parse(source)
-      instance = double(:current_node => block_node)
-      Rewriter::InsertAction.new(instance, '{{arguments.first}}.include FactoryGirl::Syntax::Methods')
-    }
+    describe 'block node' do
+      subject {
+        source = "RSpec.configure do |config|\nend"
+        block_node = Parser::CurrentRuby.parse(source)
+        instance = double(:current_node => block_node)
+        Rewriter::InsertAction.new(instance, '{{arguments.first}}.include FactoryGirl::Syntax::Methods')
+      }
 
-    it 'gets begin_pos' do
-      expect(subject.begin_pos).to eq 27
+      it 'gets begin_pos' do
+        expect(subject.begin_pos).to eq 27
+      end
+
+      it 'gets end_pos' do
+        expect(subject.end_pos).to eq 27
+      end
+
+      it 'gets rewritten_code' do
+        expect(subject.rewritten_code).to eq "\n  config.include FactoryGirl::Syntax::Methods"
+      end
     end
 
-    it 'gets end_pos' do
-      expect(subject.end_pos).to eq 27
+    describe 'class node without superclass' do
+      subject {
+        source = "class User\n  has_many :posts\nend"
+        class_node = Parser::CurrentRuby.parse(source)
+        instance = double(:current_node => class_node)
+        Rewriter::InsertAction.new(instance, 'include Deletable')
+      }
+
+      it 'gets begin_pos' do
+        expect(subject.begin_pos).to eq 10
+      end
+
+      it 'gets end_pos' do
+        expect(subject.end_pos).to eq 10
+      end
+
+      it 'gets rewritten_code' do
+        expect(subject.rewritten_code).to eq "\n  include Deletable"
+      end
     end
 
-    it 'gets rewritten_code' do
-      expect(subject.rewritten_code).to eq "\n  config.include FactoryGirl::Syntax::Methods"
+    describe 'class node with superclass' do
+      subject {
+        source = "class User < ActiveRecord::Base\n  has_many :posts\nend"
+        class_node = Parser::CurrentRuby.parse(source)
+        instance = double(:current_node => class_node)
+        Rewriter::InsertAction.new(instance, 'include Deletable')
+      }
+
+      it 'gets begin_pos' do
+        expect(subject.begin_pos).to eq 31
+      end
+
+      it 'gets end_pos' do
+        expect(subject.end_pos).to eq 31
+      end
+
+      it 'gets rewritten_code' do
+        expect(subject.rewritten_code).to eq "\n  include Deletable"
+      end
     end
   end
 

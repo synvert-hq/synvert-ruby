@@ -51,7 +51,7 @@ module Synvert
       when :block
         node.children[1].loc.expression.end_pos
       when :class
-        node.children[0].loc.expression.end_pos
+        node.children[1] ? node.children[1].loc.expression.end_pos : node.children[0].loc.expression.end_pos
       else
         node.children.last.loc.expression.end_pos
       end
