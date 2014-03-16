@@ -3,6 +3,7 @@ require 'spec_helper'
 describe 'FactoryGirl uses short synax' do
   before do
     Synvert::Configuration.instance.set :path, '.'
+    allow_any_instance_of(Synvert::Rewriter::GemSpec).to receive(:match?).and_return(true)
     rewriter_path = File.join(File.dirname(__FILE__), '../../../../lib/synvert/snippets/factory_girl/syntax_methods.rb')
     @rewriter = eval(File.read(rewriter_path))
   end
@@ -51,7 +52,6 @@ end
     '''}
 
     it 'process' do
-      allow_any_instance_of(Synvert::Rewriter::GemSpec).to receive(:match?).and_return(true)
       FileUtils.mkdir 'spec'
       FileUtils.mkdir 'spec/models'
       File.write 'spec/spec_helper.rb', spec_helper_content
@@ -98,7 +98,6 @@ end
     '''}
 
     it 'process' do
-      allow_any_instance_of(Synvert::Rewriter::GemSpec).to receive(:match?).and_return(true)
       FileUtils.mkdir 'test'
       FileUtils.mkdir 'test/unit'
       File.write 'test/test_helper.rb', test_helper_content
@@ -143,7 +142,6 @@ end
     '''}
 
     it 'process' do
-      allow_any_instance_of(Synvert::Rewriter::GemSpec).to receive(:match?).and_return(true)
       FileUtils.mkdir_p 'features/support'
       FileUtils.mkdir_p 'features/step_definitions'
       File.write 'features/support/env.rb', env_content

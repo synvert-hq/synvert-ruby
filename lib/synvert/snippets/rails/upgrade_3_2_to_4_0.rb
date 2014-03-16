@@ -1,13 +1,15 @@
 require 'securerandom'
 
-def dynamic_finder_to_hash(node, prefix)
-  fields = node.message.to_s[prefix.length..-1].split("_and_")
-  fields.length.times.map { |i|
-    fields[i] + ": " + node.arguments[i].to_s
-  }.join(", ")
+class Synvert::Rewriter::Instance
+  def dynamic_finder_to_hash(node, prefix)
+    fields = node.message.to_s[prefix.length..-1].split("_and_")
+    fields.length.times.map { |i|
+      fields[i] + ": " + node.arguments[i].source(self)
+    }.join(", ")
+  end
 end
 
-Synvert::Rewriter.new "Upgrade from rails 3.2 to rails 4.0" do
+Synvert::Rewriter.new "Upgrade rails from 3.2 to 4.0" do
   gem_spec 'rails', '3.2.0'
 
   within_file 'config/application.rb' do
@@ -15,7 +17,7 @@ Synvert::Rewriter.new "Upgrade from rails 3.2 to rails 4.0" do
     #   Bundler.require(*Rails.groups(:assets => %w(development test)))
     # end
     # => Bundler.require(:default, Rails.env)
-    with_node type: 'if', condition: {type: 'defined?', arguments: {first: 'Bundler'}} do
+    with_node type: 'if', condition: {type: 'defined?', arguments: ['Bundler']} do
       replace_with 'Bundler.require(:default, Rails.env)'
     end
   end
@@ -37,13 +39,13 @@ Synvert::Rewriter.new "Upgrade from rails 3.2 to rails 4.0" do
   within_file 'app/models/**/*.rb' do
     # scope :active, where(active: true) => scope :active, -> { where(active: true) }
     with_node type: 'send', receiver: nil, message: 'scope' do
-      replace_with 'scope {{self.arguments.first}}, -> { {{self.arguments.last}} }'
+      replace_with 'scope {{arguments.first}}, -> { {{arguments.last}} }'
     end
   end
 
   within_file 'test/unit/**/*.rb' do
     # ActiveRecord::TestCase => ActiveSupport::TestCase
-    with_node type: 'const', to_s: 'ActiveRecord::TestCase' do
+    with_node source: 'ActiveRecord::TestCase' do
       replace_with 'ActiveSupport::TestCase'
     end
   end
@@ -51,46 +53,54 @@ Synvert::Rewriter.new "Upgrade from rails 3.2 to rails 4.0" do
   within_file 'app/**/*.rb' do
     # find_all_by_... => where(...)
     with_node type: 'send', message: /find_all_by_(.*)/ do
-      hash_params = '{{find_all_by(self, "find_last_by_")}}'
-      replace_with "{{self.receiver}}.where(#{hash_params})"
+      hash_params = dynamic_finder_to_hash(node, "find_all_by_")
+      replace_with "{{receiver}}.where(#{hash_params})"
+    end
+  end
+
+  within_file 'app/**/*.rb' do
+    # find_by_... => where(...).first
+    with_node type: 'send', message: /find_by_(.*)/ do
+      hash_params = dynamic_finder_to_hash(node, "find_by_")
+      replace_with "{{receiver}}.where(#{hash_params}).first"
     end
   end
 
   within_file 'app/**/*.rb' do
     # find_last_by_... => where(...).last
     with_node type: 'send', message: /find_last_by_(.*)/ do
-      hash_params = '{{dynamic_finder_to_hash(self, "find_last_by_")}}'
-      replace_with "{{self.receiver}}.where(#{hash_params}).last"
+      hash_params = dynamic_finder_to_hash(node, "find_last_by_")
+      replace_with "{{receiver}}.where(#{hash_params}).last"
     end
   end
 
   within_file 'app/**/*.rb' do
     # scoped_by_... => where(...)
     with_node type: 'send', message: /scoped_by_(.*)/ do
-      hash_params = '{{dynamic_finder_to_hash(self, "scoped_by_")}}'
-      replace_with "{{self.receiver}}.where(#{hash_params})"
+      hash_params = dynamic_finder_to_hash(node, "scoped_by_")
+      replace_with "{{receiver}}.where(#{hash_params})"
     end
   end
 
   within_file 'app/**/*.rb' do
     # find_or_initialize_by_... => find_or_initialize_by(...)
     with_node type: 'send', message: /find_or_initialize_by_(.*)/ do
-      hash_params = '{{dynamic_finder_to_hash(self, "find_or_initialize_by_")}}'
-      replace_with "{{self.receiver}}.find_or_initialize_by(#{hash_params})"
+      hash_params = dynamic_finder_to_hash(node, "find_or_initialize_by_")
+      replace_with "{{receiver}}.find_or_initialize_by(#{hash_params})"
     end
   end
 
   within_file 'app/**/*.rb' do
     # find_or_create_by_... => find_or_create_by(...)
     with_node type: 'send', message: /find_or_create_by_(.*)/ do
-      hash_params = '{{dynamic_finder_to_hash(self, "find_or_create_by_")}}'
-      replace_with "{{self.receiver}}.find_or_create_by(#{hash_params})"
+      hash_params = dynamic_finder_to_hash(node, "find_or_create_by_")
+      replace_with "{{receiver}}.find_or_create_by(#{hash_params})"
     end
   end
 
   within_file 'config/initializers/wrap_parameters.rb' do
     # remove self.include_root_in_json = false
-    with_node type: 'block', caller: {receiver: 'ActiveSupport', message: 'on_load', arguments: {first: ':active_record'}} do
+    with_node type: 'block', caller: {receiver: 'ActiveSupport', message: 'on_load', arguments: [':active_record']} do
       if_only_exist_node to_ast: Parser::CurrentRuby.parse('self.include_root_in_json = false') do
         remove
       end
@@ -102,29 +112,29 @@ Synvert::Rewriter.new "Upgrade from rails 3.2 to rails 4.0" do
     unless_exist_node type: 'send', message: 'secret_key_base=' do
       with_node type: 'send', message: 'secret_token=' do
         secret = SecureRandom.hex(64)
-        insert_after "{{self.receiver}}.secret_key_base = '#{secret}'"
+        insert_after "{{receiver}}.secret_key_base = \"#{secret}\""
       end
     end
   end
 
   within_file 'config/**/*.rb' do
-    # remove ActionController::Base.page_cache_extension => ActionController::Base.default_static_extension
+    # remove ActionController::Base.page_cache_extension = ... => ActionController::Base.default_static_extension = ...
     with_node type: 'send', message: 'page_cache_extension=' do
-      replace_with 'ActionController::Base.default_static_extension = {{self.arguments}}'
+      replace_with 'ActionController::Base.default_static_extension = {{arguments}}'
     end
   end
 
   within_file 'config/routes.rb' do
     # Rack::Utils.escape('こんにちは') => 'こんにちは'
     with_node type: 'send', receiver: 'Rack::Utils', message: 'escape' do
-      replace_with '{{self.arguments}}'
+      replace_with '{{arguments}}'
     end
   end
 
   within_file 'config/routes.rb' do
     # match "/" => "root#index" => get "/" => "root#index"
     with_node type: 'send', message: 'match' do
-      replace_with 'get {{self.arguments}}'
+      replace_with 'get {{arguments}}'
     end
   end
 
@@ -149,7 +159,7 @@ Synvert::Rewriter.new "Upgrade from rails 3.2 to rails 4.0" do
    'ActionController::Response' => 'ActionDispatch::Response',
    'ActionController::Routing' => 'ActionDispatch::Routing'}.each do |deprecated, favor|
     within_file '**/*.rb' do
-      with_node to_s: deprecated do
+      with_node source: deprecated do
         replace_with favor
       end
     end

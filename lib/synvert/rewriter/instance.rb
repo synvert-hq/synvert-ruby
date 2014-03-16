@@ -29,12 +29,16 @@ module Synvert
 
         @actions.sort.reverse.each do |action|
           source[action.begin_pos...action.end_pos] = action.rewritten_code
-          remove_code_or_whole_line(source, action.line)
+          source = remove_code_or_whole_line(source, action.line)
         end
         @actions = []
 
         File.write file_path, source
       end
+    end
+
+    def node
+      @current_node
     end
 
     def within_node(options, &block)
