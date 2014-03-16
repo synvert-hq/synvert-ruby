@@ -55,6 +55,10 @@ module Synvert
       Rewriter::IfOnlyExistCondition.new(self, options, &block).process
     end
 
+    def append(code)
+      @actions << Rewriter::AppendAction.new(self, code)
+    end
+
     def insert(code)
       @actions << Rewriter::InsertAction.new(self, code)
     end

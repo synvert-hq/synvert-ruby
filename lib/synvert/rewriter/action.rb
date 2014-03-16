@@ -31,6 +31,30 @@ module Synvert
     end
   end
 
+  class Rewriter::AppendAction < Rewriter::Action
+    def begin_pos
+      @node.loc.expression.end_pos - 4
+    end
+
+    def end_pos
+      begin_pos
+    end
+
+    def rewritten_code
+      "\n" + append_indent(@node) + @node.rewritten_source(@code)
+    end
+
+  private
+
+    def append_indent(node)
+      if [:block, :class].include? node.type
+        ' ' * (node.indent + 2)
+      else
+        ' ' * node.indent
+      end
+    end
+  end
+
   class Rewriter::InsertAction < Rewriter::Action
     def begin_pos
       insert_position(@node)

@@ -1,6 +1,7 @@
 module Synvert
   class Rewriter
     autoload :Action, 'synvert/rewriter/action'
+    autoload :AppendAction, 'synvert/rewriter/action'
     autoload :InsertAction, 'synvert/rewriter/action'
     autoload :InsertAfterAction, 'synvert/rewriter/action'
     autoload :ReplaceWithAction, 'synvert/rewriter/action'

@@ -36,6 +36,11 @@ module Synvert
       instance.if_only_exist_node(type: 'send', message: 'create', &block)
     end
 
+    it 'parses append' do
+      expect(Rewriter::AppendAction).to receive(:new).with(instance, 'include FactoryGirl::Syntax::Methods')
+      instance.append "include FactoryGirl::Syntax::Methods"
+    end
+
     it 'parses insert' do
       expect(Rewriter::InsertAction).to receive(:new).with(instance, '{{arguments.first}}.include FactoryGirl::Syntax::Methods')
       instance.insert "{{arguments.first}}.include FactoryGirl::Syntax::Methods"

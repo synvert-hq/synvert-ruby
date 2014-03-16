@@ -22,6 +22,29 @@ module Synvert
     end
   end
 
+  describe Rewriter::AppendAction < Rewriter::Action do
+    describe 'class node' do
+      subject {
+        source = "class User\n  has_many :posts\nend"
+        class_node = Parser::CurrentRuby.parse(source)
+        instance = double(:current_node => class_node)
+        Rewriter::AppendAction.new(instance, 'def as_json; end')
+      }
+
+      it 'gets begin_pos' do
+        expect(subject.begin_pos).to eq 28
+      end
+
+      it 'gets end_pos' do
+        expect(subject.end_pos).to eq 28
+      end
+
+      it 'gets rewritten_code' do
+        expect(subject.rewritten_code).to eq "\n  def as_json; end"
+      end
+    end
+  end
+
   describe Rewriter::InsertAction do
     describe 'block node' do
       subject {
