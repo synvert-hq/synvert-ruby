@@ -22,6 +22,16 @@ module Synvert
     def initialize(description, &block)
       @description = description
       @block = block
+      @assignments = {}
+    end
+
+    def set(name, key, value)
+      @assignments[name] ||= {}
+      @assignments[name][key] = value
+    end
+
+    def get(name, key)
+      @assignments[name] and @assignments[name][key]
     end
 
     def process
@@ -34,7 +44,7 @@ module Synvert
 
     def within_file(file_pattern, &block)
       if @gem_spec.match?
-        Rewriter::Instance.new(file_pattern, &block).process
+        Rewriter::Instance.new(self, file_pattern, &block).process
       end
     end
 

@@ -7,6 +7,14 @@ module Synvert
       expect(rewriter.description).to eq 'this is description'
     end
 
+    describe 'get / set' do
+      it 'set and get parameters' do
+        rewriter = Rewriter.new 'this is description' do; end
+        rewriter.set 'parameter', 'post', ':title, :description'
+        expect(rewriter.get 'parameter', 'post').to eq ':title, :description'
+      end
+    end
+
     describe '#process' do
       it 'does nothing if gem_spec not match' do
         expect_any_instance_of(Rewriter::GemSpec).to receive(:match?).and_return(false)

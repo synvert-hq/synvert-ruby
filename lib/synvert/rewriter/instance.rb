@@ -4,7 +4,8 @@ module Synvert
   class Rewriter::Instance
     attr_accessor :current_node, :current_source, :current_file
 
-    def initialize(file_pattern, &block)
+    def initialize(rewriter, file_pattern, &block)
+      @rewriter = rewriter
       @actions = []
       @file_pattern = file_pattern
       @block = block
@@ -75,6 +76,14 @@ module Synvert
       @actions << Rewriter::RemoveAction.new(self)
     end
 
+    def assign(name, key, value)
+      @rewriter.set name, key, value
+    end
+
+    def fetch(name, key)
+      @rewriter.get name, key
+    end
+
   private
 
     def remove_code_or_whole_line(source, line)
@@ -82,6 +91,9 @@ module Synvert
       source_arr = source.split("\n")
       if source_arr[line - 1] && source_arr[line - 1].strip.empty?
         source_arr.delete_at(line - 1)
+        if source_arr[line - 2] && source_arr[line - 2].strip.empty? && source_arr[line - 1] && source_arr[line - 1].strip.empty?
+          source_arr.delete_at(line - 1)
+        end
         source_arr.join("\n") + (newline_at_end_of_line ? "\n" : '')
       else
         source
