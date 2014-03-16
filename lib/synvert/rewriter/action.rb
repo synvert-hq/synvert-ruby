@@ -12,6 +12,20 @@ module Synvert
       @node.loc.expression.line
     end
 
+    def rewritten_code
+      if rewritten_source.split("\n").length > 1
+        "\n\n" + rewritten_source.split("\n").map { |line|
+          indent(@node) + line
+        }.join("\n")
+      else
+        "\n" + indent(@node) + rewritten_source
+      end
+    end
+
+    def rewritten_source
+      @rewritten_source ||= @node.rewritten_source(@code)
+    end
+
     def <=>(action)
       self.begin_pos <=> action.begin_pos
     end
@@ -40,13 +54,9 @@ module Synvert
       begin_pos
     end
 
-    def rewritten_code
-      "\n" + append_indent(@node) + @node.rewritten_source(@code)
-    end
-
   private
 
-    def append_indent(node)
+    def indent(node)
       if [:block, :class].include? node.type
         ' ' * (node.indent + 2)
       else
@@ -64,10 +74,6 @@ module Synvert
       begin_pos
     end
 
-    def rewritten_code
-      "\n" + insert_indent(@node) + @node.rewritten_source(@code)
-    end
-
   private
 
     def insert_position(node)
@@ -81,7 +87,7 @@ module Synvert
       end
     end
 
-    def insert_indent(node)
+    def indent(node)
       if [:block, :class].include? node.type
         ' ' * (node.indent + 2)
       else
@@ -99,13 +105,9 @@ module Synvert
       begin_pos
     end
 
-    def rewritten_code
-      "\n" + insert_indent(@node) + @node.rewritten_source(@code)
-    end
-
   private
 
-    def insert_indent(node)
+    def indent(node)
       ' ' * node.indent
     end
   end

@@ -28,7 +28,7 @@ module Synvert
         source = "class User\n  has_many :posts\nend"
         class_node = Parser::CurrentRuby.parse(source)
         instance = double(:current_node => class_node)
-        Rewriter::AppendAction.new(instance, 'def as_json; end')
+        Rewriter::AppendAction.new(instance, "def as_json\n  super\nend")
       }
 
       it 'gets begin_pos' do
@@ -40,7 +40,7 @@ module Synvert
       end
 
       it 'gets rewritten_code' do
-        expect(subject.rewritten_code).to eq "\n  def as_json; end"
+        expect(subject.rewritten_code).to eq "\n\n  def as_json\n    super\n  end"
       end
     end
   end
