@@ -27,7 +27,7 @@ module Synvert
     end
 
     def rewritten_code
-      @node.to_source(@code)
+      @node.rewritten_source(@code)
     end
   end
 
@@ -41,7 +41,7 @@ module Synvert
     end
 
     def rewritten_code
-      "\n" + insert_indent(@node) + @node.to_source(@code)
+      "\n" + insert_indent(@node) + @node.rewritten_source(@code)
     end
 
   private
@@ -76,7 +76,7 @@ module Synvert
     end
 
     def rewritten_code
-      insert_indent(@node) + @node.to_source(@code)
+      "\n" + insert_indent(@node) + @node.rewritten_source(@code)
     end
 
   private

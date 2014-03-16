@@ -32,8 +32,10 @@ describe Parser::AST::Node do
     end
 
     it 'gets for block node' do
-      node = parse('RSpec.configure do |config|; end')
-      expect(node.arguments.map(&:to_s)).to eq ['config']
+      source = 'RSpec.configure do |config|; end'
+      node = parse(source)
+      instance = double(current_source: source)
+      expect(node.arguments.map { |argument| argument.source(instance) }).to eq ['config']
     end
 
     it 'gets for defined? node' do
@@ -63,58 +65,12 @@ describe Parser::AST::Node do
     end
   end
 
-  describe '#to_s' do
-    it 'gets for const node' do
-      node = parse('Synvert')
-      expect(node.to_s).to eq 'Synvert'
-
-      node = parse('Synvert::Rewriter::Instance')
-      expect(node.to_s).to eq 'Synvert::Rewriter::Instance'
-    end
-
-    it 'gets for sym node' do
-      node = parse(':synvert')
-      expect(node.to_s).to eq ':synvert'
-    end
-
-    it 'gets for str node' do
-      node = parse("'synvert'")
-      expect(node.to_s).to eq "'synvert'"
-    end
-
-    it 'gets for lvar node' do
-      node = parse("user = User.find 1; user.valid?").grep_node(type: 'lvar')
-      expect(node.to_s).to eq 'user'
-    end
-
-    it 'gets for ivar node' do
-      node = parse('@user')
-      expect(node.to_s).to eq '@user'
-    end
-
-    it 'gets for arg node' do
-      node = parse("RSpec.configure do |config|; end").grep_node(type: 'arg')
-      expect(node.to_s).to eq 'config'
-    end
-
-    it 'gets for self node' do
-      node = parse('self')
-      expect(node.to_s).to eq 'self'
-    end
-
-    it 'gets for true node' do
-      node = parse('true')
-      expect(node.to_s).to eq 'true'
-    end
-
-    it 'gets for false node' do
-      node = parse('false')
-      expect(node.to_s).to eq 'false'
-    end
-
-    it 'gets for send node' do
-      node = parse('email')
-      expect(node.to_s).to eq 'email'
+  describe '#source' do
+    it 'gets for node' do
+      source = 'params[:user][:email]'
+      instance = double(current_source: source)
+      node = parse(source)
+      expect(node.source(instance)).to eq 'params[:user][:email]'
     end
   end
 

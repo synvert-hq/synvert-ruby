@@ -17,7 +17,7 @@ module Synvert
     def match?
       match = false
       @instance.current_node.recursive_children do |child_node|
-        match = match || (child_node && child_node.match?(@options))
+        match = match || (child_node && child_node.match?(@instance, @options))
       end
       !match
     end
@@ -25,7 +25,8 @@ module Synvert
 
   class Rewriter::IfOnlyExistCondition < Rewriter::Condition
     def match?
-      :begin != @instance.current_node.body.type && @instance.current_node.body.match?(@options)
+      :begin != @instance.current_node.body.type &&
+        @instance.current_node.body.match?(@instance, @options)
     end
   end
 end

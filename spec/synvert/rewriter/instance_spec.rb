@@ -88,7 +88,7 @@ end
       it 'includes FactoryGirl::Syntax::Methods' do
         instance = Rewriter::Instance.new 'spec/spec_helper.rb'  do
           with_node type: 'block', caller: {receiver: 'RSpec', message: 'configure'} do
-            unless_exist_node type: 'send', message: 'include', arguments: {first: {to_s: 'FactoryGirl::Syntax::Methods'}} do
+            unless_exist_node type: 'send', message: 'include', arguments: ['FactoryGirl::Syntax::Methods'] do
               insert "{{arguments.first}}.include FactoryGirl::Syntax::Methods"
             end
           end
@@ -111,7 +111,7 @@ end
       it 'does not include FactoryGirl::Syntax::Methods' do
         instance = Rewriter::Instance.new 'spec/spec_helper.rb' do
           with_node type: 'block', caller: {receiver: 'RSpec', message: 'configure'} do
-            unless_exist_node type: 'send', message: 'include', arguments: {first: {to_s: 'FactoryGirl::Syntax::Methods'}} do
+            unless_exist_node type: 'send', message: 'include', arguments: ['FactoryGirl::Syntax::Methods'] do
               insert "{{arguments.first}}.include FactoryGirl::Syntax::Methods"
             end
           end

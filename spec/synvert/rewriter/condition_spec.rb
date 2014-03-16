@@ -11,7 +11,7 @@ module Synvert
       """
     }
     let(:node) { Parser::CurrentRuby.parse(source) }
-    let(:instance) { double(:current_node => node) }
+    let(:instance) { double(:current_node => node, :current_source => source) }
 
     describe '#process' do
       it 'call block if match anything' do
@@ -43,7 +43,7 @@ module Synvert
           end
         """
         node = Parser::CurrentRuby.parse(source)
-        instance = double(:current_node => node)
+        instance = double(:current_node => node, :current_source => source)
         run = false
         condition = Rewriter::IfOnlyExistCondition.new instance, type: 'send', message: 'include', arguments: ['EmailSpec::Helpers'] do
           run = true
@@ -60,7 +60,7 @@ module Synvert
           end
         """
         node = Parser::CurrentRuby.parse(source)
-        instance = double(:current_node => node)
+        instance = double(:current_node => node, :current_source => source)
         run = false
         condition = Rewriter::IfOnlyExistCondition.new instance, type: 'send', message: 'include', arguments: ['EmailSpec::Helpers'] do
           run = true

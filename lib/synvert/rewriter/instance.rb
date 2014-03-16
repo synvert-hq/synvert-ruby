@@ -22,6 +22,7 @@ module Synvert
         ast = parser.parse buffer
 
         @current_file = file_path
+        @current_source = source
         @current_node = ast
         instance_eval &@block
         @current_node = ast

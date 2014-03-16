@@ -60,7 +60,7 @@ module Synvert
     end
 
     it 'gets rewritten_code' do
-      expect(subject.rewritten_code).to eq "  include Bar"
+      expect(subject.rewritten_code).to eq "\n  include Bar"
     end
   end
 

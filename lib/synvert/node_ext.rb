@@ -60,25 +60,9 @@ class Parser::AST::Node
     end
   end
 
-  def to_ast
-    self
-  end
-
-  def to_s
-    case self.type
-    when :const
-      self.children.compact.map(&:to_s).join('::')
-    when :sym
-      ':' + self.children[0].to_s
-    when :str
-      "'" + self.children[0].to_s + "'"
-    when :arg, :lvar, :ivar
-      self.children[0].to_s
-    when :self, :true, :false
-      self.type.to_s
-    when :send
-      self.children[1].to_s
-    else
+  def source(instance)
+    if self.loc.expression
+      instance.current_source[self.loc.expression.begin_pos...self.loc.expression.end_pos]
     end
   end
 
@@ -101,21 +85,21 @@ class Parser::AST::Node
     end
   end
 
-  def match?(options)
+  def match?(instance, options)
     flat_hash(options).keys.all? do |multi_keys|
       if multi_keys.last == :any
-        actual_values = actual_value(self, multi_keys[0...-1])
+        actual_values = actual_value(self, instance, multi_keys[0...-1])
         expected = expected_value(options, multi_keys)
-        actual_values.any? { |actual| match_value?(actual, expected) }
+        actual_values.any? { |actual| match_value?(instance, actual, expected) }
       else
-        actual = actual_value(self, multi_keys)
+        actual = actual_value(self, instance, multi_keys)
         expected = expected_value(options, multi_keys)
-        match_value?(actual, expected)
+        match_value?(instance, actual, expected)
       end
     end
   end
 
-  def to_source(code)
+  def rewritten_source(code)
     code.gsub(/{{(.*?)}}/m) do
       evaluated = self.instance_eval $1
       case evaluated
@@ -128,23 +112,31 @@ class Parser::AST::Node
       when String
         evaluated
       else
-        raise NotImplementedError.new "to_source is not handled for #{evaluated.inspect}"
+        raise NotImplementedError.new "rewritten_source is not handled for #{evaluated.inspect}"
       end
     end
   end
 
 private
 
-  def match_value?(actual, expected)
+  def match_value?(instance, actual, expected)
     case expected
     when Symbol
       actual.to_sym == expected
     when String
-      actual.to_s == expected || actual.to_s == "'#{expected}'"
+      if Parser::AST::Node === actual
+        actual.source(instance) == expected
+      else
+        actual.to_s == expected
+      end
     when Regexp
-      actual.to_s =~ Regexp.new(expected.to_s, Regexp::MULTILINE)
+      if Parser::AST::Node === actual
+        actual.source(instance) =~ Regexp.new(expected.to_s, Regexp::MULTILINE)
+      else
+        actual.to_s =~ Regexp.new(expected.to_s, Regexp::MULTILINE)
+      end
     when Array
-      actual.zip(expected).all? { |a, e| match_value?(a, e) }
+      actual.zip(expected).all? { |a, e| match_value?(instance, a, e) }
     when NilClass
       actual.nil?
     when Parser::AST::Node
@@ -166,8 +158,12 @@ private
     new_hash
   end
 
-  def actual_value(node, multi_keys)
-    multi_keys.inject(node) { |n, key| n.send(key) if n }
+  def actual_value(node, instance, multi_keys)
+    multi_keys.inject(node) { |n, key|
+      if n
+        key == :source ? n.send(key, instance) : n.send(key)
+      end
+    }
   end
 
   def expected_value(options, multi_keys)

@@ -17,7 +17,7 @@ end
 """
     }
     let(:node) { Parser::CurrentRuby.parse(source) }
-    let(:instance) { double(:current_node => node, :current_node= => node) }
+    let(:instance) { double(:current_node => node, :current_node= => node, :current_source => source) }
 
     describe '#process' do
       it 'not call block if no matching node' do
