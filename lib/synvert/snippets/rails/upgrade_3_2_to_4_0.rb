@@ -22,10 +22,92 @@ Synvert::Rewriter.new "Upgrade rails from 3.2 to 4.0" do
     end
   end
 
-  within_file 'config/environments/production.rb' do
+  within_file 'config/**/*.rb' do
     # remove config.active_record.identity_map = true
     with_node type: 'send', receiver: {type: 'send', receiver: {type: 'send', message: 'config'}, message: 'active_record'}, message: 'identity_map=' do
       remove
+    end
+  end
+
+  within_file 'config/initializers/wrap_parameters.rb' do
+    # remove self.include_root_in_json = false
+    with_node type: 'block', caller: {receiver: 'ActiveSupport', message: 'on_load', arguments: [':active_record']} do
+      if_only_exist_node to_ast: Parser::CurrentRuby.parse('self.include_root_in_json = false') do
+        remove
+      end
+    end
+  end
+
+  within_file 'config/initializers/secret_token.rb' do
+    # insert Application.config.secret_key_base = '...'
+    unless_exist_node type: 'send', message: 'secret_key_base=' do
+      with_node type: 'send', message: 'secret_token=' do
+        secret = SecureRandom.hex(64)
+        insert_after "{{receiver}}.secret_key_base = \"#{secret}\""
+      end
+    end
+  end
+
+  within_files 'config/**/*.rb' do
+    # remove config.action_dispatch.best_standards_support = ...
+    with_node type: 'send', receiver: {type: 'send', receiver: {type: 'send', message: 'config'}, message: 'action_dispatch'}, message: 'best_standards_support=' do
+      remove
+    end
+  end
+
+  within_files 'config/**/*.rb' do
+    # remove config.active_record.whitelist_attributes = ...
+    with_node type: 'send', receiver: {type: 'send', receiver: {type: 'send', message: 'config'}, message: 'active_record'}, message: 'whitelist_attributes=' do
+      remove
+    end
+  end
+
+  within_file 'config/environments/production.rb' do
+    # append config.eager_load = true
+    unless_exist_node type: 'send', message: 'eager_load=' do
+      append 'config.eager_load = true'
+    end
+  end
+
+  within_file 'config/environments/development.rb' do
+    # append config.eager_load = false
+    unless_exist_node type: 'send', message: 'eager_load=' do
+      append 'config.eager_load = false'
+    end
+  end
+
+  within_file 'config/environments/test.rb' do
+    # append config.eager_load = false
+    unless_exist_node type: 'send', message: 'eager_load=' do
+      append 'config.eager_load = false'
+    end
+  end
+
+  within_files 'config/**/*.rb' do
+    # remove config.middleware.xxx(..., ActionDispatch::BestStandardsSupport)
+    with_node type: 'send', arguments: {any: 'ActionDispatch::BestStandardsSupport'} do
+      remove
+    end
+  end
+
+  within_files 'config/**/*.rb' do
+    # remove ActionController::Base.page_cache_extension = ... => ActionController::Base.default_static_extension = ...
+    with_node type: 'send', message: 'page_cache_extension=' do
+      replace_with 'ActionController::Base.default_static_extension = {{arguments}}'
+    end
+  end
+
+  within_file 'config/routes.rb' do
+    # Rack::Utils.escape('こんにちは') => 'こんにちは'
+    with_node type: 'send', receiver: 'Rack::Utils', message: 'escape' do
+      replace_with '{{arguments}}'
+    end
+  end
+
+  within_file 'config/routes.rb' do
+    # match "/" => "root#index" => get "/" => "root#index"
+    with_node type: 'send', message: 'match' do
+      replace_with 'get {{arguments}}'
     end
   end
 
@@ -95,58 +177,6 @@ Synvert::Rewriter.new "Upgrade rails from 3.2 to 4.0" do
     with_node type: 'send', message: /find_or_create_by_(.*)/ do
       hash_params = dynamic_finder_to_hash(node, "find_or_create_by_")
       replace_with "{{receiver}}.find_or_create_by(#{hash_params})"
-    end
-  end
-
-  within_file 'config/initializers/wrap_parameters.rb' do
-    # remove self.include_root_in_json = false
-    with_node type: 'block', caller: {receiver: 'ActiveSupport', message: 'on_load', arguments: [':active_record']} do
-      if_only_exist_node to_ast: Parser::CurrentRuby.parse('self.include_root_in_json = false') do
-        remove
-      end
-    end
-  end
-
-  within_file 'config/initializers/secret_token.rb' do
-    # insert Application.config.secret_key_base = '...'
-    unless_exist_node type: 'send', message: 'secret_key_base=' do
-      with_node type: 'send', message: 'secret_token=' do
-        secret = SecureRandom.hex(64)
-        insert_after "{{receiver}}.secret_key_base = \"#{secret}\""
-      end
-    end
-  end
-
-  within_files 'config/**/*.rb' do
-    # remove ActionController::Base.page_cache_extension = ... => ActionController::Base.default_static_extension = ...
-    with_node type: 'send', message: 'page_cache_extension=' do
-      replace_with 'ActionController::Base.default_static_extension = {{arguments}}'
-    end
-  end
-
-  within_file 'config/routes.rb' do
-    # Rack::Utils.escape('こんにちは') => 'こんにちは'
-    with_node type: 'send', receiver: 'Rack::Utils', message: 'escape' do
-      replace_with '{{arguments}}'
-    end
-  end
-
-  within_file 'config/routes.rb' do
-    # match "/" => "root#index" => get "/" => "root#index"
-    with_node type: 'send', message: 'match' do
-      replace_with 'get {{arguments}}'
-    end
-  end
-
-  within_files 'config/**/*.rb' do
-    with_node type: 'send', arguments: {any: 'ActionDispatch::BestStandardsSupport'} do
-      remove
-    end
-  end
-
-  within_files 'config/**/*.rb' do
-    with_node type: 'send', message: 'best_standards_support=' do
-      remove
     end
   end
 

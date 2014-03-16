@@ -9,13 +9,14 @@ describe 'Upgrade rails from 3.2 to 4.0' do
     expect(SecureRandom).to receive(:hex).with(64).and_return("bf4f3f46924ecd9adcb6515681c78144545bba454420973a274d7021ff946b8ef043a95ca1a15a9d1b75f9fbdf85d1a3afaf22f4e3c2f3f78e24a0a188b581df")
   end
 
-  describe 'guides', fakefs: true do
+  describe 'with fakefs', fakefs: true do
     let(:application_content) {'''
 if defined?(Bundler)
   Bundler.require(*Rails.groups(:assets => %w(development test)))
 end
 module Synvert
   class Application < Rails::Application
+    config.active_record.whitelist_attributes = true
     config.middleware.insert_before(Rack::Lock, ActionDispatch::BestStandardsSupport)
   end
 end
@@ -41,6 +42,29 @@ Synvert::Application.configure do
   config.cache_classes = true
 
   ActionController::Base.default_static_extension = "html"
+  config.eager_load = true
+end
+    '''}
+    let(:development_content) {'''
+Synvert::Application.configure do
+  config.cache_classes = false
+end
+    '''}
+    let(:development_rewritten_content) {'''
+Synvert::Application.configure do
+  config.cache_classes = false
+  config.eager_load = false
+end
+    '''}
+    let(:test_content) {'''
+Synvert::Application.configure do
+  config.cache_classes = false
+end
+    '''}
+    let(:test_rewritten_content) {'''
+Synvert::Application.configure do
+  config.cache_classes = false
+  config.eager_load = false
 end
     '''}
     let(:wrap_parameters_content) {'''
@@ -67,12 +91,14 @@ Synvert::Application.config.secret_key_base = "bf4f3f46924ecd9adcb6515681c781445
 Synvert::Application.routes.draw do
   get Rack::Utils.escape('こんにちは'), controller: 'welcome', action: 'index'
   match '/' => 'root#index'
+  match 'new', to: 'episodes#new'
 end
     """}
     let(:routes_rewritten_content) {"""
 Synvert::Application.routes.draw do
   get 'こんにちは', controller: 'welcome', action: 'index'
   get '/' => 'root#index'
+  get 'new', to: 'episodes#new'
 end
     """}
     let(:post_model_content) {'''
@@ -214,6 +240,8 @@ end
       FileUtils.mkdir_p 'test/unit'
       File.write 'config/application.rb', application_content
       File.write 'config/environments/production.rb', production_content
+      File.write 'config/environments/development.rb', development_content
+      File.write 'config/environments/test.rb', test_content
       File.write 'config/initializers/wrap_parameters.rb', wrap_parameters_content
       File.write 'config/initializers/secret_token.rb', secret_token_content
       File.write 'config/routes.rb', routes_content
@@ -225,6 +253,8 @@ end
       @rewriter.process
       expect(File.read 'config/application.rb').to eq application_rewritten_content
       expect(File.read 'config/environments/production.rb').to eq production_rewritten_content
+      expect(File.read 'config/environments/development.rb').to eq development_rewritten_content
+      expect(File.read 'config/environments/test.rb').to eq test_rewritten_content
       expect(File.read 'config/initializers/wrap_parameters.rb').to eq wrap_parameters_rewritten_content
       expect(File.read 'config/initializers/secret_token.rb').to eq secret_token_rewritten_content
       expect(File.read 'config/routes.rb').to eq routes_rewritten_content
