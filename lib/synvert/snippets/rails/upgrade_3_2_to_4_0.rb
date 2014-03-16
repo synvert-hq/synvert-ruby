@@ -219,13 +219,13 @@ Synvert::Rewriter.new "Upgrade rails from 3.2 to 4.0" do
   params.require(:#{object_name}).permit(#{fetch 'parameters', object_name})
 end"""
         end
-      end
 
-      # params[:xxx] => xxx_params
-      with_node type: 'send', receiver: 'params', message: '[]' do
-        object_name = eval(node.arguments.first.source(self)).to_s
-        if fetch('parameters', object_name)
-          replace_with "#{object_name}_params"
+        # params[:xxx] => xxx_params
+        with_node type: 'send', receiver: 'params', message: '[]' do
+          object_name = eval(node.arguments.first.source(self)).to_s
+          if fetch('parameters', object_name)
+            replace_with "#{object_name}_params"
+          end
         end
       end
     end
