@@ -74,8 +74,8 @@ class Parser::AST::Node
       "'" + self.children[0].to_s + "'"
     when :arg, :lvar, :ivar
       self.children[0].to_s
-    when :self
-      'self'
+    when :self, :true, :false
+      self.type.to_s
     when :send
       self.children[1].to_s
     else

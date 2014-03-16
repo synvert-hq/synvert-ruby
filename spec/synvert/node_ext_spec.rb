@@ -102,6 +102,16 @@ describe Parser::AST::Node do
       expect(node.to_s).to eq 'self'
     end
 
+    it 'gets for true node' do
+      node = parse('true')
+      expect(node.to_s).to eq 'true'
+    end
+
+    it 'gets for false node' do
+      node = parse('false')
+      expect(node.to_s).to eq 'false'
+    end
+
     it 'gets for send node' do
       node = parse('email')
       expect(node.to_s).to eq 'email'
