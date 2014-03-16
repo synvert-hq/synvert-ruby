@@ -46,7 +46,28 @@ module Synvert
   end
 
   describe Rewriter::InsertAction do
-    describe 'block node' do
+    describe 'block node without args' do
+      subject {
+        source = "Synvert::Application.configure do\nend"
+        block_node = Parser::CurrentRuby.parse(source)
+        instance = double(:current_node => block_node)
+        Rewriter::InsertAction.new(instance, 'config.eager_load = true')
+      }
+
+      it 'gets begin_pos' do
+        expect(subject.begin_pos).to eq 33
+      end
+
+      it 'gets end_pos' do
+        expect(subject.end_pos).to eq 33
+      end
+
+      it 'gets rewritten_code' do
+        expect(subject.rewritten_code).to eq "\n  config.eager_load = true"
+      end
+    end
+
+    describe 'block node with args' do
       subject {
         source = "RSpec.configure do |config|\nend"
         block_node = Parser::CurrentRuby.parse(source)
