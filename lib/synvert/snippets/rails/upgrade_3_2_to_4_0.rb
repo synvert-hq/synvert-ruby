@@ -29,28 +29,28 @@ Synvert::Rewriter.new "Upgrade rails from 3.2 to 4.0" do
     end
   end
 
-  within_file 'app/models/**/*.rb' do
+  within_files 'app/models/**/*.rb' do
     # self.serialized_attributes => self.class.serialized_attributes
     with_node type: 'send', receiver: 'self', message: 'serialized_attributes' do
       replace_with 'self.class.serialized_attributes'
     end
   end
 
-  within_file 'app/models/**/*.rb' do
+  within_files 'app/models/**/*.rb' do
     # scope :active, where(active: true) => scope :active, -> { where(active: true) }
     with_node type: 'send', receiver: nil, message: 'scope' do
       replace_with 'scope {{arguments.first}}, -> { {{arguments.last}} }'
     end
   end
 
-  within_file 'test/unit/**/*.rb' do
+  within_files 'test/unit/**/*.rb' do
     # ActiveRecord::TestCase => ActiveSupport::TestCase
     with_node source: 'ActiveRecord::TestCase' do
       replace_with 'ActiveSupport::TestCase'
     end
   end
 
-  within_file 'app/**/*.rb' do
+  within_files 'app/**/*.rb' do
     # find_all_by_... => where(...)
     with_node type: 'send', message: /find_all_by_(.*)/ do
       hash_params = dynamic_finder_to_hash(node, "find_all_by_")
@@ -58,7 +58,7 @@ Synvert::Rewriter.new "Upgrade rails from 3.2 to 4.0" do
     end
   end
 
-  within_file 'app/**/*.rb' do
+  within_files 'app/**/*.rb' do
     # find_by_... => where(...).first
     with_node type: 'send', message: /find_by_(.*)/ do
       hash_params = dynamic_finder_to_hash(node, "find_by_")
@@ -66,7 +66,7 @@ Synvert::Rewriter.new "Upgrade rails from 3.2 to 4.0" do
     end
   end
 
-  within_file 'app/**/*.rb' do
+  within_files 'app/**/*.rb' do
     # find_last_by_... => where(...).last
     with_node type: 'send', message: /find_last_by_(.*)/ do
       hash_params = dynamic_finder_to_hash(node, "find_last_by_")
@@ -74,7 +74,7 @@ Synvert::Rewriter.new "Upgrade rails from 3.2 to 4.0" do
     end
   end
 
-  within_file 'app/**/*.rb' do
+  within_files 'app/**/*.rb' do
     # scoped_by_... => where(...)
     with_node type: 'send', message: /scoped_by_(.*)/ do
       hash_params = dynamic_finder_to_hash(node, "scoped_by_")
@@ -82,7 +82,7 @@ Synvert::Rewriter.new "Upgrade rails from 3.2 to 4.0" do
     end
   end
 
-  within_file 'app/**/*.rb' do
+  within_files 'app/**/*.rb' do
     # find_or_initialize_by_... => find_or_initialize_by(...)
     with_node type: 'send', message: /find_or_initialize_by_(.*)/ do
       hash_params = dynamic_finder_to_hash(node, "find_or_initialize_by_")
@@ -90,7 +90,7 @@ Synvert::Rewriter.new "Upgrade rails from 3.2 to 4.0" do
     end
   end
 
-  within_file 'app/**/*.rb' do
+  within_files 'app/**/*.rb' do
     # find_or_create_by_... => find_or_create_by(...)
     with_node type: 'send', message: /find_or_create_by_(.*)/ do
       hash_params = dynamic_finder_to_hash(node, "find_or_create_by_")
@@ -117,7 +117,7 @@ Synvert::Rewriter.new "Upgrade rails from 3.2 to 4.0" do
     end
   end
 
-  within_file 'config/**/*.rb' do
+  within_files 'config/**/*.rb' do
     # remove ActionController::Base.page_cache_extension = ... => ActionController::Base.default_static_extension = ...
     with_node type: 'send', message: 'page_cache_extension=' do
       replace_with 'ActionController::Base.default_static_extension = {{arguments}}'
@@ -138,13 +138,13 @@ Synvert::Rewriter.new "Upgrade rails from 3.2 to 4.0" do
     end
   end
 
-  within_file 'config/**/*.rb' do
+  within_files 'config/**/*.rb' do
     with_node type: 'send', arguments: {any: 'ActionDispatch::BestStandardsSupport'} do
       remove
     end
   end
 
-  within_file 'config/**/*.rb' do
+  within_files 'config/**/*.rb' do
     with_node type: 'send', message: 'best_standards_support=' do
       remove
     end
@@ -158,9 +158,45 @@ Synvert::Rewriter.new "Upgrade rails from 3.2 to 4.0" do
    'ActionController::AbstractResponse' => 'ActionDispatch::Response',
    'ActionController::Response' => 'ActionDispatch::Response',
    'ActionController::Routing' => 'ActionDispatch::Routing'}.each do |deprecated, favor|
-    within_file '**/*.rb' do
+    within_files '**/*.rb' do
       with_node source: deprecated do
         replace_with favor
+      end
+    end
+  end
+
+  #####################
+  # strong_parameters #
+  #####################
+  within_files 'app/models/**/*.rb' do
+    # assign and remove attr_accessible ...
+    within_node type: 'class' do
+      class_node = node
+      with_node type: 'send', message: 'attr_accessible' do
+        assign 'parameters', class_node.name.source(self).underscore, node.arguments.map { |key| key.source(self) }.join(', ')
+        remove
+      end
+    end
+  end
+
+  within_file 'app/controllers/**/*.rb' do
+    within_node type: 'class' do
+      # insert def xxx_params; ...; end
+      object_name = node.name.source(self).sub('Controller', '').singularize.underscore
+      if fetch('parameters', object_name)
+        unless_exist_node type: 'def', name: "#{object_name}_params" do
+          append """def #{object_name}_params
+  params.require(:#{object_name}).permit(#{fetch 'parameters', object_name})
+end"""
+        end
+      end
+
+      # params[:xxx] => xxx_params
+      with_node type: 'send', receiver: 'params', message: '[]' do
+        object_name = eval(node.arguments.first.source(self)).to_s
+        if fetch('parameters', object_name)
+          replace_with "#{object_name}_params"
+        end
       end
     end
   end

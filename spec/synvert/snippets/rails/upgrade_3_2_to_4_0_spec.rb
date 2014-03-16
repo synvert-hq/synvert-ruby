@@ -44,11 +44,17 @@ Synvert::Application.configure do
 end
     '''}
     let(:wrap_parameters_content) {'''
+ActiveSupport.on_load(:action_controller) do
+  wrap_parameters format: [:json]
+end
 ActiveSupport.on_load(:active_record) do
   self.include_root_in_json = false
 end
     '''}
     let(:wrap_parameters_rewritten_content) {'''
+ActiveSupport.on_load(:action_controller) do
+  wrap_parameters format: [:json]
+end
     '''}
     let(:secret_token_content) {'''
 Synvert::Application.config.secret_token = "0447aa931d42918bfb934750bb78257088fb671186b5d1b6f9fddf126fc8a14d34f1d045cefab3900751c3da121a8dd929aec9bafe975f1cabb48232b4002e4e"
@@ -72,6 +78,8 @@ end
     let(:post_model_content) {'''
 class Post < ActiveRecord::Base
   scope :active, where(active: true)
+
+  attr_accessible :title, :description
 
   def serialized_attrs
     self.serialized_attributes
@@ -141,6 +149,34 @@ class UsersController < ApplicationController
   end
 end
     '''}
+    let(:posts_controller_content) {'''
+class PostsController < ApplicationController
+  def update
+    @post = Post.find(params[:id])
+    if @post.update_attributes params[:post]
+      redirect_to post_path(@post)
+    else
+      render :action => :edit
+    end
+  end
+end
+    '''}
+    let(:posts_controller_rewritten_content) {'''
+class PostsController < ApplicationController
+  def update
+    @post = Post.find(params[:id])
+    if @post.update_attributes post_params
+      redirect_to post_path(@post)
+    else
+      render :action => :edit
+    end
+  end
+
+  def post_params
+    params.require(:post).permit(:title, :description)
+  end
+end
+    '''}
     let(:post_test_content) {'''
 require "test_helper"
 
@@ -183,6 +219,7 @@ end
       File.write 'config/routes.rb', routes_content
       File.write 'app/models/post.rb', post_model_content
       File.write 'app/controllers/users_controller.rb', users_controller_content
+      File.write 'app/controllers/posts_controller.rb', posts_controller_content
       File.write 'test/unit/post_test.rb', post_test_content
       File.write 'test/test_helper.rb', test_helper_content
       @rewriter.process
@@ -193,6 +230,7 @@ end
       expect(File.read 'config/routes.rb').to eq routes_rewritten_content
       expect(File.read 'app/models/post.rb').to eq post_model_rewritten_content
       expect(File.read 'app/controllers/users_controller.rb').to eq users_controller_rewritten_content
+      expect(File.read 'app/controllers/posts_controller.rb').to eq posts_controller_rewritten_content
       expect(File.read 'test/unit/post_test.rb').to eq post_test_rewritten_content
       expect(File.read 'test/test_helper.rb').to eq test_helper_rewritten_content
     end

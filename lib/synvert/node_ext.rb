@@ -1,6 +1,6 @@
 class Parser::AST::Node
   def name
-    if :class == self.type
+    if [:class, :def].include? self.type
       self.children[0]
     else
       raise NotImplementedError.new "name is not handled for #{self.inspect}"

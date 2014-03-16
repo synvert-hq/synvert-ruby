@@ -9,6 +9,11 @@ describe Parser::AST::Node do
       node = parse('class Synvert::Rewriter::Instance; end')
       expect(node.name).to eq parse('Synvert::Rewriter::Instance')
     end
+
+    it 'gets for def node' do
+      node = parse('def current_node; end')
+      expect(node.name).to eq :current_node
+    end
   end
 
   describe '#receiver' do

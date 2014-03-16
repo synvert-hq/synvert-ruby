@@ -4,6 +4,7 @@ require 'bundler'
 require 'parser'
 require 'parser/current'
 require 'ast'
+require 'active_support/inflector'
 require 'synvert/node_ext'
 
 module Synvert
