@@ -63,23 +63,23 @@ Synvert::Rewriter.new "Upgrade rails from 3.2 to 4.0" do
   end
 
   within_file 'config/environments/production.rb' do
-    # append config.eager_load = true
+    # insert config.eager_load = true
     unless_exist_node type: 'send', message: 'eager_load=' do
-      append 'config.eager_load = true'
+      insert 'config.eager_load = true'
     end
   end
 
   within_file 'config/environments/development.rb' do
-    # append config.eager_load = false
+    # insert config.eager_load = false
     unless_exist_node type: 'send', message: 'eager_load=' do
-      append 'config.eager_load = false'
+      insert 'config.eager_load = false'
     end
   end
 
   within_file 'config/environments/test.rb' do
-    # append config.eager_load = false
+    # insert config.eager_load = false
     unless_exist_node type: 'send', message: 'eager_load=' do
-      append 'config.eager_load = false'
+      insert 'config.eager_load = false'
     end
   end
 

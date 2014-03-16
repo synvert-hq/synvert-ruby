@@ -39,10 +39,10 @@ end
     '''}
     let(:production_rewritten_content) {'''
 Synvert::Application.configure do
+  config.eager_load = true
   config.cache_classes = true
 
   ActionController::Base.default_static_extension = "html"
-  config.eager_load = true
 end
     '''}
     let(:development_content) {'''
@@ -52,8 +52,8 @@ end
     '''}
     let(:development_rewritten_content) {'''
 Synvert::Application.configure do
-  config.cache_classes = false
   config.eager_load = false
+  config.cache_classes = false
 end
     '''}
     let(:test_content) {'''
@@ -63,8 +63,8 @@ end
     '''}
     let(:test_rewritten_content) {'''
 Synvert::Application.configure do
-  config.cache_classes = false
   config.eager_load = false
+  config.cache_classes = false
 end
     '''}
     let(:wrap_parameters_content) {'''
