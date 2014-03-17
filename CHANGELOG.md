@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.0.5
+
+* Add add_snippet dsl for reuse
+* Abstract strong_parameters and convert_dynamic_finders snippet
+
 ## 0.0.4
 
 * Test snippets
