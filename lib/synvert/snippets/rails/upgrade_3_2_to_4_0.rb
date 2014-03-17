@@ -1,14 +1,5 @@
 require 'securerandom'
 
-class Synvert::Rewriter::Instance
-  def dynamic_finder_to_hash(node, prefix)
-    fields = node.message.to_s[prefix.length..-1].split("_and_")
-    fields.length.times.map { |i|
-      fields[i] + ": " + node.arguments[i].source(self)
-    }.join(", ")
-  end
-end
-
 Synvert::Rewriter.new "upgrade_rails_3_2_to_4_0", "Upgrade rails from 3.2 to 4.0" do
   gem_spec 'rails', '3.2.0'
 
@@ -125,54 +116,6 @@ Synvert::Rewriter.new "upgrade_rails_3_2_to_4_0", "Upgrade rails from 3.2 to 4.0
     end
   end
 
-  within_files 'app/**/*.rb' do
-    # find_all_by_... => where(...)
-    with_node type: 'send', message: /find_all_by_(.*)/ do
-      hash_params = dynamic_finder_to_hash(node, "find_all_by_")
-      replace_with "{{receiver}}.where(#{hash_params})"
-    end
-  end
-
-  within_files 'app/**/*.rb' do
-    # find_by_... => where(...).first
-    with_node type: 'send', message: /find_by_(.*)/ do
-      hash_params = dynamic_finder_to_hash(node, "find_by_")
-      replace_with "{{receiver}}.where(#{hash_params}).first"
-    end
-  end
-
-  within_files 'app/**/*.rb' do
-    # find_last_by_... => where(...).last
-    with_node type: 'send', message: /find_last_by_(.*)/ do
-      hash_params = dynamic_finder_to_hash(node, "find_last_by_")
-      replace_with "{{receiver}}.where(#{hash_params}).last"
-    end
-  end
-
-  within_files 'app/**/*.rb' do
-    # scoped_by_... => where(...)
-    with_node type: 'send', message: /scoped_by_(.*)/ do
-      hash_params = dynamic_finder_to_hash(node, "scoped_by_")
-      replace_with "{{receiver}}.where(#{hash_params})"
-    end
-  end
-
-  within_files 'app/**/*.rb' do
-    # find_or_initialize_by_... => find_or_initialize_by(...)
-    with_node type: 'send', message: /find_or_initialize_by_(.*)/ do
-      hash_params = dynamic_finder_to_hash(node, "find_or_initialize_by_")
-      replace_with "{{receiver}}.find_or_initialize_by(#{hash_params})"
-    end
-  end
-
-  within_files 'app/**/*.rb' do
-    # find_or_create_by_... => find_or_create_by(...)
-    with_node type: 'send', message: /find_or_create_by_(.*)/ do
-      hash_params = dynamic_finder_to_hash(node, "find_or_create_by_")
-      replace_with "{{receiver}}.find_or_create_by(#{hash_params})"
-    end
-  end
-
   {'ActionController::Integration' => 'ActionDispatch::Integration',
    'ActionController::IntegrationTest' => 'ActionDispatch::IntegrationTest',
    'ActionController::PerformanceTest' => 'ActionDispatch::PerformanceTest',
@@ -188,5 +131,6 @@ Synvert::Rewriter.new "upgrade_rails_3_2_to_4_0", "Upgrade rails from 3.2 to 4.0
     end
   end
 
+  add_snippet 'convert_dynamic_finders'
   add_snippet 'strong_parameters'
 end
