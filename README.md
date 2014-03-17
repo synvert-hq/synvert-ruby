@@ -1,5 +1,7 @@
 # Synvert
 
+[![Build Status](https://secure.travis-ci.org/xinminlabs/synvert.png)](http://travis-ci.org/xinminlabs/synvert)
+
 synvert = syntax + convert, makes it easy to rewrite ruby code
 automatically.
 
