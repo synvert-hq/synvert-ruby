@@ -125,7 +125,7 @@ private
       actual.to_sym == expected
     when String
       if Parser::AST::Node === actual
-        actual.source(instance) == expected
+        actual.source(instance) == expected || actual.source(instance) == ':' + expected
       else
         actual.to_s == expected
       end
