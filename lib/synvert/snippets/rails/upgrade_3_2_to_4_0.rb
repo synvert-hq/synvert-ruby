@@ -55,13 +55,6 @@ Synvert::Rewriter.new "Upgrade rails from 3.2 to 4.0" do
     end
   end
 
-  within_files 'config/**/*.rb' do
-    # remove config.active_record.whitelist_attributes = ...
-    with_node type: 'send', receiver: {type: 'send', receiver: {type: 'send', message: 'config'}, message: 'active_record'}, message: 'whitelist_attributes=' do
-      remove
-    end
-  end
-
   within_file 'config/environments/production.rb' do
     # insert config.eager_load = true
     unless_exist_node type: 'send', message: 'eager_load=' do

@@ -18,7 +18,15 @@ module Synvert
         rewriter.process
       end
 
-      it 'delegates process to instances' do
+      it 'delegates process to instances if gem_spec not exist' do
+        expect_any_instance_of(Rewriter::Instance).to receive(:process)
+        rewriter = Rewriter.new 'description' do
+          within_file 'config/routes.rb' do; end
+        end
+        rewriter.process
+      end
+
+      it 'delegates process to instances if gem_spec matches' do
         expect_any_instance_of(Rewriter::GemSpec).to receive(:match?).and_return(true)
         expect_any_instance_of(Rewriter::Instance).to receive(:process)
         rewriter = Rewriter.new 'description' do

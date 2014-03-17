@@ -33,7 +33,7 @@ module Synvert
     end
 
     def within_file(file_pattern, &block)
-      if @gem_spec.match?
+      if !@gem_spec || @gem_spec.match?
         Rewriter::Instance.new(file_pattern, &block).process
       end
     end
