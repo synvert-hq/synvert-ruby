@@ -198,12 +198,13 @@ Synvert::Rewriter.new "Upgrade rails from 3.2 to 4.0" do
   #####################
   # strong_parameters #
   #####################
+  parameters = {}
   within_files 'app/models/**/*.rb' do
     # assign and remove attr_accessible ...
     within_node type: 'class' do
-      class_node = node
+      object_name = node.name.source(self).underscore
       with_node type: 'send', message: 'attr_accessible' do
-        assign 'parameters', class_node.name.source(self).underscore, node.arguments.map { |key| key.source(self) }.join(', ')
+        parameters[object_name] = node.arguments.map { |key| key.source(self) }.join(', ')
         remove
       end
     end
@@ -213,17 +214,17 @@ Synvert::Rewriter.new "Upgrade rails from 3.2 to 4.0" do
     within_node type: 'class' do
       # insert def xxx_params; ...; end
       object_name = node.name.source(self).sub('Controller', '').singularize.underscore
-      if fetch('parameters', object_name)
+      if parameters[object_name]
         unless_exist_node type: 'def', name: "#{object_name}_params" do
           append """def #{object_name}_params
-  params.require(:#{object_name}).permit(#{fetch 'parameters', object_name})
+  params.require(:#{object_name}).permit(#{parameters[object_name]})
 end"""
         end
 
         # params[:xxx] => xxx_params
         with_node type: 'send', receiver: 'params', message: '[]' do
           object_name = eval(node.arguments.first.source(self)).to_s
-          if fetch('parameters', object_name)
+          if parameters[object_name]
             replace_with "#{object_name}_params"
           end
         end
