@@ -11,4 +11,5 @@ module Synvert
   autoload :CheckingVisitor, 'synvert/checking_visitor'
   autoload :Configuration, 'synvert/configuration'
   autoload :Rewriter, 'synvert/rewriter'
+  autoload :RewriterNotFound, 'synvert/rewriter_not_found'
 end

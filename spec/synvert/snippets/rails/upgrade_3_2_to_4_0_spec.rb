@@ -6,6 +6,8 @@ describe 'Upgrade rails from 3.2 to 4.0' do
     rewriter_path = File.join(File.dirname(__FILE__), '../../../../lib/synvert/snippets/rails/upgrade_3_2_to_4_0.rb')
     @rewriter = eval(File.read(rewriter_path))
     allow_any_instance_of(Synvert::Rewriter::GemSpec).to receive(:match?).and_return(true)
+    strong_parameters_rewriter_path = File.join(File.dirname(__FILE__), '../../../../lib/synvert/snippets/rails/strong_parameters.rb')
+    eval(File.read(strong_parameters_rewriter_path))
     expect(SecureRandom).to receive(:hex).with(64).and_return("bf4f3f46924ecd9adcb6515681c78144545bba454420973a274d7021ff946b8ef043a95ca1a15a9d1b75f9fbdf85d1a3afaf22f4e3c2f3f78e24a0a188b581df")
   end
 

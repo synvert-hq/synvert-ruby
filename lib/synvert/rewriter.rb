@@ -17,11 +17,26 @@ module Synvert
 
     autoload :GemSpec, 'synvert/rewriter/gem_spec'
 
-    attr_reader :description
+    class <<self
+      def register(name, rewriter)
+        @rewriters ||= {}
+        @rewriters[name.to_s] = rewriter
+      end
 
-    def initialize(description, &block)
+      def call(name)
+        if @rewriters[name.to_s]
+          @rewriters[name.to_s].process
+        else
+          raise RewriterNotFound.new "Rewriter #{name} not found"
+        end
+      end
+    end
+
+    def initialize(name, description, &block)
+      @name = name
       @description = description
       @block = block
+      self.class.register(name, self)
     end
 
     def process
@@ -39,5 +54,9 @@ module Synvert
     end
 
     alias within_files within_file
+
+    def add_snippet(name)
+      self.class.call(name)
+    end
   end
 end

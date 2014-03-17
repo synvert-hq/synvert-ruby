@@ -15,9 +15,10 @@ module Synvert
       paths = optparse.parse(args)
       Configuration.instance.set :path, paths.first || Dir.pwd
 
-      Dir.glob(File.join(File.dirname(__FILE__), 'snippets/**/*.rb')).each do |file|
-        eval(File.read(file)).process
+      rewriters = Dir.glob(File.join(File.dirname(__FILE__), 'snippets/**/*.rb')).map do |file|
+        eval(File.read(file))
       end
+      rewriters.map(&:process)
     end
   end
 end

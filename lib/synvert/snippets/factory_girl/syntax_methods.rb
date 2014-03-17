@@ -1,4 +1,4 @@
-Synvert::Rewriter.new "FactoryGirl uses short syntax" do
+Synvert::Rewriter.new "factory_girl_short_syntax", "FactoryGirl uses short syntax" do
   gem_spec 'factory_girl', '2.0.0'
 
   # insert include FactoryGirl::Syntax::Methods
