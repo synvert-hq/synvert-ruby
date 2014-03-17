@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'spec_helper'
 
 describe 'Upgrade rails from 3.2 to 4.0' do
