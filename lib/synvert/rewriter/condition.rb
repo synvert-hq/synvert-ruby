@@ -13,6 +13,16 @@ module Synvert
     end
   end
 
+  class Rewriter::IfExistCondition < Rewriter::Condition
+    def match?
+      match = false
+      @instance.current_node.recursive_children do |child_node|
+        match = match || (child_node && child_node.match?(@instance, @options))
+      end
+      match
+    end
+  end
+
   class Rewriter::UnlessExistCondition < Rewriter::Condition
     def match?
       match = false

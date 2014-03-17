@@ -12,6 +12,7 @@ module Synvert
     autoload :Scope, 'synvert/rewriter/scope'
 
     autoload :Condition, 'synvert/rewriter/condition'
+    autoload :IfExistCondition, 'synvert/rewriter/condition'
     autoload :UnlessExistCondition, 'synvert/rewriter/condition'
     autoload :IfOnlyExistCondition, 'synvert/rewriter/condition'
 

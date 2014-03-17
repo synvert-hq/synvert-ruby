@@ -47,6 +47,10 @@ module Synvert
 
     alias with_node within_node
 
+    def if_exist_node(options, &block)
+      Rewriter::IfExistCondition.new(self, options, &block).process
+    end
+
     def unless_exist_node(options, &block)
       Rewriter::UnlessExistCondition.new(self, options, &block).process
     end

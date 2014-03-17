@@ -20,6 +20,14 @@ module Synvert
       instance.with_node(type: 'send', message: 'create', &block)
     end
 
+    it 'parses if_exist_node' do
+      condition = double()
+      block = Proc.new {}
+      expect(Rewriter::IfExistCondition).to receive(:new).with(instance, type: 'send', message: 'create', &block).and_return(condition)
+      expect(condition).to receive(:process)
+      instance.if_exist_node(type: 'send', message: 'create', &block)
+    end
+
     it 'parses unless_exist_node' do
       condition = double()
       block = Proc.new {}
