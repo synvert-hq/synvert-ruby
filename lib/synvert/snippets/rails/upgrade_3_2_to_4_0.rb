@@ -108,7 +108,9 @@ Synvert::Rewriter.new "upgrade_rails_3_2_to_4_0", "Upgrade rails from 3.2 to 4.0
   within_files 'app/models/**/*.rb' do
     # scope :active, where(active: true) => scope :active, -> { where(active: true) }
     with_node type: 'send', receiver: nil, message: 'scope' do
-      replace_with 'scope {{arguments.first}}, -> { {{arguments.last}} }'
+      unless_exist_node type: 'block', caller: {type: 'send', message: 'lambda'} do
+        replace_with 'scope {{arguments.first}}, -> { {{arguments.last}} }'
+      end
     end
   end
 
