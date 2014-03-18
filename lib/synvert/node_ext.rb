@@ -139,6 +139,10 @@ private
       actual.zip(expected).all? { |a, e| match_value?(instance, a, e) }
     when NilClass
       actual.nil?
+    when TrueClass
+      :true == actual.type
+    when FalseClass
+      :false == actual.type
     when Parser::AST::Node
       actual == expected
     else
