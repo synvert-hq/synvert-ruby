@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.0.6
+
+* Add -> {} only when not exist in rails upgrade snippet
+* Add travis support
+
 ## 0.0.5
 
 * Add add_snippet dsl for reuse
