@@ -9,19 +9,7 @@ automatically.
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'synvert'
-```
-
-And then execute:
-
-```
-$ bundle
-```
-
-Or install it yourself as:
+Install it using rubygems
 
 ```
 $ gem install synvert
