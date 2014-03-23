@@ -36,6 +36,13 @@ GEM
       expect(gem_spec).not_to be_match
     end
 
+    it 'returns false if gem does not exist in Gemfile.lock' do
+      expect(File).to receive(:exists?).with('./Gemfile.lock').and_return(true)
+      expect(File).to receive(:read).with('./Gemfile.lock').and_return(gemfile_lock_content)
+      gem_spec = Rewriter::GemSpec.new('synvert', '1.0.0')
+      expect(gem_spec).not_to be_match
+    end
+
     it 'raise LoadError if Gemfile.lock does not exist' do
       expect(File).to receive(:exists?).with('./Gemfile.lock').and_return(false)
       gem_spec = Rewriter::GemSpec.new('ast', '1.1.0')

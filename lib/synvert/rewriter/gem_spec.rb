@@ -11,7 +11,11 @@ module Synvert
       gemfile_lock_path = File.join(Configuration.instance.get(:path), 'Gemfile.lock')
       if File.exists? gemfile_lock_path
         parser = Bundler::LockfileParser.new(File.read(gemfile_lock_path))
-        Gem::Version.new(parser.specs.find { |spec| spec.name == @name }.version) >= @version
+        if spec = parser.specs.find { |spec| spec.name == @name }
+          Gem::Version.new(spec.version) >= @version
+        else
+          false
+        end
       else
         raise LoadError.new 'Gemfile.lock does not exist'
       end
