@@ -74,6 +74,16 @@ module Synvert
       end
     end
 
+    describe 'parses todo' do
+      it 'sets todo_list' do
+        rewriter = Rewriter.new 'name', 'description' do
+          todo "this rewriter doesn't do blah blah blah"
+        end
+        rewriter.process
+        expect(rewriter.todo_list).to eq "this rewriter doesn't do blah blah blah"
+      end
+    end
+
     describe 'class methods' do
       before :each do
         Rewriter.clear

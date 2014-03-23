@@ -38,7 +38,11 @@ module Synvert
           eval(File.read(snippet_path))
         end
       end
-      Configuration.instance.get('snippet_names').each { |snippet_name| Rewriter.call snippet_name }
+      Configuration.instance.get('snippet_names').each do |snippet_name|
+        rewriter = Rewriter.call snippet_name
+        puts "-------#{snippet_name} todo-------"
+        puts rewriter.todo_list
+      end
 
       if :list == command
         puts "%-40s %s" % ['name', 'description']

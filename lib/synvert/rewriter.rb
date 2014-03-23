@@ -25,8 +25,9 @@ module Synvert
       end
 
       def call(name)
-        if @rewriters[name.to_s]
-          @rewriters[name.to_s].process
+        if (rewriter = @rewriters[name.to_s])
+          rewriter.process
+          rewriter
         else
           raise RewriterNotFound.new "Rewriter #{name} not found"
         end
@@ -41,7 +42,7 @@ module Synvert
       end
     end
 
-    attr_reader :name, :description
+    attr_reader :name, :description, :todo_list
 
     def initialize(name, description, &block)
       @name = name
@@ -75,6 +76,10 @@ module Synvert
 
     def add_helper(name, &block)
       @helpers << {name: name, block: block}
+    end
+
+    def todo(list)
+      @todo_list = list
     end
   end
 end

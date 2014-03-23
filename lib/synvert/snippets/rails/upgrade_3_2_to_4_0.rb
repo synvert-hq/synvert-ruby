@@ -152,4 +152,8 @@ Synvert::Rewriter.new "upgrade_rails_3_2_to_4_0", "Upgrade rails from 3.2 to 4.0
 
   add_snippet 'convert_dynamic_finders'
   add_snippet 'strong_parameters'
+
+  todo <<-EOF
+Rails 4.0 no longer supports loading plugins from vendor/plugins. You must replace any plugins by extracting them to gems and adding them to your Gemfile. If you choose not to make them gems, you can move them into, say, lib/my_plugin/* and add an appropriate initializer in config/initializers/my_plugin.rb.
+  EOF
 end
