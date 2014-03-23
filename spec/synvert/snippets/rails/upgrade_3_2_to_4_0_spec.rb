@@ -107,6 +107,25 @@ Synvert::Application.routes.draw do
   get 'new', to: 'episodes#new'
 end
     """}
+    let(:migration_content) {"""
+class RenamePeopleToUsers < ActiveRecord::Migration
+  def change
+    change_table :posts do |t|
+      t.rename :user_id, :account_id
+      t.rename_index :user_id, :account_id
+    end
+  end
+end
+    """}
+    let(:migration_rewritten_content) {"""
+class RenamePeopleToUsers < ActiveRecord::Migration
+  def change
+    change_table :posts do |t|
+      t.rename :user_id, :account_id
+    end
+  end
+end
+    """}
     let(:post_model_content) {'''
 class Post < ActiveRecord::Base
   scope :active, where(active: true)
@@ -241,6 +260,7 @@ end
     it 'process' do
       FileUtils.mkdir_p 'config/environments'
       FileUtils.mkdir_p 'config/initializers'
+      FileUtils.mkdir_p 'db/migrate'
       FileUtils.mkdir_p 'app/models'
       FileUtils.mkdir_p 'app/controllers'
       FileUtils.mkdir_p 'test/unit'
@@ -251,6 +271,7 @@ end
       File.write 'config/initializers/wrap_parameters.rb', wrap_parameters_content
       File.write 'config/initializers/secret_token.rb', secret_token_content
       File.write 'config/routes.rb', routes_content
+      File.write 'db/migrate/20140101000000_change_posts.rb', migration_content
       File.write 'app/models/post.rb', post_model_content
       File.write 'app/controllers/users_controller.rb', users_controller_content
       File.write 'app/controllers/posts_controller.rb', posts_controller_content
@@ -264,6 +285,7 @@ end
       expect(File.read 'config/initializers/wrap_parameters.rb').to eq wrap_parameters_rewritten_content
       expect(File.read 'config/initializers/secret_token.rb').to eq secret_token_rewritten_content
       expect(File.read 'config/routes.rb').to eq routes_rewritten_content
+      expect(File.read 'db/migrate/20140101000000_change_posts.rb').to eq migration_rewritten_content
       expect(File.read 'app/models/post.rb').to eq post_model_rewritten_content
       expect(File.read 'app/controllers/users_controller.rb').to eq users_controller_rewritten_content
       expect(File.read 'app/controllers/posts_controller.rb').to eq posts_controller_rewritten_content

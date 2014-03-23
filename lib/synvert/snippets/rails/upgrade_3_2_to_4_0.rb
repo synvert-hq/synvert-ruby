@@ -98,6 +98,13 @@ Synvert::Rewriter.new "upgrade_rails_3_2_to_4_0", "Upgrade rails from 3.2 to 4.0
     end
   end
 
+  within_files 'db/migrate/*.rb' do
+    # remove rename_index ...
+    with_node type: 'send', message: 'rename_index' do
+      remove
+    end
+  end
+
   within_files 'app/models/**/*.rb' do
     # self.serialized_attributes => self.class.serialized_attributes
     with_node type: 'send', receiver: 'self', message: 'serialized_attributes' do
