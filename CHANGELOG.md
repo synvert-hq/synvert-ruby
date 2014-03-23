@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 0.0.7
+
+* Able to run run specified snippets
+* Able to load additional snippets
+* Able to list available snippets
+* Add helper_method dsl
+* Add todo dsl
+* Improve rails 3.2 upgrade to 4.0 snippet
+
 ## 0.0.6
 
 * Add -> {} only when not exist in rails upgrade snippet
