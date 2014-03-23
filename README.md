@@ -31,11 +31,21 @@ $ gem install synvert
 
 ```
 $ synvert -h
-Usage: synvert [project_path]
+Usage: synvert [options] [project_path]
         --load-snippets SNIPPET_PATHS
                                      load additional snippets, snippet paths can be local file path or remote http url
         --list-snippets              list all available snippets
         --run-snippets SNIPPET_NAMES run specified snippets
+```
+
+e.g.
+
+```
+$ synvert --list-snippets
+```
+
+```
+$ synvert --run-snippets factory_girl_short_syntax,upgrade_rails_3_2_to_4_0 ~/Sites/railsbp/rails-bestpractices.com
 ```
 
 ## Snippets
