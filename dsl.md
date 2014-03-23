@@ -151,4 +151,27 @@ remove
 
 `remove` removes the current node.
 
+### add other snippet
+
+```ruby
+add_snippet 'convert_dynamic_finders'
+```
+
+`add_snippet` adds other snippet, it's easy to reuse snippets.
+
+
+### add helper methods
+
+```ruby
+add_helper 'dynamic_finder_to_hash' do |prefix|
+  fields = node.message.to_s[prefix.length..-1].split("_and_")
+  fields.length.times.map { |i|
+    fields[i] + ": " + node.arguments[i].source(self)
+  }.join(", ")
+end
+```
+
+`add_helper` dynamically adds methods to all instances in the current
+rewriter.
+
 [1]: /rules/

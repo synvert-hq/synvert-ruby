@@ -151,6 +151,22 @@ node.</p>
 </code></pre></div>
 <p><code>remove</code> removes the current node.</p>
 
+<h3>add other snippet</h3>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">add_snippet</span> <span class="s1">&#39;convert_dynamic_finders&#39;</span>
+</code></pre></div>
+<p><code>add_snippet</code> adds other snippet, it&#39;s easy to reuse snippets.</p>
+
+<h3>add helper methods</h3>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">add_helper</span> <span class="s1">&#39;dynamic_finder_to_hash&#39;</span> <span class="k">do</span> <span class="o">|</span><span class="n">prefix</span><span class="o">|</span>
+  <span class="n">fields</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">to_s</span><span class="o">[</span><span class="n">prefix</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">.</span><span class="o">-</span><span class="mi">1</span><span class="o">].</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_and_&quot;</span><span class="p">)</span>
+  <span class="n">fields</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span>
+    <span class="n">fields</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span> <span class="n">node</span><span class="o">.</span><span class="n">arguments</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="n">source</span><span class="p">(</span><span class="nb">self</span><span class="p">)</span>
+  <span class="p">}</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">)</span>
+<span class="k">end</span>
+</code></pre></div>
+<p><code>add_helper</code> dynamically adds methods to all instances in the current
+rewriter.</p>
+
 </div>
 
     </div>

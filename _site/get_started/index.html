@@ -61,7 +61,19 @@
 <h3>Usage</h3>
 
 <p>Now you can use synvert to convert your ruby code.</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">$ synvert [project_path]
+<div class="highlight"><pre><code class="text language-text" data-lang="text">$ synvert -h
+Usage: synvert [options] [project_path]
+        --load-snippets SNIPPET_PATHS
+                                     load additional snippets, snippet paths can be local file path or remote http url
+        --list-snippets              list all available snippets
+        --run-snippets SNIPPET_NAMES run specified snippets
+</code></pre></div>
+<p>list all available snippets</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">$ synvert --list-snippets
+</code></pre></div>
+<p>run snippets <code>factory_girl_short_syntax</code> and <code>upgrade_rails_3_2_to_4_0</code>
+in rails-bestpractices.com repo.</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">$ synvert --run-snippets factory_girl_short_syntax,upgrade_rails_3_2_to_4_0 ~/Sites/railsbp/rails-bestpractices.com
 </code></pre></div>
 <p>It&#39;s recommended that you use version control software like <a href="http://git-scm.com/">git</a>,
 after using synvert, you can use check what changes synvert does to
