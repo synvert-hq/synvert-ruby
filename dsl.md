@@ -163,7 +163,7 @@ add_snippet 'convert_dynamic_finders'
 ### add helper methods
 
 ```ruby
-add_helper 'dynamic_finder_to_hash' do |prefix|
+helper_method 'dynamic_finder_to_hash' do |prefix|
   fields = node.message.to_s[prefix.length..-1].split("_and_")
   fields.length.times.map { |i|
     fields[i] + ": " + node.arguments[i].source(self)
@@ -171,7 +171,21 @@ add_helper 'dynamic_finder_to_hash' do |prefix|
 end
 ```
 
-`add_helper` dynamically adds methods to all instances in the current
+`helper_method` dynamically adds methods to all instances in the current
 rewriter.
+
+#### add todo list
+
+```ruby
+todo <<-EOF
+Rails 4.0 no longer supports loading plugins from vendor/plugins. You
+must replace any plugins by extracting them to gems and adding them to
+your Gemfile. If you choose not to make them gems, you can move them
+into, say, lib/my_plugin/* and add an appropriate initializer in
+config/initializers/my_plugin.rb.
+EOF
+
+`todo` is a list that developers have to do by themselves or anything
+you want to warn developers.
 
 [1]: /rules/
