@@ -44,8 +44,16 @@ It's recommended that you use version control software like [git][2],
 after using synvert, you can use check what changes synvert does to
 your ruby code.
 
-This has been a very simple walk-through, but you should now have a
-general idea of how to install and use synvert.
+You can write your own snippets then load them by `--load-snippets`.
+
+### Dependencies
+
+Synvert uses [parser][3] and [ast][4], parser helps to parse ruby source
+code and rewrite ast nodes, ast is a small library for working with
+immutable abstract syntax trees. It's highly recommended to look through
+these 2 libraries.
 
 [1]: https://rubygems.org
 [2]: http://git-scm.com/
+[3]: https://github.com/whitequark/parser
+[4]: https://github.com/whitequark/ast

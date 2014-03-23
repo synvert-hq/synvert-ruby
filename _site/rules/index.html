@@ -49,7 +49,82 @@
     <div class="content container">
       <div class="page">
   <h1 class="page-title">Rules</h1>
-  <h3>type</h3>
+  <p>synvert compares ast nodes with key / value pairs, each ast node has
+multiple attributes, e.g. <code>receiver</code>, <code>message</code> and <code>arguments</code>, it
+matches only when all of key / value pairs match.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">message</span><span class="p">:</span> <span class="ss">:include</span><span class="p">,</span> <span class="ss">arguments</span><span class="p">:</span> <span class="o">[</span><span class="s1">&#39;FactoryGirl::Syntax::Methods&#39;</span><span class="o">]</span>
+</code></pre></div>
+<p>synvert does comparison based on the value type</p>
+
+<ol>
+<li>if value is a symbol, then compares ast node value as symbol, e.g.
+<code>message: :include</code></li>
+<li>if value is a string, then compares ast node original source code,
+e.g. <code>name: &#39;Synvert::Application&#39;</code></li>
+<li>if value is a regexp, then compares ast node original source code,
+e.g. <code>message: /find_all_by_/</code></li>
+<li>if value is an array, then compares each ast node, e.g. <code>arguments:
+[&#39;FactoryGirl::Syntax::Methods&#39;]</code></li>
+<li>if value is nil, then check if ast node is nil, e.g. <code>arguments:
+[nil]</code></li>
+<li>if value is true or false, then check if ast node is :true or :false,
+e.g. <code>arguments: [false]</code></li>
+<li>if value is ast, then compare ast node directly, e.g. <code>to_ast:
+Parser::CurrentRuby.parse(&quot;self.class.serialized_attributes&quot;)</code></li>
+</ol>
+
+<p>it can compare nested key / value pairs, like</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="c1"># matches config.activerecord.identity_map = ...</span>
+<span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">receiver</span><span class="p">:</span> <span class="p">{</span><span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">receiver</span><span class="p">:</span> <span class="p">{</span><span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;config&#39;</span><span class="p">},</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;active_record&#39;</span><span class="p">},</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;identity_map=&#39;</span>
+</code></pre></div>
+<h2>Source code to ast node</h2>
+
+<h3>command line</h3>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">$ ruby-parse -e &#39;RSpec.configure do |config|; include EmailSpec::Helpers; include EmailSpec::Matchers; end&#39;
+
+(block
+  (send
+    (const nil :RSpec) :configure)
+  (args
+    (arg :config))
+  (begin
+    (send nil :include
+      (const
+        (const nil :EmailSpec) :Helpers))
+    (send nil :include
+      (const
+        (const nil :EmailSpec) :Matchers))))
+</code></pre></div>
+<h3>ruby code</h3>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s1">&#39;parser/current&#39;</span>
+
+<span class="n">code</span> <span class="o">=&lt;&lt;-</span><span class="no">EOF</span>
+<span class="sh">RSepc.configure do |config|</span>
+<span class="sh">  include EmailSpec::Helpers</span>
+<span class="sh">  include EmailSpec::Matchers</span>
+<span class="sh">end</span>
+<span class="no">EOF</span>
+
+<span class="no">Parser</span><span class="o">::</span><span class="no">CurrentRuby</span><span class="o">.</span><span class="n">parse</span> <span class="n">code</span>
+
+<span class="c1"># (block</span>
+<span class="c1">#   (send</span>
+<span class="c1">#     (const nil :RSpec) :configure)</span>
+<span class="c1">#   (args</span>
+<span class="c1">#     (arg :config))</span>
+<span class="c1">#   (begin</span>
+<span class="c1">#     (send nil :include</span>
+<span class="c1">#       (const</span>
+<span class="c1">#         (const nil :EmailSpec) :Helpers))</span>
+<span class="c1">#     (send nil :include</span>
+<span class="c1">#       (const</span>
+<span class="c1">#         (const nil :EmailSpec) :Matchers))))</span>
+</code></pre></div>
+<h2>Ast node attributes</h2>
+
+<p>The followings are all ast node attributes you can use.</p>
+
+<h3>type</h3>
 
 <p>type of ast node, e.g. <code>class</code>, <code>def</code>, <code>send</code>.</p>
 

@@ -79,8 +79,14 @@ in rails-bestpractices.com repo.</p>
 after using synvert, you can use check what changes synvert does to
 your ruby code.</p>
 
-<p>This has been a very simple walk-through, but you should now have a
-general idea of how to install and use synvert.</p>
+<p>You can write your own snippets then load them by <code>--load-snippets</code>.</p>
+
+<h3>Dependencies</h3>
+
+<p>Synvert uses <a href="https://github.com/whitequark/parser">parser</a> and <a href="https://github.com/whitequark/ast">ast</a>, parser helps to parse ruby source
+code and rewrite ast nodes, ast is a small library for working with
+immutable abstract syntax trees. It&#39;s highly recommended to look through
+these 2 libraries.</p>
 
 </div>
 

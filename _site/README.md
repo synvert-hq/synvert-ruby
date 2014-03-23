@@ -11,3 +11,7 @@ bundle install
 ```
 bundle exec jekyll serve --watch
 ```
+
+### Visit
+
+open `http://localhost:4000/synvert/` on browser
