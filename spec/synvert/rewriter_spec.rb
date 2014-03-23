@@ -58,13 +58,13 @@ module Synvert
       end
     end
 
-    describe 'parses add_helper' do
+    describe 'parses helper_method' do
       it 'adds helper method to new instance' do
         instance = double
         expect(Rewriter::Instance).to receive(:new).and_return(instance)
         expect(instance).to receive(:process)
         rewriter = Rewriter.new 'name', 'description' do
-          add_helper 'dynamic_helper' do |arg1, arg2|
+          helper_method 'dynamic_helper' do |arg1, arg2|
             'dynamic result'
           end
           within_file 'spec/spec_helper.rb' do; end

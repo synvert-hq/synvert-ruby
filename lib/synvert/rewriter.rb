@@ -74,7 +74,7 @@ module Synvert
       self.class.call(name)
     end
 
-    def add_helper(name, &block)
+    def helper_method(name, &block)
       @helpers << {name: name, block: block}
     end
 

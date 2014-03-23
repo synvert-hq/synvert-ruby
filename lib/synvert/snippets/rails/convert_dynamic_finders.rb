@@ -1,7 +1,7 @@
 require 'securerandom'
 
 Synvert::Rewriter.new "convert_dynamic_finders", "Convert dynamic finders" do
-  add_helper 'dynamic_finder_to_hash' do |prefix|
+  helper_method 'dynamic_finder_to_hash' do |prefix|
     fields = node.message.to_s[prefix.length..-1].split("_and_")
     fields.length.times.map { |i|
       fields[i] + ": " + node.arguments[i].source(self)
