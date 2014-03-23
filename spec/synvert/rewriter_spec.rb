@@ -42,8 +42,8 @@ module Synvert
 
     describe 'parses add_snippet' do
       it 'process the rewritter' do
-        rewriter1 = Synvert::Rewriter.new 'rewriter1', 'description1'
-        rewriter2 = Synvert::Rewriter.new 'rewriter2', 'description2' do
+        rewriter1 = Rewriter.new 'rewriter1', 'description1'
+        rewriter2 = Rewriter.new 'rewriter2', 'description2' do
           add_snippet :rewriter1
         end
         expect(rewriter1).to receive(:process)
@@ -51,10 +51,28 @@ module Synvert
       end
 
       it 'raises RewriterNotFound' do
-        rewriter = Synvert::Rewriter.new 'name', 'description' do
+        rewriter = Rewriter.new 'name', 'description' do
           add_snippet :not_exist
         end
-        expect { rewriter.process }.to raise_error(Synvert::RewriterNotFound)
+        expect { rewriter.process }.to raise_error(RewriterNotFound)
+      end
+    end
+
+    describe 'class methods' do
+      before :each do
+        Rewriter.clear
+      end
+
+      it 'registers and calls rewriter' do
+        rewriter = Rewriter.new 'rewriter', 'description'
+        expect(rewriter).to receive(:process)
+        Rewriter.call 'rewriter'
+      end
+
+      it 'registers and list all available rewriters' do
+        rewriter1 = Rewriter.new 'rewriter1', 'description1'
+        rewriter2 = Rewriter.new 'rewriter2', 'description2'
+        expect(Rewriter.availables).to eq [rewriter1, rewriter2]
       end
     end
   end

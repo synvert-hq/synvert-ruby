@@ -1,6 +1,6 @@
 require 'securerandom'
 
-Synvert::Rewriter.new "upgrade_rails_3_2_to_4_0", "Upgrade rails from 3.2 to 4.0" do
+Synvert::Rewriter.new "upgrade_rails_3_2_to_4_0", "Upgrade rails from 3.2 to 4.0, it contains convert_dynamic_finder and strong_parameters snippets" do
   gem_spec 'rails', '3.2.0'
 
   within_file 'config/application.rb' do

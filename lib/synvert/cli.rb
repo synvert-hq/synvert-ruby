@@ -11,8 +11,12 @@ module Synvert
     def run(args)
       Configuration.instance.set 'snippets', []
 
+      command = :run
       optparse = OptionParser.new do |opts|
         opts.banner = "Usage: synvert [project_path]"
+        opts.on '--list-snippets' do
+          command = :list
+        end
         opts.on '--snippets SNIPPETS', 'run specified snippets' do |snippets|
           Configuration.instance.set 'snippets', snippets.split(',')
         end
@@ -21,7 +25,14 @@ module Synvert
       Configuration.instance.set :path, paths.first || Dir.pwd
 
       Dir.glob(File.join(File.dirname(__FILE__), 'snippets/**/*.rb')).each { |file| eval(File.read(file)) }
-      Configuration.instance.get('snippets').each { |snippet| Rewriter.call snippet }
+      case command
+      when :list
+        Rewriter.availables.each do |rewriter|
+          puts "%-40s %s" % [rewriter.name, rewriter.description]
+        end
+      else
+        Configuration.instance.get('snippets').each { |snippet| Rewriter.call snippet }
+      end
     end
   end
 end

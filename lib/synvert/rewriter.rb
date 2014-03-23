@@ -31,7 +31,17 @@ module Synvert
           raise RewriterNotFound.new "Rewriter #{name} not found"
         end
       end
+
+      def availables
+        @rewriters.values
+      end
+
+      def clear
+        @rewriters.clear
+      end
     end
+
+    attr_reader :name, :description
 
     def initialize(name, description, &block)
       @name = name
