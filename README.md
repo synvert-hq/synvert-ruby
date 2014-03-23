@@ -32,8 +32,10 @@ $ gem install synvert
 ```
 $ synvert -h
 Usage: synvert [project_path]
-        --list-snippets
-        --snippets SNIPPETS          run specified snippets
+        --load-snippets SNIPPET_PATHS
+                                     load additional snippets, snippet paths can be local file path or remote http url
+        --list-snippets              list all available snippets
+        --run-snippets SNIPPET_NAMES run specified snippets
 ```
 
 ## Snippets
