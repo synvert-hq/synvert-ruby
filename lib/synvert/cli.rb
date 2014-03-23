@@ -41,6 +41,8 @@ module Synvert
       Configuration.instance.get('snippet_names').each { |snippet_name| Rewriter.call snippet_name }
 
       if :list == command
+        puts "%-40s %s" % ['name', 'description']
+        puts "%-40s %s" % ['----', '-----------']
         Rewriter.availables.each do |rewriter|
           puts "%-40s %s" % [rewriter.name, rewriter.description]
         end
