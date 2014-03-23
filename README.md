@@ -11,42 +11,43 @@ automatically.
 
 Add this line to your application's Gemfile:
 
-    gem 'synvert'
+```ruby
+gem 'synvert'
+```
 
 And then execute:
 
-    $ bundle
+```
+$ bundle
+```
 
 Or install it yourself as:
 
-    $ gem install synvert
+```
+$ gem install synvert
+```
 
 ## Usage
 
-    synvert PROJECT_PATH
-
-Currently it supports
-
-* convert to FactoryGirl short syntax
-* upgrade rails from 3.2.x to 4.0.0
-
-## Example
-
-```ruby
-Synvert::Rewriter.new "factory_girl_short_syntax", "FactoryGirl uses short syntax" do
-  within_file 'sepc/**/*.rb' do
-    with_node type: 'send', receiver: 'FactoryGirl', message: 'create' do
-      replace_with "create({{arguments}})"
-    end
-  end
-end
+```
+$ synvert -h
+Usage: synvert [project_path]
+        --list-snippets
+        --snippets SNIPPETS          run specified snippets
 ```
 
-This snippet will convert `post = FactoryGirl.create(:post)` to `post =
-create(:post)`.
+## Snippets
 
-There are more examples [here][1], I will write down the Documents
-later.
+name | description
+--- | ---
+factory_girl_short_syntax | FactoryGirl uses short syntax
+convert_dynamic_finders | Convert dynamic finders
+strong_parameters | Use strong_parameters syntax
+upgrade_rails_3_2_to_4_0 | Upgrade rails from 3.2 to 4.0, it contains convert_dynamic_finder and strong_parameters snippets
+
+## Documentation
+
+[http://xinminlabs.github.io/synvert/][1]
 
 ## Contributing
 
@@ -56,5 +57,4 @@ later.
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-
-[1]: https://github.com/xinminlabs/synvert/tree/master/lib/synvert/snippets
+[1]: http://xinminlabs.github.io/synvert/
