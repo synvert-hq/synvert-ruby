@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Examples &middot; Synvert
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/poole.css">
+  <link rel="stylesheet" href="/css/syntax.css">
+  <link rel="stylesheet" href="/css/hyde.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h1>Synvert</h1>
+      <p class="lead">synvert is used to convert ruby code to better syntax.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="/">Home</a></li>
+      <li class="sidebar-nav-item"><a href="/get_started/">Get Started</a></li>
+      <li class="sidebar-nav-item"><a href="/examples/">Examples</a></li>
+      <li class="sidebar-nav-item"><a href="/dsl/">DSL</a></li>
+      <li class="sidebar-nav-item"><a href="/terms/">Terms</a></li>
+      <li class="sidebar-nav-item"><a href="/rules/">Rules</a></li>
+    </ul>
+
+    <p>&copy; <a href="http://xinminlabs.com" target="_blank">Xinmin Labs</a> 2014.
+    All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="page">
+  <h1 class="page-title">Examples</h1>
+  <p>I learn best by examples</p>
+
+<h3>FactoryGirl short syntax method</h3>
+
+<p>Adds <code>include FactoryGirl::Syntax::Methods</code> to class
+<code>Test::Unit::TestCase</code> in file <code>test/test_helper.rb</code></p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span><span class="p">,</span> <span class="s1">&#39;FactoryGirl uses short syntax&#39;</span> <span class="k">do</span>
+  <span class="n">within_file</span> <span class="s1">&#39;test/test_helper.rb&#39;</span> <span class="k">do</span>
+    <span class="n">with_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="nb">name</span><span class="p">:</span> <span class="s1">&#39;Test::Unit::TestCase&#39;</span> <span class="k">do</span>
+      <span class="n">insert</span> <span class="s1">&#39;include FactoryGirl::Syntax::Methods&#39;</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>FactoryGirl short syntax only works from factory_girl 2.0.0, so let&#39;s
+check the gem version.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span><span class="p">,</span> <span class="s1">&#39;FactoryGirl uses short syntax&#39;</span> <span class="k">do</span>
+  <span class="n">gem_spec</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0.0&#39;</span>
+
+  <span class="n">within_file</span> <span class="s1">&#39;test/test_helper.rb&#39;</span> <span class="k">do</span>
+    <span class="n">with_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="nb">name</span><span class="p">:</span> <span class="s1">&#39;Test::Unit::TestCase&#39;</span> <span class="k">do</span>
+      <span class="n">insert</span> <span class="s1">&#39;include FactoryGirl::Syntax::Methods&#39;</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>It works, but it inserts code every time even <code>include
+FactoryGirl::Syntax::Methods</code> already exist in the class, so let&#39;s check
+if code doesn&#39;t exist, then insert.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span><span class="p">,</span> <span class="s1">&#39;FactoryGirl uses short syntax&#39;</span> <span class="k">do</span>
+  <span class="n">gem_spec</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0.0&#39;</span>
+
+  <span class="n">within_file</span> <span class="s1">&#39;test/test_helper.rb&#39;</span> <span class="k">do</span>
+    <span class="n">with_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="nb">name</span><span class="p">:</span> <span class="s1">&#39;Test::Unit::TestCase&#39;</span> <span class="k">do</span>
+      <span class="n">unless_exist_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;include&#39;</span><span class="p">,</span> <span class="ss">arguments</span><span class="p">:</span> <span class="o">[</span><span class="s1">&#39;FactoryGirl::Syntax::Methods&#39;</span><span class="o">]</span> <span class="k">do</span>
+        <span class="n">insert</span> <span class="s1">&#39;include FactoryGirl::Syntax::Methods&#39;</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>It should also work in minitest and activesupport testcase</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span><span class="p">,</span> <span class="s1">&#39;FactoryGirl uses short syntax&#39;</span> <span class="k">do</span>
+  <span class="n">gem_spec</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0.0&#39;</span>
+
+  <span class="n">within_file</span> <span class="s1">&#39;test/test_helper.rb&#39;</span> <span class="k">do</span>
+    <span class="sx">%w(Test::Unit::TestCase ActiveSupport::TestCase MiniTest::Unit::TestCase</span>
+<span class="sx">        MiniTest::Spec MiniTest::Rails::ActiveSupport::TestCase)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">class_name</span><span class="o">|</span>
+      <span class="n">with_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="nb">name</span><span class="p">:</span> <span class="n">class_name</span> <span class="k">do</span>
+        <span class="n">unless_exist_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;include&#39;</span><span class="p">,</span> <span class="ss">arguments</span><span class="p">:</span> <span class="o">[</span><span class="s1">&#39;FactoryGirl::Syntax::Methods&#39;</span><span class="o">]</span> <span class="k">do</span>
+          <span class="n">insert</span> <span class="s1">&#39;include FactoryGirl::Syntax::Methods&#39;</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>For rspec, it does a bit different</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span><span class="p">,</span> <span class="s1">&#39;FactoryGirl uses short syntax&#39;</span> <span class="k">do</span>
+  <span class="n">gem_spec</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0.0&#39;</span>
+
+  <span class="n">within_file</span> <span class="s1">&#39;spec/spec_helper.rb&#39;</span> <span class="k">do</span>
+    <span class="n">within_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;block&#39;</span><span class="p">,</span> <span class="nb">caller</span><span class="p">:</span> <span class="p">{</span><span class="ss">receiver</span><span class="p">:</span> <span class="s1">&#39;RSpec&#39;</span><span class="p">,</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;configure&#39;</span><span class="p">}</span> <span class="k">do</span>
+      <span class="c1"># match code RSpec.configure do |config|; ... end</span>
+      <span class="n">unless_exist_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;include&#39;</span><span class="p">,</span> <span class="ss">arguments</span><span class="p">:</span> <span class="o">[</span><span class="s1">&#39;FactoryGirl::Syntax::Methods&#39;</span><span class="o">]</span> <span class="k">do</span>
+        <span class="c1"># {{ }} is executed on current node, so we can add or replace with some old code,</span>
+        <span class="c1"># arguments are [config], arguments.first is config,</span>
+        <span class="c1"># here we insert `config.include FactoryGirl::Syntax::Methods`</span>
+        <span class="n">insert</span> <span class="s2">&quot;{{arguments.first}}.include FactoryGirl::Syntax::Methods&quot;</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>Finally, apply it for cucumber as well.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span><span class="p">,</span> <span class="s1">&#39;FactoryGirl uses short syntax&#39;</span> <span class="k">do</span>
+  <span class="n">gem_spec</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0.0&#39;</span>
+
+  <span class="n">within_file</span> <span class="s1">&#39;features/support/env.rb&#39;</span> <span class="k">do</span>
+    <span class="c1"># current node is the root node of env.rb file</span>
+    <span class="c1"># we don&#39;t need with_node / within_node here</span>
+    <span class="n">unless_exist_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;World&#39;</span><span class="p">,</span> <span class="ss">arguments</span><span class="p">:</span> <span class="o">[</span><span class="s1">&#39;FactoryGirl::Syntax::Methods&#39;</span><span class="o">]</span> <span class="k">do</span>
+      <span class="n">insert</span> <span class="s2">&quot;World(FactoryGirl::Syntax::Methods)&quot;</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>We already insert <code>FactoryGirl::Syntax::Methods</code> module, then we can
+replace <code>FactoryGirl.create</code> with <code>create</code> now.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span><span class="p">,</span> <span class="s1">&#39;FactoryGirl uses short syntax&#39;</span> <span class="k">do</span>
+  <span class="n">gem_spec</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0.0&#39;</span>
+
+  <span class="sx">%w(test/**/*.rb spec/**/*.rb features/**/*.rb)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">file_pattern</span><span class="o">|</span>
+    <span class="c1"># find all files in test/, spec/ and features/</span>
+    <span class="n">within_files</span> <span class="n">file_pattern</span> <span class="k">do</span>
+      <span class="n">with_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">receiver</span><span class="p">:</span> <span class="s1">&#39;FactoryGirl&#39;</span><span class="p">,</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;create&#39;</span> <span class="k">do</span>
+        <span class="c1"># for FactoryGirl.create(:post, title: &#39;post&#39;),</span>
+        <span class="c1"># arguments are `:post, title: &#39;post&#39;</span>
+        <span class="n">replace_with</span> <span class="s2">&quot;create({{arguments}})&quot;</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>There are more short syntax, e.g. <code>build</code>, <code>create_list</code>, <code>build_list</code>, etc.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span><span class="p">,</span> <span class="s1">&#39;FactoryGirl uses short syntax&#39;</span> <span class="k">do</span>
+  <span class="n">gem_spec</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0.0&#39;</span>
+
+  <span class="sx">%w(test/**/*.rb spec/**/*.rb features/**/*.rb)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">file_pattern</span><span class="o">|</span>
+    <span class="n">within_files</span> <span class="n">file_pattern</span> <span class="k">do</span>
+      <span class="sx">%w(create build attributes_for build_stubbed create_list build_list</span>
+<span class="sx">          create_pair build_pair)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">message</span><span class="o">|</span>
+        <span class="n">with_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">receiver</span><span class="p">:</span> <span class="s1">&#39;FactoryGirl&#39;</span><span class="p">,</span> <span class="ss">message</span><span class="p">:</span> <span class="n">message</span> <span class="k">do</span>
+          <span class="n">replace_with</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">message</span><span class="si">}</span><span class="s2">({{arguments}})&quot;</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+</div>
+
+    </div>
+
+    <script>
+  window.twttr = (function (d,s,id) {
+    var t, js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return; js=d.createElement(s); js.id=id; js.async=1;
+    js.src="https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs);
+    return window.twttr || (t = { _e: [], ready: function(f){ t._e.push(f) } });
+  }(document, "script", "twitter-wjs"));
+</script>
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+  try {
+    var pageTracker = _gat._getTracker("UA-49054619-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+  </body>
+</html>

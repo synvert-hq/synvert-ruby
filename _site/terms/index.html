@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Terms &middot; Synvert
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/poole.css">
+  <link rel="stylesheet" href="/css/syntax.css">
+  <link rel="stylesheet" href="/css/hyde.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h1>Synvert</h1>
+      <p class="lead">synvert is used to convert ruby code to better syntax.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="/">Home</a></li>
+      <li class="sidebar-nav-item"><a href="/get_started/">Get Started</a></li>
+      <li class="sidebar-nav-item"><a href="/examples/">Examples</a></li>
+      <li class="sidebar-nav-item"><a href="/dsl/">DSL</a></li>
+      <li class="sidebar-nav-item"><a href="/terms/">Terms</a></li>
+      <li class="sidebar-nav-item"><a href="/rules/">Rules</a></li>
+    </ul>
+
+    <p>&copy; <a href="http://xinminlabs.com" target="_blank">Xinmin Labs</a> 2014.
+    All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="page">
+  <h1 class="page-title">Terms</h1>
+  <h3>Snippet</h3>
+
+<p>Snippet is a piece of code to define what code need to convert and how
+to convert the code.</p>
+
+<h3>Rewriter</h3>
+
+<p>Rewriter is the top level namespace in a snippet.</p>
+
+<p>One rewriter checks if the gem version matches, e.g. we can say the
+rewriter only works if factory_girl gem is greater than or equal to
+2.0.0.</p>
+
+<p>One rewriter contains one or many instances.</p>
+
+<h3>Instance</h3>
+
+<p>Instance is an execution unit, it finds specified ast nodes, checks
+if the nodes match some conditions, then add, replace or remove code.</p>
+
+<p>One instance can contains any scopes or conditions.</p>
+
+<h3>Scope</h3>
+
+<p>Scope just likes its name, different scope points to different
+current node.</p>
+
+<p>One scope defines some rules, it finds new nodes and changes
+current node to matching node.</p>
+
+<h3>Condition</h3>
+
+<p>Condition is used to check if the node matches the rules, condition
+won&#39;t change the node scope.</p>
+
+<h3>Action</h3>
+
+<p>Action does some real action, e.g. add / replace / remove code.</p>
+
+</div>
+
+    </div>
+
+    <script>
+  window.twttr = (function (d,s,id) {
+    var t, js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return; js=d.createElement(s); js.id=id; js.async=1;
+    js.src="https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs);
+    return window.twttr || (t = { _e: [], ready: function(f){ t._e.push(f) } });
+  }(document, "script", "twitter-wjs"));
+</script>
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+  try {
+    var pageTracker = _gat._getTracker("UA-49054619-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+  </body>
+</html>

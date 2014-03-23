@@ -1,0 +1,19 @@
+# Dependencies
+markdown:         redcarpet
+pygments:         true
+
+# Permalinks
+permalink:        pretty
+
+# Setup
+title:            Synvert
+tagline:          'syntax + convert'
+description:      'synvert is used to convert ruby code to better syntax.'
+url:              https://github.com/xinminlabs/synvert
+
+author:
+  name:           'Xinmin Labs'
+  url:            http://xinminlabs.com
+
+github:
+  repo:           https://github.com/xinminlabs/synvert

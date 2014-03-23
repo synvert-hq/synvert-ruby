@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      DSL &middot; Synvert
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/poole.css">
+  <link rel="stylesheet" href="/css/syntax.css">
+  <link rel="stylesheet" href="/css/hyde.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h1>Synvert</h1>
+      <p class="lead">synvert is used to convert ruby code to better syntax.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="/">Home</a></li>
+      <li class="sidebar-nav-item"><a href="/get_started/">Get Started</a></li>
+      <li class="sidebar-nav-item"><a href="/examples/">Examples</a></li>
+      <li class="sidebar-nav-item"><a href="/dsl/">DSL</a></li>
+      <li class="sidebar-nav-item"><a href="/terms/">Terms</a></li>
+      <li class="sidebar-nav-item"><a href="/rules/">Rules</a></li>
+    </ul>
+
+    <p>&copy; <a href="http://xinminlabs.com" target="_blank">Xinmin Labs</a> 2014.
+    All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="page">
+  <h1 class="page-title">DSL</h1>
+  <p>Synvert provides a simple dsl to define a snippet.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span> <span class="k">do</span>
+  <span class="n">gem_spec</span> <span class="n">gem_name</span><span class="p">,</span> <span class="n">gem_version</span>
+
+  <span class="n">within_file</span> <span class="n">file_pattern</span> <span class="k">do</span>
+    <span class="n">within_node</span> <span class="n">rules</span> <span class="k">do</span>
+      <span class="n">with_node</span> <span class="n">rules</span> <span class="k">do</span>
+        <span class="n">remove</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="n">within_files</span> <span class="n">files_pattern</span> <span class="k">do</span>
+    <span class="n">with_node</span> <span class="n">rules</span> <span class="k">do</span>
+      <span class="n">unless_exist_node</span> <span class="n">rule</span> <span class="k">do</span>
+        <span class="n">insert</span> <span class="n">code</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+<h3>check gem version</h3>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">gem_spec</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0.0&#39;</span>
+</code></pre></div>
+<p><code>gem_spec</code> checks the gem in <code>Gemfile.lock</code>, if gem version in
+<code>Gemfile.lock</code> is greater than or equal to the version in <code>gem_spec</code>,
+the rewriter will be executed, otherwise, the rewriter will be ignored.</p>
+
+<h3>match file / files</h3>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">within_file</span> <span class="s1">&#39;spec/spec_helper.rb&#39;</span> <span class="k">do</span>
+  <span class="c1"># find nodes</span>
+  <span class="c1"># check nodes</span>
+  <span class="c1"># add / replace / remove code</span>
+<span class="k">end</span>
+</code></pre></div>
+<p><code>within_file</code> finds matching file according to file_pattern, the block
+will be executed only for matching file.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">within_files</span> <span class="s1">&#39;spec/**/*_spec.rb&#39;</span> <span class="k">do</span>
+  <span class="c1"># find nodes</span>
+  <span class="c1"># check nodes</span>
+  <span class="c1"># add / replace / remove code</span>
+<span class="k">end</span>
+</code></pre></div>
+<p><code>within_files</code> is an alias to within_file, but used to find multiple
+files.</p>
+
+<h3>find nodes</h3>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">within_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="nb">name</span><span class="p">:</span> <span class="s1">&#39;Test::Unit::TestCase&#39;</span> <span class="k">do</span>
+  <span class="c1"># find nodes</span>
+  <span class="c1"># check nodes</span>
+  <span class="c1"># add / replace / remove code</span>
+<span class="k">end</span>
+</code></pre></div>
+<p><code>within_node</code> finds ast nodes according to the <a href="/rules/">rules</a>, the block
+will be executed for the matching nodes.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">with_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="s1">&#39;receiver: &#39;</span><span class="no">FactoryGirl</span><span class="s1">&#39;, message: &#39;</span><span class="n">create</span><span class="err">&#39;</span> <span class="k">do</span>
+  <span class="c1"># check nodes</span>
+  <span class="c1"># add / replace / remove code</span>
+<span class="k">end</span>
+</code></pre></div>
+<p><code>with_node</code> is an alias to <code>within_node</code>, it indicates this is the node
+we are looking for and we would do some action on that node.</p>
+
+<h3>check conditions</h3>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">if_exist_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">receiver</span><span class="p">:</span> <span class="s1">&#39;params&#39;</span><span class="p">,</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;[]&#39;</span> <span class="k">do</span>
+  <span class="c1"># add / replace / remove code</span>
+<span class="k">end</span>
+</code></pre></div>
+<p><code>if_exist_node</code> checks if the node matches <a href="/rules/">rules</a> exists, if
+matches, then executes the block to add / replace / remove code.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">unless_exist_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;include&#39;</span><span class="p">,</span> <span class="ss">arguments</span><span class="p">:</span> <span class="o">[</span><span class="s1">&#39;FactoryGirl::Syntax::Methods&#39;</span><span class="o">]</span> <span class="k">do</span>
+  <span class="c1"># add / replace / remove code</span>
+<span class="k">end</span>
+</code></pre></div>
+<p><code>unless_exist_node</code> checks if the node matches <a href="/rules/">rules</a> does not
+exist, if does not match, then executes the block.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">if_only_exist_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">receiver</span><span class="p">:</span> <span class="s1">&#39;self&#39;</span><span class="p">,</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;include_root_in_json=&#39;</span><span class="p">,</span> <span class="ss">arguments</span><span class="p">:</span> <span class="o">[</span><span class="kp">false</span><span class="o">]</span> <span class="k">do</span>
+  <span class="c1"># add / replace / remove code</span>
+<span class="k">end</span>
+</code></pre></div>
+<p><code>if_only_exist_node</code> checks if the body of current node contains only
+one node and the node matches <a href="/rules/">rules</a>, if matches, then executes the
+node.</p>
+
+<h3>add / replace / remove code</h3>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">append</span> <span class="s1">&#39;config.eager_load = false&#39;</span>
+</code></pre></div>
+<p><code>append</code> adds the code at the bottom of the current node.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">insert</span> <span class="s2">&quot;include FactoryGirl::Syntax::Methods&quot;</span>
+</code></pre></div>
+<p><code>insert</code> adds the code at the top of the current node.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">secret</span> <span class="o">=</span> <span class="no">SecureRandom</span><span class="o">.</span><span class="n">hex</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span>
+<span class="n">insert_after</span> <span class="s2">&quot;{{receiver}}.secret_key_base = &#39;</span><span class="si">#{</span><span class="n">secret</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+</code></pre></div>
+<p><code>insert_after</code> adds the code next to the current node.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">replace_with</span> <span class="s2">&quot;create({{arguments}})&quot;</span>
+</code></pre></div>
+<p><code>replace_with</code> replaces the current node with the code.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">remove</span>
+</code></pre></div>
+<p><code>remove</code> removes the current node.</p>
+
+</div>
+
+    </div>
+
+    <script>
+  window.twttr = (function (d,s,id) {
+    var t, js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return; js=d.createElement(s); js.id=id; js.async=1;
+    js.src="https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs);
+    return window.twttr || (t = { _e: [], ready: function(f){ t._e.push(f) } });
+  }(document, "script", "twitter-wjs"));
+</script>
+
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+  try {
+    var pageTracker = _gat._getTracker("UA-49054619-1");
+    pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+
+  </body>
+</html>

@@ -1,0 +1,11 @@
+pre {
+  white-space: pre;
+  word-wrap: normal;
+  overflow-x: auto;
+}
+pre code {
+  font-size: 80%;
+}
+.social-btns {
+  margin-top: 20px;
+}
