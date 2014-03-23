@@ -157,16 +157,28 @@ node.</p>
 <p><code>add_snippet</code> adds other snippet, it&#39;s easy to reuse snippets.</p>
 
 <h3>add helper methods</h3>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">add_helper</span> <span class="s1">&#39;dynamic_finder_to_hash&#39;</span> <span class="k">do</span> <span class="o">|</span><span class="n">prefix</span><span class="o">|</span>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">helper_method</span> <span class="s1">&#39;dynamic_finder_to_hash&#39;</span> <span class="k">do</span> <span class="o">|</span><span class="n">prefix</span><span class="o">|</span>
   <span class="n">fields</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">to_s</span><span class="o">[</span><span class="n">prefix</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">.</span><span class="o">-</span><span class="mi">1</span><span class="o">].</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_and_&quot;</span><span class="p">)</span>
   <span class="n">fields</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span>
     <span class="n">fields</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span> <span class="n">node</span><span class="o">.</span><span class="n">arguments</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="n">source</span><span class="p">(</span><span class="nb">self</span><span class="p">)</span>
   <span class="p">}</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">)</span>
 <span class="k">end</span>
 </code></pre></div>
-<p><code>add_helper</code> dynamically adds methods to all instances in the current
+<p><code>helper_method</code> dynamically adds methods to all instances in the current
 rewriter.</p>
 
+<h4>add todo list</h4>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">todo</span> <span class="o">&lt;&lt;-</span><span class="no">EOF</span>
+<span class="sh">Rails 4.0 no longer supports loading plugins from vendor/plugins. You</span>
+<span class="sh">must replace any plugins by extracting them to gems and adding them to</span>
+<span class="sh">your Gemfile. If you choose not to make them gems, you can move them</span>
+<span class="sh">into, say, lib/my_plugin/* and add an appropriate initializer in</span>
+<span class="sh">config/initializers/my_plugin.rb.</span>
+<span class="no">EOF</span>
+
+<span class="sb">`todo`</span> <span class="n">is</span> <span class="n">a</span> <span class="n">list</span> <span class="n">that</span> <span class="n">developers</span> <span class="n">have</span> <span class="n">to</span> <span class="k">do</span> <span class="n">by</span> <span class="n">themselves</span> <span class="ow">or</span> <span class="n">anything</span>
+<span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="nb">warn</span> <span class="n">developers</span><span class="o">.</span>
+</code></pre></div>
 </div>
 
     </div>

@@ -152,3 +152,63 @@ Synvert::Rewriter.new 'factory_girl_short_syntax', 'FactoryGirl uses short synta
 end
 {% endraw %}
 ```
+
+### Convert dynamic finders
+
+From rails 4, dynamic finder methods (e.g.
+`User.find_all_by_login('richard')`) is deprecated, we should use
+`User.where(login: 'richrd')` instead.
+
+```ruby
+{% raw %}
+Synvert::Rewriter.new "convert_dynamic_finders", "Convert dynamic finders" do
+  within_files '**/*.rb' do
+    with_node type: 'send', message: /find_all_by_(.*)/ do
+      # node is current matching ast node
+      # you can add any ruby code in the block
+      # here we convert dynamic finder message to hash params, e.g.
+      # login_and_email('login', 'email') to
+      # login: 'login', email: 'email'
+      #
+      # node.source(self) is used to get original ruby source code
+      # {{receiver}} gets the receiver of current ast node
+      fields = node.message.to_s["find_all_by_".length..-1].split("_and_")
+      hash_params = fields.length.times.map { |i|
+        fields[i] + ": " + node.arguments[i].source(self)
+      }.join(", ")
+      replace_with "{{receiver}}.where(#{hash_params})"
+    end
+  end
+end
+{% endraw %}
+```
+
+We can use this snippet to convert other dynamic finders, e.g.
+`find_last_by_`, but we don't want to calculate the hash_params
+in each instance, so let's use helper_method for reuse.
+
+```ruby
+{% raw %}
+Synvert::Rewriter.new "convert_dynamic_finders", "Convert dynamic finders" do
+  helper_method 'dynamic_finder_to_hash' do |prefix|
+    fields = node.message.to_s[prefix.length..-1].split("_and_")
+    fields.length.times.map { |i|
+      fields[i] + ": " + node.arguments[i].source(self)
+    }.join(", ")
+  end
+
+  within_files '**/*.rb' do
+    with_node type: 'send', message: /find_all_by_(.*)/ do
+      hash_params = dynamic_finder_to_hash("find_all_by_")
+      replace_with "{{receiver}}.where(#{hash_params})"
+    end
+  end
+  within_files '**/*.rb' do
+    with_node type: 'send', message: /find_last_by_(.*)/ do
+      hash_params = dynamic_finder_to_hash("find_last_by_")
+      replace_with "{{receiver}}.where(#{hash_params}).last"
+    end
+  end
+end
+{% endraw %}
+```
