@@ -5,6 +5,8 @@ pygments:         true
 # Permalinks
 permalink:        pretty
 
+baseurl:          /synvert
+
 # Setup
 title:            Synvert
 tagline:          'syntax + convert'
