@@ -9,16 +9,19 @@ module Synvert
     end
 
     def run(args)
+      Configuration.instance.set 'snippets', []
+
       optparse = OptionParser.new do |opts|
-        opts.banner = "Usage: synvert path"
+        opts.banner = "Usage: synvert [project_path]"
+        opts.on '--snippets SNIPPETS', 'run specified snippets' do |snippets|
+          Configuration.instance.set 'snippets', snippets.split(',')
+        end
       end
       paths = optparse.parse(args)
       Configuration.instance.set :path, paths.first || Dir.pwd
 
-      rewriters = Dir.glob(File.join(File.dirname(__FILE__), 'snippets/**/*.rb')).map do |file|
-        eval(File.read(file))
-      end
-      rewriters.map(&:process)
+      Dir.glob(File.join(File.dirname(__FILE__), 'snippets/**/*.rb')).each { |file| eval(File.read(file)) }
+      Configuration.instance.get('snippets').each { |snippet| Rewriter.call snippet }
     end
   end
 end
