@@ -23,6 +23,7 @@ end
 module Synvert
   class Application < Rails::Application
     config.active_record.whitelist_attributes = true
+    config.assets.compress = :uglifier
     config.middleware.insert_before(Rack::Lock, ActionDispatch::BestStandardsSupport)
   end
 end
@@ -31,6 +32,7 @@ end
 Bundler.require(:default, Rails.env)
 module Synvert
   class Application < Rails::Application
+    config.assets.js_compressor = :uglifier
   end
 end
     '''}

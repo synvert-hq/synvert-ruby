@@ -20,6 +20,13 @@ Synvert::Rewriter.new "upgrade_rails_3_2_to_4_0", "Upgrade rails from 3.2 to 4.0
     end
   end
 
+  within_file 'config/**/*.rb' do
+    # config.assets.compress = ... => config.assets.js_compressor = ...
+    with_node type: 'send', receiver: {type: 'send', receiver: {type: 'send', message: 'config'}, message: 'assets'}, message: 'compress=' do
+      replace_with "config.assets.js_compressor = {{arguments}}"
+    end
+  end
+
   within_file 'config/initializers/wrap_parameters.rb' do
     # remove
     # ActiveSupport.on_load(:active_record) do
