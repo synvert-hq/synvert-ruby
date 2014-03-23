@@ -47,6 +47,7 @@ module Synvert
       @name = name
       @description = description
       @block = block
+      @helpers = []
       self.class.register(name, self)
     end
 
@@ -60,7 +61,9 @@ module Synvert
 
     def within_file(file_pattern, &block)
       if !@gem_spec || @gem_spec.match?
-        Rewriter::Instance.new(file_pattern, &block).process
+        instance = Rewriter::Instance.new(file_pattern, &block)
+        @helpers.each { |helper| instance.singleton_class.send(:define_method, helper[:name], &helper[:block]) }
+        instance.process
       end
     end
 
@@ -68,6 +71,10 @@ module Synvert
 
     def add_snippet(name)
       self.class.call(name)
+    end
+
+    def add_helper(name, &block)
+      @helpers << {name: name, block: block}
     end
   end
 end
