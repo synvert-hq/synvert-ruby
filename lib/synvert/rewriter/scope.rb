@@ -2,9 +2,9 @@
 
 module Synvert
   class Rewriter::Scope
-    def initialize(instance, options, &block)
+    def initialize(instance, rules, &block)
       @instance = instance
-      @options = options
+      @rules = rules
       @block = block
     end
 
@@ -13,9 +13,9 @@ module Synvert
       return unless current_node
       process_with_node current_node do
         matching_nodes = []
-        matching_nodes << current_node if current_node.match? @instance, @options
+        matching_nodes << current_node if current_node.match? @instance, @rules
         current_node.recursive_children do |child_node|
-          matching_nodes << child_node if child_node.match? @instance, @options
+          matching_nodes << child_node if child_node.match? @instance, @rules
         end
         matching_nodes.each do |matching_node|
           process_with_node matching_node do

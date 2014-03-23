@@ -41,22 +41,22 @@ module Synvert
       @current_node
     end
 
-    def within_node(options, &block)
-      Rewriter::Scope.new(self, options, &block).process
+    def within_node(rules, &block)
+      Rewriter::Scope.new(self, rules, &block).process
     end
 
     alias with_node within_node
 
-    def if_exist_node(options, &block)
-      Rewriter::IfExistCondition.new(self, options, &block).process
+    def if_exist_node(rules, &block)
+      Rewriter::IfExistCondition.new(self, rules, &block).process
     end
 
-    def unless_exist_node(options, &block)
-      Rewriter::UnlessExistCondition.new(self, options, &block).process
+    def unless_exist_node(rules, &block)
+      Rewriter::UnlessExistCondition.new(self, rules, &block).process
     end
 
-    def if_only_exist_node(options, &block)
-      Rewriter::IfOnlyExistCondition.new(self, options, &block).process
+    def if_only_exist_node(rules, &block)
+      Rewriter::IfOnlyExistCondition.new(self, rules, &block).process
     end
 
     def append(code)

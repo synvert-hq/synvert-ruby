@@ -79,21 +79,21 @@ class Parser::AST::Node
     end
   end
 
-  def grep_node(options)
+  def grep_node(rules)
     self.recursive_children do |child|
-      return child if child.match?(options)
+      return child if child.match?(rules)
     end
   end
 
-  def match?(instance, options)
-    flat_hash(options).keys.all? do |multi_keys|
+  def match?(instance, rules)
+    flat_hash(rules).keys.all? do |multi_keys|
       if multi_keys.last == :any
         actual_values = actual_value(self, instance, multi_keys[0...-1])
-        expected = expected_value(options, multi_keys)
+        expected = expected_value(rules, multi_keys)
         actual_values.any? { |actual| match_value?(instance, actual, expected) }
       else
         actual = actual_value(self, instance, multi_keys)
-        expected = expected_value(options, multi_keys)
+        expected = expected_value(rules, multi_keys)
         match_value?(instance, actual, expected)
       end
     end
@@ -170,7 +170,7 @@ private
     }
   end
 
-  def expected_value(options, multi_keys)
-    multi_keys.inject(options) { |o, key| o[key] }
+  def expected_value(rules, multi_keys)
+    multi_keys.inject(rules) { |o, key| o[key] }
   end
 end

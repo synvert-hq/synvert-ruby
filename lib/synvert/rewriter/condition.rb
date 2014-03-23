@@ -2,9 +2,9 @@
 
 module Synvert
   class Rewriter::Condition
-    def initialize(instance, options, &block)
+    def initialize(instance, rules, &block)
       @instance = instance
-      @options = options
+      @rules = rules
       @block = block
     end
 
@@ -17,7 +17,7 @@ module Synvert
     def match?
       match = false
       @instance.current_node.recursive_children do |child_node|
-        match = match || (child_node && child_node.match?(@instance, @options))
+        match = match || (child_node && child_node.match?(@instance, @rules))
       end
       match
     end
@@ -27,7 +27,7 @@ module Synvert
     def match?
       match = false
       @instance.current_node.recursive_children do |child_node|
-        match = match || (child_node && child_node.match?(@instance, @options))
+        match = match || (child_node && child_node.match?(@instance, @rules))
       end
       !match
     end
@@ -36,7 +36,7 @@ module Synvert
   class Rewriter::IfOnlyExistCondition < Rewriter::Condition
     def match?
       :begin != @instance.current_node.body.type &&
-        @instance.current_node.body.match?(@instance, @options)
+        @instance.current_node.body.match?(@instance, @rules)
     end
   end
 end
