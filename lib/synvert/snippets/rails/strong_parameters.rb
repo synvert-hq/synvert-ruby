@@ -6,6 +6,13 @@ Synvert::Rewriter.new "strong_parameters", "Use strong_parameters syntax" do
     end
   end
 
+  within_files 'config/**/*.rb' do
+    # remove config.active_record.mass_assignment_sanitizer = ...
+    with_node type: 'send', receiver: {type: 'send', receiver: {type: 'send', message: 'config'}, message: 'active_record'}, message: 'mass_assignment_sanitizer=' do
+      remove
+    end
+  end
+
   parameters = {}
   within_files 'app/models/**/*.rb' do
     # assign and remove attr_accessible ...

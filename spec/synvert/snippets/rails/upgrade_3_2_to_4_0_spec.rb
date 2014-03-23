@@ -23,6 +23,7 @@ end
 module Synvert
   class Application < Rails::Application
     config.active_record.whitelist_attributes = true
+    config.active_record.mass_assignment_sanitizer = :strict
     config.assets.compress = :uglifier
     config.middleware.insert_before(Rack::Lock, ActionDispatch::BestStandardsSupport)
   end

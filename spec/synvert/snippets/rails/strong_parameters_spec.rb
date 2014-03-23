@@ -13,6 +13,7 @@ describe 'rails strong_parameters snippet' do
 module Synvert
   class Application < Rails::Application
     config.active_record.whitelist_attributes = true
+    config.active_record.mass_assignment_sanitizer = :strict
   end
 end
     '''}
