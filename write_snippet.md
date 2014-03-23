@@ -13,4 +13,8 @@ own snippets.
    `# Factory.create(:post) => create(:post)`
 3. test snippet, see our example [here][1].
 
+If you don't want to write the snippet by yourself, feel free to [open
+an issue][2] to us, we can help you write it.
+
 [1]: https://github.com/xinminlabs/synvert/blob/master/spec/synvert/snippets/factory_girl/syntax_methods_spec.rb
+[2]: https://github.com/xinminlabs/synvert/issues
