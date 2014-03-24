@@ -1,4 +1,4 @@
-Copyright (c) 2014 Richard Huang
+Copyright (c) 2014 Xinmin Labs
 
 MIT License
 
