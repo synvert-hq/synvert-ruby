@@ -3,6 +3,9 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require 'synvert'
 require 'fakefs/spec_helpers'
 
+require 'coveralls'
+Coveralls.wear!
+
 Dir[File.join(File.dirname(__FILE__), 'support', '*')].each do |path|
   require path
 end
