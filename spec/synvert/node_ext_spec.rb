@@ -10,8 +10,18 @@ describe Parser::AST::Node do
       expect(node.name).to eq parse('Synvert::Rewriter::Instance')
     end
 
+    it 'gets for module node' do
+      node = parse('module Synvert; end')
+      expect(node.name).to eq parse('Synvert')
+    end
+
     it 'gets for def node' do
       node = parse('def current_node; end')
+      expect(node.name).to eq :current_node
+    end
+
+    it 'gets for defs node' do
+      node = parse('def self.current_node; end')
       expect(node.name).to eq :current_node
     end
   end
