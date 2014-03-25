@@ -116,6 +116,28 @@ name
 (const nil :Synvert)
 ```
 
+##### module node
+
+source code
+
+```ruby
+module Synvert
+end
+```
+
+ast node
+
+```
+(module
+  (const nil :Synvert) nil)
+```
+
+name
+
+```
+(const nil :Synvert)
+```
+
 ##### def node
 
 source code
@@ -136,6 +158,29 @@ name
 
 ```
 :synvert
+```
+
+##### defs node
+
+source code
+
+```ruby
+defs self.current_node
+end
+```
+
+ast node
+
+```
+(defs
+  (self) :current_node
+  (args) nil)
+```
+
+name
+
+```
+:current_node
 ```
 
 ### receiver

@@ -144,6 +144,19 @@ Parser::CurrentRuby.parse(&quot;self.class.serialized_attributes&quot;)</code></
 <p>name</p>
 <div class="highlight"><pre><code class="text language-text" data-lang="text">(const nil :Synvert)
 </code></pre></div>
+<h5>module node</h5>
+
+<p>source code</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="k">module</span> <span class="nn">Synvert</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>ast node</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">(module
+  (const nil :Synvert) nil)
+</code></pre></div>
+<p>name</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">(const nil :Synvert)
+</code></pre></div>
 <h5>def node</h5>
 
 <p>source code</p>
@@ -156,6 +169,20 @@ Parser::CurrentRuby.parse(&quot;self.class.serialized_attributes&quot;)</code></
 </code></pre></div>
 <p>name</p>
 <div class="highlight"><pre><code class="text language-text" data-lang="text">:synvert
+</code></pre></div>
+<h5>defs node</h5>
+
+<p>source code</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">defs</span> <span class="nb">self</span><span class="o">.</span><span class="n">current_node</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>ast node</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">(defs
+  (self) :current_node
+  (args) nil)
+</code></pre></div>
+<p>name</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">:current_node
 </code></pre></div>
 <h3>receiver</h3>
 
