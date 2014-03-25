@@ -9,3 +9,7 @@ pre code {
 .social-btns {
   margin-top: 20px;
 }
+.social-btns img {
+  display: inline;
+  margin: 0;
+}
