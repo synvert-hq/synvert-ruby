@@ -95,4 +95,41 @@ describe Parser::AST::Node do
       expect(node.indent).to eq 2
     end
   end
+
+  describe '#recursive_children' do
+    it 'iterates all children recursively' do
+      node = parse('class Synvert; def current_node; @node; end; end')
+      children = []
+      node.recursive_children { |child| children << child.type }
+      expect(children).to be_include :const
+      expect(children).to be_include :def
+      expect(children).to be_include :args
+      expect(children).to be_include :ivar
+    end
+  end
+
+  describe '#match' do
+    let(:instance) { Synvert::Rewriter::Instance.new('file pattern') }
+
+    it 'matches class name' do
+      source = 'class Synvert; end'
+      instance.current_source = source
+      node = parse(source)
+      expect(node).to be_match(instance, type: 'class', name: 'Synvert')
+    end
+
+    it 'matches message with regexp' do
+      source = 'User.find_by_login(login)'
+      instance.current_source = source
+      node = parse(source)
+      expect(node).to be_match(instance, type: 'send', message: /^find_by_/)
+    end
+
+    it 'matches arguments any' do
+      source = 'config.middleware.insert_after ActiveRecord::QueryCache, Lifo::Cache, page_cache: false'
+      instance.current_source = source
+      node = parse(source)
+      expect(node).to be_match(instance, type: 'send', arguments: {any: 'Lifo::Cache'})
+    end
+  end
 end

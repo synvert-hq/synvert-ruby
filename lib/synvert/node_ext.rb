@@ -82,12 +82,6 @@ class Parser::AST::Node
     end
   end
 
-  def grep_node(rules)
-    self.recursive_children do |child|
-      return child if child.match?(rules)
-    end
-  end
-
   def match?(instance, rules)
     flat_hash(rules).keys.all? do |multi_keys|
       if multi_keys.last == :any
