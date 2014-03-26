@@ -9,30 +9,6 @@ describe 'Upgrade rails from 3.1 to 3.2' do
   end
 
   describe 'with fakefs', fakefs: true do
-    let(:gemfile_content) {"""
-source 'http://rubygems.org'
-
-gem 'rails'
-
-gem 'sqlite3'
-
-gem 'jquery-rails'
-    """}
-    let(:gemfile_rewritten_content) {"""
-source 'http://rubygems.org'
-
-gem 'rails'
-
-gem 'sqlite3'
-
-gem 'jquery-rails'
-
-group :assets do
-  gem 'sass-rails', '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
-  gem 'uglifier', '>=1.0.3'
-end
-    """}
     let(:development_content) {'''
 Synvert::Application.configure do
 end
@@ -55,11 +31,9 @@ end
 
     it 'process' do
       FileUtils.mkdir_p 'config/environments'
-      File.write 'Gemfile', gemfile_content
       File.write 'config/environments/development.rb', development_content
       File.write 'config/environments/test.rb', test_content
       @rewriter.process
-      expect(File.read 'Gemfile').to eq gemfile_rewritten_content
       expect(File.read 'config/environments/development.rb').to eq development_rewritten_content
       expect(File.read 'config/environments/test.rb').to eq test_rewritten_content
     end
