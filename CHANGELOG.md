@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.0.8
+
+* Supports travis-ci and coveralls
+* Upgrade rails 3.1 to 3.2 snippet
+
 ## 0.0.7
 
 * Able to run run specified snippets
