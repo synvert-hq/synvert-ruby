@@ -39,9 +39,10 @@ module Synvert
         end
       end
       Configuration.instance.get('snippet_names').each do |snippet_name|
+        puts "===== #{snippet_name} started ====="
         rewriter = Rewriter.call snippet_name
-        puts "-------#{snippet_name} todo-------"
-        puts rewriter.todo_list
+        puts rewriter.todo_list if rewriter.todo_list
+        puts "===== #{snippet_name} done ====="
       end
 
       if :list == command
