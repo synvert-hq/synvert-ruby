@@ -10,11 +10,11 @@ module Synvert
     }
 
     it 'gets begin_pos' do
-      expect(subject.begin_pos).to eq 7
+      expect(subject.begin_pos).to eq "post = ".length
     end
 
     it 'gets end_pos' do
-      expect(subject.end_pos).to eq 39
+      expect(subject.end_pos).to eq "post = FactoryGirl.create_list :post, 2".length
     end
 
     it 'gets rewritten_code' do
@@ -24,23 +24,44 @@ module Synvert
 
   describe Rewriter::AppendAction < Rewriter::Action do
     describe 'class node' do
-      subject {
+      subject do
         source = "class User\n  has_many :posts\nend"
         class_node = Parser::CurrentRuby.parse(source)
         instance = double(:current_node => class_node)
         Rewriter::AppendAction.new(instance, "def as_json\n  super\nend")
-      }
+      end
 
       it 'gets begin_pos' do
-        expect(subject.begin_pos).to eq 28
+        expect(subject.begin_pos).to eq "calss User\n  has_many :posts".length
       end
 
       it 'gets end_pos' do
-        expect(subject.end_pos).to eq 28
+        expect(subject.end_pos).to eq "class User\n  has_many :posts".length
       end
 
       it 'gets rewritten_code' do
         expect(subject.rewritten_code).to eq "\n\n  def as_json\n    super\n  end"
+      end
+    end
+
+    describe 'begin node' do
+      subject do
+        source = "gem 'rails'\ngem 'mysql2'"
+        begin_node = Parser::CurrentRuby.parse(source)
+        instance = double(:current_node => begin_node)
+        Rewriter::AppendAction.new(instance, "gem 'twitter'")
+      end
+
+      it 'gets begin_pos' do
+        expect(subject.begin_pos).to eq "gem 'rails'\ngem 'mysql2'".length
+      end
+
+      it 'gets end_pos' do
+        expect(subject.end_pos).to eq "gem 'rails'\ngem 'mysql2'".length
+      end
+
+      it 'gets rewritten_code' do
+        expect(subject.rewritten_code).to eq "\ngem 'twitter'"
       end
     end
   end
@@ -55,11 +76,11 @@ module Synvert
       }
 
       it 'gets begin_pos' do
-        expect(subject.begin_pos).to eq 33
+        expect(subject.begin_pos).to eq "Synvert::Application.configure do".length
       end
 
       it 'gets end_pos' do
-        expect(subject.end_pos).to eq 33
+        expect(subject.end_pos).to eq "Synvert::Application.configure do".length
       end
 
       it 'gets rewritten_code' do
@@ -76,11 +97,11 @@ module Synvert
       }
 
       it 'gets begin_pos' do
-        expect(subject.begin_pos).to eq 27
+        expect(subject.begin_pos).to eq "RSpec.configure do |config|".length
       end
 
       it 'gets end_pos' do
-        expect(subject.end_pos).to eq 27
+        expect(subject.end_pos).to eq "RSpec.configure do |config|".length
       end
 
       it 'gets rewritten_code' do
@@ -97,11 +118,11 @@ module Synvert
       }
 
       it 'gets begin_pos' do
-        expect(subject.begin_pos).to eq 10
+        expect(subject.begin_pos).to eq "class User".length
       end
 
       it 'gets end_pos' do
-        expect(subject.end_pos).to eq 10
+        expect(subject.end_pos).to eq "class User".length
       end
 
       it 'gets rewritten_code' do
@@ -118,11 +139,11 @@ module Synvert
       }
 
       it 'gets begin_pos' do
-        expect(subject.begin_pos).to eq 31
+        expect(subject.begin_pos).to eq "class User < ActionRecord::Base".length
       end
 
       it 'gets end_pos' do
-        expect(subject.end_pos).to eq 31
+        expect(subject.end_pos).to eq "class User < ActionRecord::Base".length
       end
 
       it 'gets rewritten_code' do
@@ -140,11 +161,11 @@ module Synvert
     }
 
     it 'gets begin_pos' do
-      expect(subject.begin_pos).to eq 13
+      expect(subject.begin_pos).to eq "  include Foo".length
     end
 
     it 'gets end_pos' do
-      expect(subject.end_pos).to eq 13
+      expect(subject.end_pos).to eq "  include Foo".length
     end
 
     it 'gets rewritten_code' do
@@ -161,11 +182,11 @@ module Synvert
     }
 
     it 'gets begin_pos' do
-      expect(subject.begin_pos).to eq 30
+      expect(subject.begin_pos).to eq "user = User.new params[:user]\n".length
     end
 
     it 'gets end_pos' do
-      expect(subject.end_pos).to eq 39
+      expect(subject.end_pos).to eq "user = User.new params[:user]\nuser.save".length
     end
 
     it 'gets rewritten_code' do

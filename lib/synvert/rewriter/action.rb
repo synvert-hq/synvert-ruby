@@ -47,7 +47,11 @@ module Synvert
 
   class Rewriter::AppendAction < Rewriter::Action
     def begin_pos
-      @node.loc.expression.end_pos - 4
+      if :begin == @node.type
+        @node.loc.expression.end_pos
+      else
+        @node.loc.expression.end_pos - 4
+      end
     end
 
     def end_pos
