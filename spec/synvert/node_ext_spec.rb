@@ -67,9 +67,14 @@ describe Parser::AST::Node do
   end
 
   describe '#body' do
-    it 'gets for block node' do
+    it 'gets one line for block node' do
       node = parse('RSpec.configure do |config|; include EmailSpec::Helpers; end')
-      expect(node.body).to eq parse('include EmailSpec::Helpers')
+      expect(node.body).to eq [parse('include EmailSpec::Helpers')]
+    end
+
+    it 'gets multiple lines for block node' do
+      node = parse('RSpec.configure do |config|; include EmailSpec::Helpers; include EmailSpec::Matchers; end')
+      expect(node.body).to eq [parse('include EmailSpec::Helpers'), parse('include EmailSpec::Matchers')]
     end
   end
 

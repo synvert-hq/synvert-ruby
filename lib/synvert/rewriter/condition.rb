@@ -35,8 +35,8 @@ module Synvert
 
   class Rewriter::IfOnlyExistCondition < Rewriter::Condition
     def match?
-      :begin != @instance.current_node.body.type &&
-        @instance.current_node.body.match?(@instance, @rules)
+      @instance.current_node.body.size == 1 &&
+        @instance.current_node.body.first.match?(@instance, @rules)
     end
   end
 end
