@@ -46,6 +46,7 @@ convert_dynamic_finders | Convert dynamic finders
 strong_parameters | Use strong_parameters syntax
 upgrade_rails_3_2_to_4_0 | Upgrade rails from 3.2 to 4.0, it contains convert_dynamic_finder and strong_parameters snippets
 upgrade_rails_3_1_to_3_2 | Upgrade rails from 3.1 to 3.2
+upgrade_rails_3_0_to_3_1 | Upgrade rails from 3.0 to 3.1
 
 ## Documentation
 
