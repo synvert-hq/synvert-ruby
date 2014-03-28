@@ -108,7 +108,7 @@ describe Parser::AST::Node do
     end
   end
 
-  describe '#match' do
+  describe '#match?' do
     let(:instance) { Synvert::Rewriter::Instance.new('file pattern') }
 
     it 'matches class name' do
@@ -123,6 +123,20 @@ describe Parser::AST::Node do
       instance.current_source = source
       node = parse(source)
       expect(node).to be_match(instance, type: 'send', message: /^find_by_/)
+    end
+
+    it 'matches arguments with symbol' do
+      source = 'params[:user]'
+      instance.current_source = source
+      node = parse(source)
+      expect(node).to be_match(instance, type: 'send', receiver: 'params', message: '[]', arguments: [:user])
+    end
+
+    it 'matches arguments with string' do
+      source = 'params["user"]'
+      instance.current_source = source
+      node = parse(source)
+      expect(node).to be_match(instance, type: 'send', receiver: 'params', message: '[]', arguments: ['user'])
     end
 
     it 'matches arguments any' do

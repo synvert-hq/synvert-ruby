@@ -119,10 +119,14 @@ private
   def match_value?(instance, actual, expected)
     case expected
     when Symbol
-      actual.to_sym == expected
+      if Parser::AST::Node === actual
+        actual.source(instance) == ":#{expected}"
+      else
+        actual.to_sym == expected
+      end
     when String
       if Parser::AST::Node === actual
-        actual.source(instance) == expected || actual.source(instance) == ':' + expected
+        actual.source(instance) == expected || actual.source(instance)[1...-1] == expected
       else
         actual.to_s == expected
       end

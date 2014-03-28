@@ -32,7 +32,7 @@ Synvert::Rewriter.new "upgrade_rails_3_2_to_4_0", "Upgrade rails from 3.2 to 4.0
     # ActiveSupport.on_load(:active_record) do
     #   self.include_root_in_json = false
     # end
-    with_node type: 'block', caller: {receiver: 'ActiveSupport', message: 'on_load', arguments: [':active_record']} do
+    with_node type: 'block', caller: {receiver: 'ActiveSupport', message: 'on_load', arguments: [:active_record]} do
       if_only_exist_node type: 'send', receiver: 'self', message: 'include_root_in_json=', arguments: [false] do
         remove
       end

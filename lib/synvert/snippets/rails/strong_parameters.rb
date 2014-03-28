@@ -28,7 +28,7 @@ Synvert::Rewriter.new "strong_parameters", "Use strong_parameters syntax" do
   within_file 'app/controllers/**/*.rb' do
     within_node type: 'class' do
       object_name = node.name.source(self).sub('Controller', '').singularize.underscore
-      if_exist_node type: 'send', receiver: 'params', message: '[]', arguments: [object_name] do
+      if_exist_node type: 'send', receiver: 'params', message: '[]', arguments: [object_name.to_sym] do
         if parameters[object_name]
           # append def xxx_params; ...; end
           unless_exist_node type: 'def', name: "#{object_name}_params" do
