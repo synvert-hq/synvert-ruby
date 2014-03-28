@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.0.9
+
+* Add add_file dsl
+* Upgrade rails 3.0 to 3.1 snippet
+
 ## 0.0.8
 
 * Supports travis-ci and coveralls
