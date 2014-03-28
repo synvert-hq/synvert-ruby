@@ -40,8 +40,19 @@ module Synvert
       end
     end
 
+    describe 'parses add_file' do
+      it 'processes the rewriter' do
+        rewriter = Rewriter.new 'rewriter2', 'description2' do
+          add_file './foo.bar', 'FooBar'
+        end
+        rewriter.process
+        expect(File.read './foo.bar').to eq 'FooBar'
+        FileUtils.rm './foo.bar'
+      end
+    end
+
     describe 'parses add_snippet' do
-      it 'process the rewritter' do
+      it 'processes the rewritter' do
         rewriter1 = Rewriter.new 'rewriter1', 'description1'
         rewriter2 = Rewriter.new 'rewriter2', 'description2' do
           add_snippet :rewriter1

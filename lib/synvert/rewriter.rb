@@ -70,6 +70,12 @@ module Synvert
 
     alias within_files within_file
 
+    def add_file(file, content)
+      File.open file, 'w' do |file|
+        file.write content
+      end
+    end
+
     def add_snippet(name)
       self.class.call(name)
     end
