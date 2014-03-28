@@ -37,6 +37,18 @@ gem_spec 'factory_girl', '2.0.0'
 `Gemfile.lock` is greater than or equal to the version in `gem_spec`,
 the rewriter will be executed, otherwise, the rewriter will be ignored.
 
+### add file
+
+```ruby
+add_file 'config/initializers/wrap_parameters.rb', """
+ActiveSupport.on_load(:action_controller) do
+  wrap_parameters format: [:json]
+end
+""".strip
+```
+
+`add_file` adds a new file and writes the content.
+
 ### match file / files
 
 ```ruby

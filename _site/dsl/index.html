@@ -78,6 +78,15 @@
 <code>Gemfile.lock</code> is greater than or equal to the version in <code>gem_spec</code>,
 the rewriter will be executed, otherwise, the rewriter will be ignored.</p>
 
+<h3>add file</h3>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">add_file</span> <span class="s1">&#39;config/initializers/wrap_parameters.rb&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">ActiveSupport.on_load(:action_controller) do</span>
+<span class="s2">  wrap_parameters format: [:json]</span>
+<span class="s2">end</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="o">.</span><span class="n">strip</span>
+</code></pre></div>
+<p><code>add_file</code> adds a new file and writes the content.</p>
+
 <h3>match file / files</h3>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">within_file</span> <span class="s1">&#39;spec/spec_helper.rb&#39;</span> <span class="k">do</span>
   <span class="c1"># find nodes</span>
