@@ -308,13 +308,12 @@ Parser::CurrentRuby.parse(&quot;self.class.serialized_attributes&quot;)</code></
         (const nil :EmailSpec) :Matchers))))
 </code></pre></div>
 <p>body</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(begin
+<div class="highlight"><pre><code class="text language-text" data-lang="text">[ (send nil :include
+    (const
+      (const nil :EmailSpec) :Helpers)),
   (send nil :include
     (const
-      (const nil :EmailSpec) :Helpers))
-  (send nil :include
-    (const
-      (const nil :EmailSpec) :Matchers))))
+      (const nil :EmailSpec) :Matchers)))) ]
 </code></pre></div>
 <h3>condition</h3>
 

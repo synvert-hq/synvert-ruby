@@ -369,13 +369,12 @@ ast node
 body
 
 ```
-(begin
+[ (send nil :include
+    (const
+      (const nil :EmailSpec) :Helpers)),
   (send nil :include
     (const
-      (const nil :EmailSpec) :Helpers))
-  (send nil :include
-    (const
-      (const nil :EmailSpec) :Matchers))))
+      (const nil :EmailSpec) :Matchers)))) ]
 ```
 
 ### condition
