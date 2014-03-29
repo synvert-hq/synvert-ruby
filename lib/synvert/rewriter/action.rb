@@ -41,7 +41,19 @@ module Synvert
     end
 
     def rewritten_code
-      @node.rewritten_source(@code)
+      if rewritten_source.split("\n").length > 1
+        rewritten_source.split("\n").map { |line|
+          indent(@node) + line
+        }.join("\n")
+      else
+        rewritten_source
+      end
+    end
+
+  private
+
+    def indent(node)
+      ' ' * node.indent
     end
   end
 
