@@ -285,6 +285,21 @@ Parser::CurrentRuby.parse(&quot;self.class.serialized_attributes&quot;)</code></
 </code></pre></div>
 <h3>body</h3>
 
+<h5>begin node</h5>
+
+<p>source code</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">foo</span>
+<span class="n">bar</span>
+</code></pre></div>
+<p>ast node</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">(begin
+  (send nil :foo)
+  (send nil :bar))
+</code></pre></div>
+<p>body</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">[ (send nil :foo),
+  (send nil :bar)) ]
+</code></pre></div>
 <h5>block node</h5>
 
 <p>source code</p>

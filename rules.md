@@ -338,6 +338,30 @@ caller
 
 ### body
 
+##### begin node
+
+source code
+
+```ruby
+foo
+bar
+```
+
+ast node
+
+```
+(begin
+  (send nil :foo)
+  (send nil :bar))
+```
+
+body
+
+```
+[ (send nil :foo),
+  (send nil :bar)) ]
+```
+
 ##### block node
 
 source code
