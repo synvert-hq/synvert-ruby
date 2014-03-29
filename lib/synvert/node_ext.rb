@@ -48,7 +48,10 @@ class Parser::AST::Node
   end
 
   def body
-    if :block == self.type
+    case self.type
+    when :begin
+      self.children
+    when :block
       :begin == self.children[2].type ? self.children[2].children : [self.children[2]]
     else
       raise NotImplementedError.new "body is not handled for #{self.inspect}"

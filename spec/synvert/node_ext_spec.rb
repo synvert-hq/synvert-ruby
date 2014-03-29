@@ -76,6 +76,11 @@ describe Parser::AST::Node do
       node = parse('RSpec.configure do |config|; include EmailSpec::Helpers; include EmailSpec::Matchers; end')
       expect(node.body).to eq [parse('include EmailSpec::Helpers'), parse('include EmailSpec::Matchers')]
     end
+
+    it 'gets for begin node' do
+      node = parse('foo; bar')
+      expect(node.body).to eq [parse('foo'), parse('bar')]
+    end
   end
 
   describe "#condition" do
