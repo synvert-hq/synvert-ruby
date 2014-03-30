@@ -1,5 +1,5 @@
 Synvert::Rewriter.new 'upgrade_rails_3_0_to_3_1', 'Upgrade rails from 3.0 to 3.1' do
-  gem_spec 'rails', '3.0.0'
+  if_gem 'rails', {gte: '3.0.0'}
 
   within_file 'config/application.rb' do
     # insert config.assets.version = '1.0'

@@ -1,5 +1,5 @@
 Synvert::Rewriter.new "convert_rspec_collection_matcher", "RSpec converts collection matcher" do
-  gem_spec 'rspec', '2.11.0'
+  if_gem 'rspec', {gte: '2.11.0'}
 
   {have: 'eq', have_exactly: 'eq', have_at_least: 'be >=', have_at_most: 'be <='}.each do |old_matcher, new_matcher|
     within_files 'spec/**/*_spec.rb' do

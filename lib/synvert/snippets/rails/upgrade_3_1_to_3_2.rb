@@ -1,5 +1,5 @@
 Synvert::Rewriter.new 'upgrade_rails_3_1_to_3_2', 'Upgrade rails from 3.1 to 3.2' do
-  gem_spec 'rails', '3.1.0'
+  if_gem 'rails', {gte: '3.1.0'}
 
   within_file 'config/environments/development.rb' do
     # insert config.active_record.auto_explain_threshold_in_seconds = 0.5

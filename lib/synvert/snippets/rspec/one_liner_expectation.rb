@@ -1,5 +1,5 @@
 Synvert::Rewriter.new "convert_rspec_one_liner_expectation", "RSpec converts one liner expectation" do
-  gem_spec 'rspec', '2.99.0'
+  if_gem 'rspec', {gte: '2.99.0'}
 
   {should: 'to', should_not: 'not_to'}.each do |old_message, new_message|
     matcher_converters = {have: 'eq', have_exactly: 'eq', have_at_least: 'be >=', have_at_most: 'be <='}

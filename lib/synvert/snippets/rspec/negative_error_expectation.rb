@@ -1,5 +1,5 @@
 Synvert::Rewriter.new "convert_rspec_negative_error_expectation", "RSpec converts negative error expectation" do
-  gem_spec 'rspec', '2.14.0'
+  if_gem 'rspec', {gte: '2.14.0'}
 
   within_files 'spec/**/*.rb' do
     # expect { do_something }.not_to raise_error(SomeErrorClass) => expect { do_something }.not_to raise_error

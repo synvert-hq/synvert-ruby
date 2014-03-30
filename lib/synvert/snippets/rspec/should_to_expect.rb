@@ -1,5 +1,5 @@
 Synvert::Rewriter.new "convert_rspec_should_to_expect", "RSpec converts should to expect" do
-  gem_spec 'rspec', '2.11.0'
+  if_gem 'rspec', {gte: '2.11.0'}
 
   {should: 'to', should_not: 'not_to'}.each do |old_message, new_message|
     within_files 'spec/**/*.rb' do

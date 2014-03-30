@@ -2,26 +2,26 @@ require 'spec_helper'
 
 module Synvert
   describe Rewriter do
-    it 'parses gem_spec' do
+    it 'parses if_gem' do
       expect(Rewriter::GemSpec).to receive(:new).with('synvert', '1.0.0')
       rewriter = Rewriter.new 'name', 'description' do
-        gem_spec 'synvert', '1.0.0'
+        if_gem 'synvert', '1.0.0'
       end
       rewriter.process
     end
 
     describe 'parses within_file' do
-      it 'does nothing if gem_spec not match' do
+      it 'does nothing if if_gem not match' do
         expect_any_instance_of(Rewriter::GemSpec).to receive(:match?).and_return(false)
         expect_any_instance_of(Rewriter::Instance).not_to receive(:process)
         rewriter = Rewriter.new 'name', 'description' do
-          gem_spec 'synvert', '1.0.0'
+          if_gem 'synvert', '1.0.0'
           within_file 'config/routes.rb' do; end
         end
         rewriter.process
       end
 
-      it 'delegates process to instances if gem_spec not exist' do
+      it 'delegates process to instances if if_gem not exist' do
         expect_any_instance_of(Rewriter::Instance).to receive(:process)
         rewriter = Rewriter.new 'name', 'description' do
           within_file 'config/routes.rb' do; end
@@ -29,11 +29,11 @@ module Synvert
         rewriter.process
       end
 
-      it 'delegates process to instances if gem_spec matches' do
+      it 'delegates process to instances if if_gem matches' do
         expect_any_instance_of(Rewriter::GemSpec).to receive(:match?).and_return(true)
         expect_any_instance_of(Rewriter::Instance).to receive(:process)
         rewriter = Rewriter.new 'name', 'description' do
-          gem_spec 'synvert', '1.0.0'
+          if_gem 'synvert', '1.0.0'
           within_file 'config/routes.rb' do; end
         end
         rewriter.process

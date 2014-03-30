@@ -1,5 +1,5 @@
 Synvert::Rewriter.new "convert_rspec_method_stub", "RSpec converts method stub" do
-  gem_spec 'rspec', '2.14.0'
+  if_gem 'rspec', {gte: '2.14.0'}
 
   within_files 'spec/**/*.rb' do
     # obj.stub!(:message) => obj.stub(:message)
@@ -36,7 +36,7 @@ Synvert::Rewriter.new "convert_rspec_method_stub", "RSpec converts method stub" 
     end
   end
 
-  gem_spec 'rspec', '3.0.0'
+  if_gem 'rspec', {gte: '3.0.0'}
 
   within_files 'spec/**/*.rb' do
     # obj.stub_chain(:foo, :bar, :baz) => allow(obj).to receive_message_chain(:foo, :bar, :baz)

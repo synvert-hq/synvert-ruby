@@ -1,5 +1,5 @@
 Synvert::Rewriter.new "convert_rspec_message_expectation", "RSpec converts message expectation" do
-  gem_spec 'rspec', '2.14.0'
+  if_gem 'rspec', {gte: '2.14.0'}
 
   within_files 'spec/**/*.rb' do
     # obj.should_receive(:message) => expect(obj).to receive(:message)

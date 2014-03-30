@@ -1,5 +1,5 @@
 Synvert::Rewriter.new "convert_rspec_be_close_to_be_within", "RSpec converts be_close to be_within" do
-  gem_spec 'rspec', '2.1.0'
+  if_gem 'rspec', {gte: '2.1.0'}
 
   within_files 'spec/**/*.rb' do
     # expect(1.0 / 3.0).to be_close(0.333, 0.001) => expect(1.0 / 3.0).to be_within(0.001).of(0.333)

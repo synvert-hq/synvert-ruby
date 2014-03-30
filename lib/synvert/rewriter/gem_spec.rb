@@ -2,9 +2,16 @@
 
 module Synvert
   class Rewriter::GemSpec
-    def initialize(name, version)
+    OPERATORS = {eq: '==', lt: '<', gt: '>', lte: '<=', gte: '>=', ne: '!='}
+    def initialize(name, comparator)
       @name = name
-      @version = Gem::Version.new version
+      if Hash === comparator
+        @operator = comparator.keys.first
+        @version = Gem::Version.new comparator.values.first
+      else
+        @operator = :eq
+        @version = Gem::Version.new comparator
+      end
     end
 
     def match?
@@ -12,7 +19,7 @@ module Synvert
       if File.exists? gemfile_lock_path
         parser = Bundler::LockfileParser.new(File.read(gemfile_lock_path))
         if spec = parser.specs.find { |spec| spec.name == @name }
-          Gem::Version.new(spec.version) >= @version
+          Gem::Version.new(spec.version).send(OPERATORS[@operator], @version)
         else
           false
         end

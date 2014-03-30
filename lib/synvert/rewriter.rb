@@ -56,8 +56,8 @@ module Synvert
       self.instance_eval &@block
     end
 
-    def gem_spec(name, version)
-      @gem_spec = Rewriter::GemSpec.new(name, version)
+    def if_gem(name, comparator)
+      @gem_spec = Rewriter::GemSpec.new(name, comparator)
     end
 
     def within_file(file_pattern, &block)

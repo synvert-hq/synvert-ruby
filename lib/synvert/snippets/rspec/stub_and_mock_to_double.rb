@@ -1,5 +1,5 @@
 Synvert::Rewriter.new "convert_rspec_stub_and_mock_to_double", "RSpec converts stub and mock to double" do
-  gem_spec 'rspec', '2.14.0'
+  if_gem 'rspec', {gte: '2.14.0'}
 
   within_files 'spec/**/*.rb' do
     # stub('something') => double('something')

@@ -1,5 +1,5 @@
 Synvert::Rewriter.new "convert_rspec_its_to_it", "RSpec converts its to it" do
-  gem_spec 'rspec', '2.99.0'
+  if_gem 'rspec', {gte: '2.99.0'}
 
   [:should, :should_not].each do |message|
     within_files 'spec/**/*.rb' do
