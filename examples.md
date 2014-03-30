@@ -25,7 +25,7 @@ check the gem version.
 
 ```ruby
 Synvert::Rewriter.new 'factory_girl_short_syntax', 'FactoryGirl uses short syntax' do
-  gem_spec 'factory_girl', '2.0.0'
+  if_gem 'factory_girl', {gte: '2.0.0'}
 
   within_file 'test/test_helper.rb' do
     with_node type: 'class', name: 'Test::Unit::TestCase' do
@@ -41,7 +41,7 @@ if code doesn't exist, then insert.
 
 ```ruby
 Synvert::Rewriter.new 'factory_girl_short_syntax', 'FactoryGirl uses short syntax' do
-  gem_spec 'factory_girl', '2.0.0'
+  if_gem 'factory_girl', {gte: '2.0.0'}
 
   within_file 'test/test_helper.rb' do
     with_node type: 'class', name: 'Test::Unit::TestCase' do
@@ -57,7 +57,7 @@ It should also work in minitest and activesupport testcase
 
 ```ruby
 Synvert::Rewriter.new 'factory_girl_short_syntax', 'FactoryGirl uses short syntax' do
-  gem_spec 'factory_girl', '2.0.0'
+  if_gem 'factory_girl', {gte: '2.0.0'}
 
   within_file 'test/test_helper.rb' do
     %w(Test::Unit::TestCase ActiveSupport::TestCase MiniTest::Unit::TestCase
@@ -77,7 +77,7 @@ For rspec, it does a bit different
 ```ruby
 {% raw %}
 Synvert::Rewriter.new 'factory_girl_short_syntax', 'FactoryGirl uses short syntax' do
-  gem_spec 'factory_girl', '2.0.0'
+  if_gem 'factory_girl', {gte: '2.0.0'}
 
   within_file 'spec/spec_helper.rb' do
     within_node type: 'block', caller: {receiver: 'RSpec', message: 'configure'} do
@@ -98,7 +98,7 @@ Finally, apply it for cucumber as well.
 
 ```ruby
 Synvert::Rewriter.new 'factory_girl_short_syntax', 'FactoryGirl uses short syntax' do
-  gem_spec 'factory_girl', '2.0.0'
+  if_gem 'factory_girl', {gte: '2.0.0'}
 
   within_file 'features/support/env.rb' do
     # current node is the root node of env.rb file
@@ -116,7 +116,7 @@ replace `FactoryGirl.create` with `create` now.
 ```ruby
 {% raw %}
 Synvert::Rewriter.new 'factory_girl_short_syntax', 'FactoryGirl uses short syntax' do
-  gem_spec 'factory_girl', '2.0.0'
+  if_gem 'factory_girl', {gte: '2.0.0'}
 
   %w(test/**/*.rb spec/**/*.rb features/**/*.rb).each do |file_pattern|
     # find all files in test/, spec/ and features/
@@ -137,7 +137,7 @@ There are more short syntax, e.g. `build`, `create_list`, `build_list`, etc.
 ```ruby
 {% raw %}
 Synvert::Rewriter.new 'factory_girl_short_syntax', 'FactoryGirl uses short syntax' do
-  gem_spec 'factory_girl', '2.0.0'
+  if_gem 'factory_girl', {gte: '2.0.0'}
 
   %w(test/**/*.rb spec/**/*.rb features/**/*.rb).each do |file_pattern|
     within_files file_pattern do

@@ -7,7 +7,7 @@ Synvert provides a simple dsl to define a snippet.
 
 ```ruby
 Synvert::Rewriter.new "name", "description" do
-  gem_spec gem_name, gem_version
+  if_gem gem_name, {gte: gem_version}
 
   within_file file_pattern do
     within_node rules do
@@ -30,12 +30,19 @@ end
 ### check gem version
 
 ```ruby
-gem_spec 'factory_girl', '2.0.0'
+if_gem 'factory_girl', '2.0.0'
+if_gem 'factory_girl', {eq: '2.0.0'}
+if_gem 'factory_girl', {ne: '2.0.0'}
+if_gem 'factory_girl', {gt: '2.0.0'}
+if_gem 'factory_girl', {lt: '2.0.0'}
+if_gem 'factory_girl', {gte: '2.0.0'}
+if_gem 'factory_girl', {lte: '2.0.0'}
 ```
 
-`gem_spec` checks the gem in `Gemfile.lock`, if gem version in
-`Gemfile.lock` is greater than or equal to the version in `gem_spec`,
-the rewriter will be executed, otherwise, the rewriter will be ignored.
+`if_gem` checks the gem in `Gemfile.lock`, if gem version in
+`Gemfile.lock` is less than, greater than or equal to the version in
+`if_gem`, the rewriter will be executed, otherwise, the rewriter
+will be ignored.
 
 ### add file
 

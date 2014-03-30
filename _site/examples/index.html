@@ -67,7 +67,7 @@
 <p>FactoryGirl short syntax only works from factory_girl 2.0.0, so let&#39;s
 check the gem version.</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span><span class="p">,</span> <span class="s1">&#39;FactoryGirl uses short syntax&#39;</span> <span class="k">do</span>
-  <span class="n">gem_spec</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0.0&#39;</span>
+  <span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">gte</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
 
   <span class="n">within_file</span> <span class="s1">&#39;test/test_helper.rb&#39;</span> <span class="k">do</span>
     <span class="n">with_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="nb">name</span><span class="p">:</span> <span class="s1">&#39;Test::Unit::TestCase&#39;</span> <span class="k">do</span>
@@ -80,7 +80,7 @@ check the gem version.</p>
 FactoryGirl::Syntax::Methods</code> already exist in the class, so let&#39;s check
 if code doesn&#39;t exist, then insert.</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span><span class="p">,</span> <span class="s1">&#39;FactoryGirl uses short syntax&#39;</span> <span class="k">do</span>
-  <span class="n">gem_spec</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0.0&#39;</span>
+  <span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">gte</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
 
   <span class="n">within_file</span> <span class="s1">&#39;test/test_helper.rb&#39;</span> <span class="k">do</span>
     <span class="n">with_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="nb">name</span><span class="p">:</span> <span class="s1">&#39;Test::Unit::TestCase&#39;</span> <span class="k">do</span>
@@ -93,7 +93,7 @@ if code doesn&#39;t exist, then insert.</p>
 </code></pre></div>
 <p>It should also work in minitest and activesupport testcase</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span><span class="p">,</span> <span class="s1">&#39;FactoryGirl uses short syntax&#39;</span> <span class="k">do</span>
-  <span class="n">gem_spec</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0.0&#39;</span>
+  <span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">gte</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
 
   <span class="n">within_file</span> <span class="s1">&#39;test/test_helper.rb&#39;</span> <span class="k">do</span>
     <span class="sx">%w(Test::Unit::TestCase ActiveSupport::TestCase MiniTest::Unit::TestCase</span>
@@ -109,7 +109,7 @@ if code doesn&#39;t exist, then insert.</p>
 </code></pre></div>
 <p>For rspec, it does a bit different</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span><span class="p">,</span> <span class="s1">&#39;FactoryGirl uses short syntax&#39;</span> <span class="k">do</span>
-  <span class="n">gem_spec</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0.0&#39;</span>
+  <span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">gte</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
 
   <span class="n">within_file</span> <span class="s1">&#39;spec/spec_helper.rb&#39;</span> <span class="k">do</span>
     <span class="n">within_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;block&#39;</span><span class="p">,</span> <span class="nb">caller</span><span class="p">:</span> <span class="p">{</span><span class="ss">receiver</span><span class="p">:</span> <span class="s1">&#39;RSpec&#39;</span><span class="p">,</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;configure&#39;</span><span class="p">}</span> <span class="k">do</span>
@@ -126,7 +126,7 @@ if code doesn&#39;t exist, then insert.</p>
 </code></pre></div>
 <p>Finally, apply it for cucumber as well.</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span><span class="p">,</span> <span class="s1">&#39;FactoryGirl uses short syntax&#39;</span> <span class="k">do</span>
-  <span class="n">gem_spec</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0.0&#39;</span>
+  <span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">gte</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
 
   <span class="n">within_file</span> <span class="s1">&#39;features/support/env.rb&#39;</span> <span class="k">do</span>
     <span class="c1"># current node is the root node of env.rb file</span>
@@ -140,7 +140,7 @@ if code doesn&#39;t exist, then insert.</p>
 <p>We already insert <code>FactoryGirl::Syntax::Methods</code> module, then we can
 replace <code>FactoryGirl.create</code> with <code>create</code> now.</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span><span class="p">,</span> <span class="s1">&#39;FactoryGirl uses short syntax&#39;</span> <span class="k">do</span>
-  <span class="n">gem_spec</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0.0&#39;</span>
+  <span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">gte</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
 
   <span class="sx">%w(test/**/*.rb spec/**/*.rb features/**/*.rb)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">file_pattern</span><span class="o">|</span>
     <span class="c1"># find all files in test/, spec/ and features/</span>
@@ -156,7 +156,7 @@ replace <code>FactoryGirl.create</code> with <code>create</code> now.</p>
 </code></pre></div>
 <p>There are more short syntax, e.g. <code>build</code>, <code>create_list</code>, <code>build_list</code>, etc.</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span><span class="p">,</span> <span class="s1">&#39;FactoryGirl uses short syntax&#39;</span> <span class="k">do</span>
-  <span class="n">gem_spec</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0.0&#39;</span>
+  <span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">gte</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
 
   <span class="sx">%w(test/**/*.rb spec/**/*.rb features/**/*.rb)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">file_pattern</span><span class="o">|</span>
     <span class="n">within_files</span> <span class="n">file_pattern</span> <span class="k">do</span>

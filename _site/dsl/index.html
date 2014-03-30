@@ -52,7 +52,7 @@
   <h1 class="page-title">DSL</h1>
   <p>Synvert provides a simple dsl to define a snippet.</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span> <span class="k">do</span>
-  <span class="n">gem_spec</span> <span class="n">gem_name</span><span class="p">,</span> <span class="n">gem_version</span>
+  <span class="n">if_gem</span> <span class="n">gem_name</span><span class="p">,</span> <span class="p">{</span><span class="ss">gte</span><span class="p">:</span> <span class="n">gem_version</span><span class="p">}</span>
 
   <span class="n">within_file</span> <span class="n">file_pattern</span> <span class="k">do</span>
     <span class="n">within_node</span> <span class="n">rules</span> <span class="k">do</span>
@@ -72,11 +72,18 @@
 <span class="k">end</span>
 </code></pre></div>
 <h3>check gem version</h3>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">gem_spec</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0.0&#39;</span>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0.0&#39;</span>
+<span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">eq</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
+<span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">ne</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
+<span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">gt</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
+<span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">lt</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
+<span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">gte</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
+<span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">lte</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
 </code></pre></div>
-<p><code>gem_spec</code> checks the gem in <code>Gemfile.lock</code>, if gem version in
-<code>Gemfile.lock</code> is greater than or equal to the version in <code>gem_spec</code>,
-the rewriter will be executed, otherwise, the rewriter will be ignored.</p>
+<p><code>if_gem</code> checks the gem in <code>Gemfile.lock</code>, if gem version in
+<code>Gemfile.lock</code> is less than, greater than or equal to the version in
+<code>if_gem</code>, the rewriter will be executed, otherwise, the rewriter
+will be ignored.</p>
 
 <h3>add file</h3>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">add_file</span> <span class="s1">&#39;config/initializers/wrap_parameters.rb&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;&quot;</span>
