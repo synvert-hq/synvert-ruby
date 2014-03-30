@@ -111,10 +111,14 @@ class Parser::AST::Node
         source = evaluated.loc.expression.source_buffer.source
         source[evaluated.loc.expression.begin_pos...evaluated.loc.expression.end_pos]
       when Array
-        source = evaluated.first.loc.expression.source_buffer.source
-        source[evaluated.first.loc.expression.begin_pos...evaluated.last.loc.expression.end_pos]
+        if evaluated.size > 0
+          source = evaluated.first.loc.expression.source_buffer.source
+          source[evaluated.first.loc.expression.begin_pos...evaluated.last.loc.expression.end_pos]
+        end
       when String
         evaluated
+      when NilClass
+        'nil'
       else
         raise NotImplementedError.new "rewritten_source is not handled for #{evaluated.inspect}"
       end
