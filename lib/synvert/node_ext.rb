@@ -91,6 +91,10 @@ class Parser::AST::Node
         actual_values = actual_value(self, instance, multi_keys[0...-1])
         expected = expected_value(rules, multi_keys)
         actual_values.any? { |actual| match_value?(instance, actual, expected) }
+      elsif multi_keys.last == :not
+        actual = actual_value(self, instance, multi_keys[0...-1])
+        expected = expected_value(rules, multi_keys)
+        !match_value?(instance, actual, expected)
       else
         actual = actual_value(self, instance, multi_keys)
         expected = expected_value(rules, multi_keys)

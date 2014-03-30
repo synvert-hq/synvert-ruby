@@ -155,5 +155,12 @@ describe Parser::AST::Node do
       node = parse(source)
       expect(node).to be_match(instance, type: 'send', arguments: {any: 'Lifo::Cache'})
     end
+
+    it 'matches not' do
+      source = 'class Synvert; end'
+      instance.current_source = source
+      node = parse(source)
+      expect(node).not_to be_match(instance, type: 'class', name: {not: 'Synvert'})
+    end
   end
 end
