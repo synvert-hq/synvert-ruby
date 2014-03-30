@@ -425,3 +425,53 @@ condition
 ```
 (defined? (const nil :Bundler))
 ```
+
+## Ast node operator
+
+### any
+
+source code
+
+```ruby
+config.middleware.swap ActionDispatch::ShowExceptions, Lifo::ShowExceptions
+```
+
+ast node
+
+```
+(send
+  (send
+    (send nil :config) :middleware) :swap
+  (const
+    (const nil :ActionDispatch) :ShowExceptions)
+  (const
+    (const nil :Lifo) :ShowExceptions))
+```
+
+matches
+
+```ruby
+type: 'send', arguments: {any: 'Lifo::ShowExceptions'}
+```
+
+### not
+
+source code
+
+```ruby
+obj.should matcher
+```
+
+ast node
+
+```
+(send
+  (send nil :obj) :should
+  (send nil :matcher))
+```
+
+matches
+
+```ruby
+type: 'send', receiver: {not: nil}, message: 'should'
+```

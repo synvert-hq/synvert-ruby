@@ -346,6 +346,38 @@ Parser::CurrentRuby.parse(&quot;self.class.serialized_attributes&quot;)</code></
 <p>condition</p>
 <div class="highlight"><pre><code class="text language-text" data-lang="text">(defined? (const nil :Bundler))
 </code></pre></div>
+<h2>Ast node operator</h2>
+
+<h3>any</h3>
+
+<p>source code</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">config</span><span class="o">.</span><span class="n">middleware</span><span class="o">.</span><span class="n">swap</span> <span class="no">ActionDispatch</span><span class="o">::</span><span class="no">ShowExceptions</span><span class="p">,</span> <span class="no">Lifo</span><span class="o">::</span><span class="no">ShowExceptions</span>
+</code></pre></div>
+<p>ast node</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">(send
+  (send
+    (send nil :config) :middleware) :swap
+  (const
+    (const nil :ActionDispatch) :ShowExceptions)
+  (const
+    (const nil :Lifo) :ShowExceptions))
+</code></pre></div>
+<p>matches</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">arguments</span><span class="p">:</span> <span class="p">{</span><span class="ss">any</span><span class="p">:</span> <span class="s1">&#39;Lifo::ShowExceptions&#39;</span><span class="p">}</span>
+</code></pre></div>
+<h3>not</h3>
+
+<p>source code</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">obj</span><span class="o">.</span><span class="n">should</span> <span class="n">matcher</span>
+</code></pre></div>
+<p>ast node</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">(send
+  (send nil :obj) :should
+  (send nil :matcher))
+</code></pre></div>
+<p>matches</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">receiver</span><span class="p">:</span> <span class="p">{</span><span class="ow">not</span><span class="p">:</span> <span class="kp">nil</span><span class="p">},</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;should&#39;</span>
+</code></pre></div>
 </div>
 
     </div>
