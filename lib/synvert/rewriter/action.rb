@@ -42,7 +42,7 @@ module Synvert
 
     def rewritten_code
       if rewritten_source.split("\n").length > 1
-        rewritten_source.split("\n").map { |line|
+        "\n\n" + rewritten_source.split("\n").map { |line|
           indent(@node) + line
         }.join("\n")
       else
