@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.0.11
+
+* Rename gem_spec to if_gem dsl
+
 ## 0.0.10
 
 * Add not ast node operator
