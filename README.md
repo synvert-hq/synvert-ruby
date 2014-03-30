@@ -56,7 +56,7 @@ convert_rspec_its_to_it                  | RSpec converts its to it
 convert_rspec_message_expectation        | RSpec converts message expectation
 convert_rspec_method_stub                | RSpec converts method stub
 convert_rspec_negative_error_expectation | RSpec converts negative error expectation
-rspec_new_syntax                         | Use RSpec new syntax
+rspec_new_syntax                         | Use RSpec new syntax, it contains all convert_rspec_* snippets
 convert_rspec_one_liner_expectation      | RSpec converts one liner expectation
 convert_rspec_should_to_expect           | RSpec converts should to expect
 convert_rspec_stub_and_mock_to_double    | RSpec converts stub and mock to double

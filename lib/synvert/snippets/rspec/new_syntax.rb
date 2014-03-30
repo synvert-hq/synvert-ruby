@@ -1,4 +1,4 @@
-Synvert::Rewriter.new "rspec_new_syntax", "Use RSpec new syntax" do
+Synvert::Rewriter.new "rspec_new_syntax", "Use RSpec new syntax, it contains all convert_rspec_* snippets" do
   add_snippet "convert_rspec_should_to_expect"
   add_snippet "convert_rspec_block_to_expect"
   add_snippet "convert_rspec_one_liner_expectation"
