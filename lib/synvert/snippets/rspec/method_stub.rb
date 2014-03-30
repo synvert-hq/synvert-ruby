@@ -18,7 +18,7 @@ Synvert::Rewriter.new "convert_rspec_method_stub", "RSpec converts method stub" 
       replace_with "{{receiver}}"
     end
 
-    with_node type: 'send', message: 'at_least', arguments: {first: 0} do
+    with_node type: 'send', message: 'at_least', arguments: [0] do
       replace_with "{{receiver}}"
     end
   end
@@ -59,12 +59,12 @@ Synvert::Rewriter.new "convert_rspec_method_stub", "RSpec converts method stub" 
 
   within_files 'spec/**/*.rb' do
     # allow(obj).to receive(:message).and_return { 1 } => allow(obj).to receive(:message) { 1 }
-    with_node type: 'send', receiver: {type: 'send', message: 'allow'}, arguments: {first: {type: 'block', caller: {type: 'send', message: 'and_return', arguments: {size: 0}}}} do
+    with_node type: 'send', receiver: {type: 'send', message: 'allow'}, arguments: {first: {type: 'block', caller: {type: 'send', message: 'and_return', arguments: []}}} do
       replace_with "{{receiver}}.to {{arguments.first.caller.receiver}} { {{arguments.first.body}} }"
     end
 
     # allow(obj).to receive(:message).and_return => allow(obj).to receive(:message)
-    with_node type: 'send', receiver: {type: 'send', message: 'allow'}, arguments: {first: {type: 'send', message: 'and_return', arguments: {size: 0}}} do
+    with_node type: 'send', receiver: {type: 'send', message: 'allow'}, arguments: {first: {type: 'send', message: 'and_return', arguments: []}} do
       replace_with "{{receiver}}.to {{arguments.first.receiver}}"
     end
   end

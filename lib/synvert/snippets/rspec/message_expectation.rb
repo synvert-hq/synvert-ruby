@@ -16,12 +16,12 @@ Synvert::Rewriter.new "convert_rspec_message_expectation", "RSpec converts messa
 
   within_files 'spec/**/*.rb' do
     # expect(obj).to receive(:message).and_return { 1 } => expect(obj).to receive(:message) { 1 }
-    with_node type: 'send', receiver: {type: 'send', message: 'expect'}, arguments: {first: {type: 'block', caller: {type: 'send', message: 'and_return', arguments: {size: 0}}}} do
+    with_node type: 'send', receiver: {type: 'send', message: 'expect'}, arguments: {first: {type: 'block', caller: {type: 'send', message: 'and_return', arguments: []}}} do
       replace_with "{{receiver}}.to {{arguments.first.caller.receiver}} { {{arguments.first.body}} }"
     end
 
     # expect(obj).to receive(:message).and_return => expect(obj).to receive(:message)
-    with_node type: 'send', receiver: {type: 'send', message: 'expect'}, arguments: {first: {type: 'send', message: 'and_return', arguments: {size: 0}}} do
+    with_node type: 'send', receiver: {type: 'send', message: 'expect'}, arguments: {first: {type: 'send', message: 'and_return', arguments: []}} do
       replace_with "{{receiver}}.to {{arguments.first.receiver}}"
     end
   end
