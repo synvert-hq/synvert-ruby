@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.0.10
+
+* Add not ast node operator
+* Replace with multipe line code
+* Add RSpec new syntax snippet
+
 ## 0.0.9
 
 * Add add_file dsl
