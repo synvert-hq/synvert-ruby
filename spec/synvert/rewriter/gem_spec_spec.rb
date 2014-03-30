@@ -32,7 +32,7 @@ GEM
     it 'returns false if version in Gemfile.lock is less than definition' do
       expect(File).to receive(:exists?).with('./Gemfile.lock').and_return(true)
       expect(File).to receive(:read).with('./Gemfile.lock').and_return(gemfile_lock_content)
-      gem_spec = Rewriter::GemSpec.new('ast', {lt: '1.2.0'})
+      gem_spec = Rewriter::GemSpec.new('ast', {gt: '1.2.0'})
       expect(gem_spec).not_to be_match
     end
 
