@@ -33,11 +33,11 @@ list all available snippets
 $ synvert --list-snippets
 ```
 
-run snippets `factory_girl_short_syntax` and `upgrade_rails_3_2_to_4_0`
-in rails-bestpractices.com repo.
+run snippets `factory_girl_short_syntax`, `rspec_new_syntax` and
+`upgrade_rails_3_2_to_4_0` in rails-bestpractices.com repo.
 
 ```
-$ synvert --run-snippets factory_girl_short_syntax,upgrade_rails_3_2_to_4_0 ~/Sites/railsbp/rails-bestpractices.com
+$ synvert --run-snippets factory_girl_short_syntax,rspec_new_syntax,upgrade_rails_3_2_to_4_0 ~/Sites/railsbp/rails-bestpractices.com
 ```
 
 It's recommended that you use version control software like [git][2],
