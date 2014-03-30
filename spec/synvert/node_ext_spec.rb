@@ -142,6 +142,13 @@ describe Parser::AST::Node do
       expect(node).to be_match(instance, type: 'send', receiver: 'params', message: '[]', arguments: [:user])
     end
 
+    it 'matches assign number' do
+      source = 'at_least(0)'
+      instance.current_source = source
+      node = parse(source)
+      expect(node).to be_match(instance, type: 'send', arguments: [0])
+    end
+
     it 'matches arguments with string' do
       source = 'params["user"]'
       instance.current_source = source
