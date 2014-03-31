@@ -1,36 +1,36 @@
 Synvert::Rewriter.new "convert_rspec_its_to_it", "RSpec converts its to it" do
   if_gem 'rspec', {gte: '2.99.0'}
 
-  [:should, :should_not].each do |message|
-    within_files 'spec/**/*.rb' do
-      # describe 'example' do
-      #   subject { { foo: 1, bar: 2 } }
-      #   its(:size) { should == 2 }
-      #   its([:foo]) { should == 1 }
-      #   its('keys.first') { should == :foo }
-      # end
-      # =>
-      # describe 'example' do
-      #   subject { { foo: 1, bar: 2 } }
-      #
-      #   describe '#size' do
-      #     subject { super().size }
-      #     it { should == 2 }
-      #   end
-      #
-      #   describe '[:foo]' do
-      #     subject { super()[:foo] }
-      #     it { should == 1 }
-      #   end
-      #
-      #   describe '#keys' do
-      #     subject { super().keys }
-      #     describe '#first' do
-      #       subject { super().first }
-      #       it { should == :foo }
-      #     end
-      #   end
-      # end
+  within_files 'spec/**/*.rb' do
+    # describe 'example' do
+    #   subject { { foo: 1, bar: 2 } }
+    #   its(:size) { should == 2 }
+    #   its([:foo]) { should == 1 }
+    #   its('keys.first') { should == :foo }
+    # end
+    # =>
+    # describe 'example' do
+    #   subject { { foo: 1, bar: 2 } }
+    #
+    #   describe '#size' do
+    #     subject { super().size }
+    #     it { should == 2 }
+    #   end
+    #
+    #   describe '[:foo]' do
+    #     subject { super()[:foo] }
+    #     it { should == 1 }
+    #   end
+    #
+    #   describe '#keys' do
+    #     subject { super().keys }
+    #     describe '#first' do
+    #       subject { super().first }
+    #       it { should == :foo }
+    #     end
+    #   end
+    # end
+    [:should, :should_not].each do |message|
       with_node type: 'block', caller: {message: 'its'} do
         if node.body.length == 1
           its_arg = node.caller.arguments.first.source(self)

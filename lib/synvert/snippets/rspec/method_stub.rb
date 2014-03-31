@@ -9,9 +9,7 @@ Synvert::Rewriter.new "convert_rspec_method_stub", "RSpec converts method stub" 
         replace_with "{{receiver}}.#{new_message}({{arguments}})"
       end
     end
-  end
 
-  within_files 'spec/**/*.rb' do
     # obj.stub(:message).any_number_of_times => allow(obj).to receive(:message)
     # obj.stub(:message).at_least(0) => allow(obj).to receive(:message)
     with_node type: 'send', message: 'any_number_of_times' do
@@ -21,9 +19,7 @@ Synvert::Rewriter.new "convert_rspec_method_stub", "RSpec converts method stub" 
     with_node type: 'send', message: 'at_least', arguments: [0] do
       replace_with "{{receiver}}"
     end
-  end
 
-  within_files 'spec/**/*.rb' do
     # obj.stub(:message) => allow(obj).to receive(:message)
     # Klass.any_instance.stub(:message) => allow_any_instance_of(Klass).to receive(:message)
     with_node type: 'send', message: 'stub', arguments: {first: {type: {not: 'hash'}}} do
@@ -48,16 +44,12 @@ Synvert::Rewriter.new "convert_rspec_method_stub", "RSpec converts method stub" 
         replace_with "allow({{receiver}}).to receive_message_chain({{arguments}})"
       end
     end
-  end
 
-  within_files 'spec/**/*.rb' do
     # obj.stub(:foo => 1, :bar => 2) => allow(obj).to receive_messages(:foo => 1, :bar => 2)
     with_node type: 'send', message: 'stub', arguments: {first: {type: 'hash'}} do
       replace_with "allow({{receiver}}).to receive_messages({{arguments}})"
     end
-  end
 
-  within_files 'spec/**/*.rb' do
     # allow(obj).to receive(:message).and_return { 1 } => allow(obj).to receive(:message) { 1 }
     with_node type: 'send', receiver: {type: 'send', message: 'allow'}, arguments: {first: {type: 'block', caller: {type: 'send', message: 'and_return', arguments: []}}} do
       replace_with "{{receiver}}.to {{arguments.first.caller.receiver}} { {{arguments.first.body}} }"

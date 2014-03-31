@@ -4,9 +4,7 @@ Synvert::Rewriter.new "strong_parameters", "Use strong_parameters syntax" do
     with_node type: 'send', receiver: {type: 'send', receiver: {type: 'send', message: 'config'}, message: 'active_record'}, message: 'whitelist_attributes=' do
       remove
     end
-  end
 
-  within_files 'config/**/*.rb' do
     # remove config.active_record.mass_assignment_sanitizer = ...
     with_node type: 'send', receiver: {type: 'send', receiver: {type: 'send', message: 'config'}, message: 'active_record'}, message: 'mass_assignment_sanitizer=' do
       remove
@@ -32,9 +30,10 @@ Synvert::Rewriter.new "strong_parameters", "Use strong_parameters syntax" do
         if parameters[object_name]
           # append def xxx_params; ...; end
           unless_exist_node type: 'def', name: "#{object_name}_params" do
-            append """def #{object_name}_params
-  params.require(:#{object_name}).permit(#{parameters[object_name]})
-end"""
+            new_code =  "def #{object_name}_params\n"
+            new_code << "  params.require(:#{object_name}).permit(#{parameters[object_name]})\n"
+            new_code << "end"
+            append new_code
           end
 
           # params[:xxx] => xxx_params
