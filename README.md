@@ -43,7 +43,7 @@ $ synvert --run-snippets factory_girl_short_syntax,upgrade_rails_3_2_to_4_0 ~/Si
 name | description
 --- | ---
 factory_girl_short_syntax                | FactoryGirl uses short syntax
-convert_dynamic_finders                  | Convert dynamic finders
+convert_rails_dynamic_finders            | Convert rails dynamic finders
 strong_parameters                        | Use strong_parameters syntax
 upgrade_rails_3_0_to_3_1                 | Upgrade rails from 3.0 to 3.1
 upgrade_rails_3_1_to_3_2                 | Upgrade rails from 3.1 to 3.2

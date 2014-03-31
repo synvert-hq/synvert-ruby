@@ -150,7 +150,7 @@ Synvert::Rewriter.new "upgrade_rails_3_2_to_4_0", "Upgrade rails from 3.2 to 4.0
     end
   end
 
-  add_snippet 'convert_dynamic_finders'
+  add_snippet 'convert_rails_dynamic_finders'
   add_snippet 'strong_parameters'
 
   todo <<-EOF

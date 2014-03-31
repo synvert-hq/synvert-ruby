@@ -1,4 +1,4 @@
-Synvert::Rewriter.new "convert_dynamic_finders", "Convert dynamic finders" do
+Synvert::Rewriter.new "convert_rails_dynamic_finders", "Convert rails dynamic finders" do
   helper_method 'dynamic_finder_to_hash' do |prefix|
     fields = node.message.to_s[prefix.length..-1].split("_and_")
     fields.length.times.map { |i|
@@ -17,8 +17,10 @@ Synvert::Rewriter.new "convert_dynamic_finders", "Convert dynamic finders" do
   within_files '**/*.rb' do
     # find_by_... => where(...).first
     with_node type: 'send', message: /find_by_/ do
-      hash_params = dynamic_finder_to_hash("find_by_")
-      replace_with "{{receiver}}.where(#{hash_params}).first"
+      unless :find_by_sql == node.message
+        hash_params = dynamic_finder_to_hash("find_by_")
+        replace_with "{{receiver}}.where(#{hash_params}).first"
+      end
     end
   end
 

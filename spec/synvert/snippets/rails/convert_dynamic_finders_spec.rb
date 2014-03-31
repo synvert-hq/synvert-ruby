@@ -26,6 +26,10 @@ class Post < ActiveRecord::Base
   def scoped_active_user_by_email(email)
     User.scoped_by_email_and_active(email, true)
   end
+
+  def active_users_by_sql(email)
+    User.find_by_sql ["select * from  users where email = ?", email]
+  end
 end
     '''}
     let(:post_model_rewritten_content) {'''
@@ -44,6 +48,10 @@ class Post < ActiveRecord::Base
 
   def scoped_active_user_by_email(email)
     User.where(email: email, active: true)
+  end
+
+  def active_users_by_sql(email)
+    User.find_by_sql ["select * from  users where email = ?", email]
   end
 end
     '''}
