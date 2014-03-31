@@ -17,7 +17,9 @@ Synvert::Rewriter.new "convert_rails_dynamic_finders", "Convert rails dynamic fi
   within_files '**/*.rb' do
     # find_by_... => where(...).first
     with_node type: 'send', message: /find_by_/ do
-      unless :find_by_sql == node.message
+      if :find_by_id == node.message
+        replace_with "{{receiver}}.find({{arguments}})"
+      elsif :find_by_sql != node.message
         hash_params = dynamic_finder_to_hash("find_by_")
         replace_with "{{receiver}}.where(#{hash_params}).first"
       end

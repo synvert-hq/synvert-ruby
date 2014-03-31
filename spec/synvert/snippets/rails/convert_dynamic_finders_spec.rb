@@ -28,7 +28,11 @@ class Post < ActiveRecord::Base
   end
 
   def active_users_by_sql(email)
-    User.find_by_sql ["select * from  users where email = ?", email]
+    User.find_by_sql(["select * from  users where email = ?", email])
+  end
+
+  def active_user_by_id(id)
+    User.find_by_id(id)
   end
 end
     '''}
@@ -51,7 +55,11 @@ class Post < ActiveRecord::Base
   end
 
   def active_users_by_sql(email)
-    User.find_by_sql ["select * from  users where email = ?", email]
+    User.find_by_sql(["select * from  users where email = ?", email])
+  end
+
+  def active_user_by_id(id)
+    User.find(id)
   end
 end
     '''}
