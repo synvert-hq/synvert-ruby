@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.0.12
+
+* Allow define multiple scopes and conditions in one instance
+* Polish snippets
+
 ## 0.0.11
 
 * Rename gem_spec to if_gem dsl
