@@ -34,6 +34,10 @@ class Post < ActiveRecord::Base
   def active_user_by_id(id)
     User.find_by_id(id)
   end
+
+  def active_user_by_account_email(account_email)
+    User.find_by_account_id(Account.find_by_email(account_email).id)
+  end
 end
     '''}
     let(:post_model_rewritten_content) {'''
@@ -60,6 +64,10 @@ class Post < ActiveRecord::Base
 
   def active_user_by_id(id)
     User.find(id)
+  end
+
+  def active_user_by_account_email(account_email)
+    User.where(account_id: Account.where(email: account_email).first.id).first
   end
 end
     '''}

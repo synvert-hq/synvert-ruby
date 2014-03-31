@@ -14,26 +14,30 @@ module Synvert
       parser = Parser::CurrentRuby.new
       file_pattern = File.join(Configuration.instance.get(:path), @file_pattern)
       Dir.glob(file_pattern).each do |file_path|
-        source = File.read(file_path)
-        buffer = Parser::Source::Buffer.new file_path
-        buffer.source = source
+        begin
+          source = File.read(file_path)
+          buffer = Parser::Source::Buffer.new file_path
+          buffer.source = source
 
-        parser.reset
-        ast = parser.parse buffer
+          parser.reset
+          ast = parser.parse buffer
 
-        @current_file = file_path
-        @current_source = source
-        @current_node = ast
-        instance_eval &@block
-        @current_node = ast
+          @current_file = file_path
+          @current_source = source
+          @current_node = ast
+          instance_eval &@block
+          @current_node = ast
 
-        @actions.sort.reverse.each do |action|
-          source[action.begin_pos...action.end_pos] = action.rewritten_code
-          source = remove_code_or_whole_line(source, action.line)
-        end
-        @actions = []
+          @actions.sort!
+          check_conflict_actions
+          @actions.reverse.each do |action|
+            source[action.begin_pos...action.end_pos] = action.rewritten_code
+            source = remove_code_or_whole_line(source, action.line)
+          end
+          @actions = []
 
-        File.write file_path, source
+          File.write file_path, source
+        end while !@conflict_actions.empty?
       end
     end
 
@@ -80,6 +84,18 @@ module Synvert
     end
 
   private
+
+    def check_conflict_actions
+      i = @actions.length - 1
+      @conflict_actions = []
+      while i > 0
+        if @actions[i].begin_pos <= @actions[i - 1].end_pos
+          @conflict_actions << @actions.delete_at(i)
+        end
+        i -= 1
+      end
+      @conflict_actions
+    end
 
     def remove_code_or_whole_line(source, line)
       newline_at_end_of_line = source[-1] == "\n"
