@@ -11,63 +11,39 @@ describe 'Convert dynamic finders' do
   describe 'with fakefs', fakefs: true do
     let(:post_model_content) {'''
 class Post < ActiveRecord::Base
-  def active_users_by_email(email)
+  def active_users
     User.find_all_by_email_and_active(email, true)
-  end
-
-  def first_active_user_by_email(email)
     User.find_by_email_and_active(email, true)
-  end
-
-  def last_active_user_by_email(email)
     User.find_last_by_email_and_active(email, true)
-  end
-
-  def scoped_active_user_by_email(email)
     User.scoped_by_email_and_active(email, true)
-  end
-
-  def active_users_by_sql(email)
     User.find_by_sql(["select * from  users where email = ?", email])
-  end
-
-  def active_user_by_id(id)
     User.find_by_id(id)
+    User.find_by_account_id(Account.find_by_email(account_email).id)
+    User.find_or_create_by_email_and_login(parmas)
+    User.find_or_initialize_by_account_id(:account_id => account_id)
   end
 
-  def active_user_by_account_email(account_email)
-    User.find_by_account_id(Account.find_by_email(account_email).id)
+  def self.active_admins
+    find_all_by_role_and_active("admin", true)
   end
 end
     '''}
     let(:post_model_rewritten_content) {'''
 class Post < ActiveRecord::Base
-  def active_users_by_email(email)
+  def active_users
     User.where(email: email, active: true)
-  end
-
-  def first_active_user_by_email(email)
     User.where(email: email, active: true).first
-  end
-
-  def last_active_user_by_email(email)
     User.where(email: email, active: true).last
-  end
-
-  def scoped_active_user_by_email(email)
     User.where(email: email, active: true)
-  end
-
-  def active_users_by_sql(email)
     User.find_by_sql(["select * from  users where email = ?", email])
-  end
-
-  def active_user_by_id(id)
     User.find(id)
+    User.where(account_id: Account.where(email: account_email).first.id).first
+    User.find_or_create_by(parmas)
+    User.find_or_initialize_by(:account_id => account_id)
   end
 
-  def active_user_by_account_email(account_email)
-    User.where(account_id: Account.where(email: account_email).first.id).first
+  def self.active_admins
+    where(role: "admin", active: true)
   end
 end
     '''}
