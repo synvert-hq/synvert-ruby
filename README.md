@@ -9,6 +9,8 @@ automatically.
 
 **synvert is still in alpha stage**
 
+synvert supports ruby >= 1.9.3
+
 ## Installation
 
 Install it using rubygems
