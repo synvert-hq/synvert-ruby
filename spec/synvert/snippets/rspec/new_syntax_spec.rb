@@ -13,7 +13,7 @@ describe 'Use RSpec new syntax' do
     end
   end
 
-  describe 'rspec', fakefs: true do
+  describe 'with fakefs', fakefs: true do
     let(:post_spec_content) {"""
 it 'case' do
   obj.should matcher
