@@ -330,6 +330,78 @@ Parser::CurrentRuby.parse(&quot;self.class.serialized_attributes&quot;)</code></
     (const
       (const nil :EmailSpec) :Matchers)))) ]
 </code></pre></div>
+<h3>keys</h3>
+
+<h5>hash node</h5>
+
+<p>source code</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="p">{</span><span class="ss">foo</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span> <span class="o">=&gt;</span> <span class="ss">:bar</span><span class="p">}</span>
+</code></pre></div>
+<p>ast node</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">(hash
+  (pair
+    (sym :foo)
+    (str &quot;bar&quot;))
+  (pair
+    (str &quot;foo&quot;)
+    (sym :bar)))
+</code></pre></div>
+<p>keys</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">[ (sym :foo),
+  (str &quot;foo&quot;) ]
+</code></pre></div>
+<h3>values</h3>
+
+<h5>hash node</h5>
+
+<p>source code</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="p">{</span><span class="ss">foo</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span> <span class="o">=&gt;</span> <span class="ss">:bar</span><span class="p">}</span>
+</code></pre></div>
+<p>ast node</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">(hash
+  (pair
+    (sym :foo)
+    (str &quot;bar&quot;))
+  (pair
+    (str &quot;foo&quot;)
+    (sym :bar)))
+</code></pre></div>
+<p>values</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">[ (str &quot;bar&quot;),
+  (sym :bar) ]
+</code></pre></div>
+<h3>key</h3>
+
+<h5>pair node</h5>
+
+<p>source code</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="p">{</span><span class="ss">foo</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">}</span>
+</code></pre></div>
+<p>ast node</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">(hash
+  (pair
+    (sym :foo)
+    (str &quot;bar&quot;)))
+</code></pre></div>
+<p>key</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">(sym :foo)
+</code></pre></div>
+<h3>value</h3>
+
+<h5>pair node</h5>
+
+<p>source code</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="p">{</span><span class="ss">foo</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">}</span>
+</code></pre></div>
+<p>ast node</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">(hash
+  (pair
+    (sym :foo)
+    (str &quot;bar&quot;)))
+</code></pre></div>
+<p>value</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">(str &quot;bar&quot;)
+</code></pre></div>
 <h3>condition</h3>
 
 <h5>if node</h5>

@@ -401,6 +401,114 @@ body
       (const nil :EmailSpec) :Matchers)))) ]
 ```
 
+### keys
+
+##### hash node
+
+source code
+
+```ruby
+{foo: 'bar', 'foo' => :bar}
+```
+
+ast node
+
+```
+(hash
+  (pair
+    (sym :foo)
+    (str "bar"))
+  (pair
+    (str "foo")
+    (sym :bar)))
+```
+
+keys
+
+```
+[ (sym :foo),
+  (str "foo") ]
+```
+
+### values
+
+##### hash node
+
+source code
+
+```ruby
+{foo: 'bar', 'foo' => :bar}
+```
+
+ast node
+
+```
+(hash
+  (pair
+    (sym :foo)
+    (str "bar"))
+  (pair
+    (str "foo")
+    (sym :bar)))
+```
+
+values
+
+```
+[ (str "bar"),
+  (sym :bar) ]
+```
+
+### key
+
+##### pair node
+
+source code
+
+```ruby
+{foo: 'bar'}
+```
+
+ast node
+
+```
+(hash
+  (pair
+    (sym :foo)
+    (str "bar")))
+```
+
+key
+
+```
+(sym :foo)
+```
+
+### value
+
+##### pair node
+
+source code
+
+```ruby
+{foo: 'bar'}
+```
+
+ast node
+
+```
+(hash
+  (pair
+    (sym :foo)
+    (str "bar")))
+```
+
+value
+
+```
+(str "bar")
+```
+
 ### condition
 
 ##### if node
