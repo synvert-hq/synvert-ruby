@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.0.13
+
+* Add keys and values rules for hash node
+* Add key and value rules for pair node
+* Add ruby new hash syntax snippet
+* Add ruby new lambda syntax snippet
+
 ## 0.0.12
 
 * Allow define multiple scopes and conditions in one instance
