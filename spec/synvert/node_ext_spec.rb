@@ -83,6 +83,34 @@ describe Parser::AST::Node do
     end
   end
 
+  describe "#keys" do
+    it 'gets for hash node' do
+      node = parse("{:foo => :bar, 'foo' => 'bar'}")
+      expect(node.keys).to eq [Parser::CurrentRuby.parse(':foo'), Parser::CurrentRuby.parse("'foo'")]
+    end
+  end
+
+  describe "#values" do
+    it 'gets for hash node' do
+      node = parse("{:foo => :bar, 'foo' => 'bar'}")
+      expect(node.values).to eq [Parser::CurrentRuby.parse(':bar'), Parser::CurrentRuby.parse("'bar'")]
+    end
+  end
+
+  describe "#key" do
+    it 'gets for pair node' do
+      node = parse("{:foo => 'bar'}").children[0]
+      expect(node.key).to eq Parser::CurrentRuby.parse(':foo')
+    end
+  end
+
+  describe "#value" do
+    it 'gets for hash node' do
+      node = parse("{:foo => 'bar'}").children[0]
+      expect(node.value).to eq Parser::CurrentRuby.parse("'bar'")
+    end
+  end
+
   describe "#condition" do
     it 'gets for if node' do
       node = parse('if defined?(Bundler); end')

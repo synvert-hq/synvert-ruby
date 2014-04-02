@@ -66,6 +66,38 @@ class Parser::AST::Node
     end
   end
 
+  def keys
+    if :hash == self.type
+      self.children.map { |child| child.children[0] }
+    else
+      raise NotImplementedError.new "keys is not handled for #{self.inspect}"
+    end
+  end
+
+  def values
+    if :hash == self.type
+      self.children.map { |child| child.children[1] }
+    else
+      raise NotImplementedError.new "keys is not handled for #{self.inspect}"
+    end
+  end
+
+  def key
+    if :pair == self.type
+      self.children.first
+    else
+      raise NotImplementedError.new "key is not handled for #{self.inspect}"
+    end
+  end
+
+  def value
+    if :pair == self.type
+      self.children.last
+    else
+      raise NotImplementedError.new "value is not handled for #{self.inspect}"
+    end
+  end
+
   def source(instance)
     if self.loc.expression
       instance.current_source[self.loc.expression.begin_pos...self.loc.expression.end_pos]
