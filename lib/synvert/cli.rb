@@ -16,13 +16,13 @@ module Synvert
       command = :run
       optparse = OptionParser.new do |opts|
         opts.banner = "Usage: synvert [project_path]"
-        opts.on '-d', '--load-snippets SNIPPET_PATHS', 'load additional snippets, snippet paths can be local file path or remote http url' do |snippet_paths|
+        opts.on '-d', '--load SNIPPET_PATHS', 'load additional snippets, snippet paths can be local file path or remote http url' do |snippet_paths|
           Configuration.instance.set 'snippet_paths', snippet_paths.split(',')
         end
-        opts.on '-l', '--list-snippets', 'list all available snippets' do
+        opts.on '-l', '--list', 'list all available snippets' do
           command = :list
         end
-        opts.on '-r', '--run-snippets SNIPPET_NAMES', 'run specified snippets' do |snippet_names|
+        opts.on '-r', '--run SNIPPET_NAMES', 'run specified snippets' do |snippet_names|
           Configuration.instance.set 'snippet_names', snippet_names.split(',')
         end
       end

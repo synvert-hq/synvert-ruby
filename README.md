@@ -23,11 +23,10 @@ $ gem install synvert
 
 ```
 $ synvert -h
-Usage: synvert [options] [project_path]
-        --load-snippets SNIPPET_PATHS
-                                     load additional snippets, snippet paths can be local file path or remote http url
-        --list-snippets              list all available snippets
-        --run-snippets SNIPPET_NAMES run specified snippets
+Usage: synvert [project_path]
+    -d, --load SNIPPET_PATHS         load additional snippets, snippet paths can be local file path or remote http url
+    -l, --list                       list all available snippets
+    -r, --run SNIPPET_NAMES          run specified snippets
 ```
 
 e.g.
@@ -62,6 +61,8 @@ rspec_new_syntax                         | Use RSpec new syntax, it contains all
 convert_rspec_one_liner_expectation      | RSpec converts one liner expectation
 convert_rspec_should_to_expect           | RSpec converts should to expect
 convert_rspec_stub_and_mock_to_double    | RSpec converts stub and mock to double
+ruby_new_hash_syntax                     | Ruby uses new hash syntax
+ruby_new_lambda_syntax                   | Ruby uses new lambda syntax
 
 ## Documentation
 
