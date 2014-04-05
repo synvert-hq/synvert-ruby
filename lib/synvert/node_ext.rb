@@ -6,7 +6,7 @@ class Parser::AST::Node
     when :defs
       self.children[1]
     else
-      raise NotImplementedError.new "name is not handled for #{self.inspect}"
+      raise Synvert::MethodNotSupported.new "name is not handled for #{self.inspect}"
     end
   end
 
@@ -14,7 +14,7 @@ class Parser::AST::Node
     if :send == self.type
       self.children[0]
     else
-      raise NotImplementedError.new "receiver is not handled for #{self.inspect}"
+      raise Synvert::MethodNotSupported.new "receiver is not handled for #{self.inspect}"
     end
   end
 
@@ -22,7 +22,7 @@ class Parser::AST::Node
     if :send == self.type
       self.children[1]
     else
-      raise NotImplementedError.new "message is not handled for #{self.inspect}"
+      raise Synvert::MethodNotSupported.new "message is not handled for #{self.inspect}"
     end
   end
 
@@ -35,7 +35,7 @@ class Parser::AST::Node
     when :defined?
       self.children
     else
-      raise NotImplementedError.new "arguments is not handled for #{self.inspect}"
+      raise Synvert::MethodNotSupported.new "arguments is not handled for #{self.inspect}"
     end
   end
 
@@ -43,7 +43,7 @@ class Parser::AST::Node
     if :block == self.type
       self.children[0]
     else
-      raise NotImplementedError.new "caller is not handled for #{self.inspect}"
+      raise Synvert::MethodNotSupported.new "caller is not handled for #{self.inspect}"
     end
   end
 
@@ -54,7 +54,7 @@ class Parser::AST::Node
     when :block
       :begin == self.children[2].type ? self.children[2].children : [self.children[2]]
     else
-      raise NotImplementedError.new "body is not handled for #{self.inspect}"
+      raise Synvert::MethodNotSupported.new "body is not handled for #{self.inspect}"
     end
   end
 
@@ -62,7 +62,7 @@ class Parser::AST::Node
     if :if == self.type
       self.children[0]
     else
-      raise NotImplementedError.new "condition is not handled for #{self.inspect}"
+      raise Synvert::MethodNotSupported.new "condition is not handled for #{self.inspect}"
     end
   end
 
@@ -70,7 +70,7 @@ class Parser::AST::Node
     if :hash == self.type
       self.children.map { |child| child.children[0] }
     else
-      raise NotImplementedError.new "keys is not handled for #{self.inspect}"
+      raise Synvert::MethodNotSupported.new "keys is not handled for #{self.inspect}"
     end
   end
 
@@ -78,7 +78,7 @@ class Parser::AST::Node
     if :hash == self.type
       self.children.map { |child| child.children[1] }
     else
-      raise NotImplementedError.new "keys is not handled for #{self.inspect}"
+      raise Synvert::MethodNotSupported.new "keys is not handled for #{self.inspect}"
     end
   end
 
@@ -86,7 +86,7 @@ class Parser::AST::Node
     if :pair == self.type
       self.children.first
     else
-      raise NotImplementedError.new "key is not handled for #{self.inspect}"
+      raise Synvert::MethodNotSupported.new "key is not handled for #{self.inspect}"
     end
   end
 
@@ -94,7 +94,7 @@ class Parser::AST::Node
     if :pair == self.type
       self.children.last
     else
-      raise NotImplementedError.new "value is not handled for #{self.inspect}"
+      raise Synvert::MethodNotSupported.new "value is not handled for #{self.inspect}"
     end
   end
 
@@ -152,7 +152,7 @@ class Parser::AST::Node
       when NilClass
         'nil'
       else
-        raise NotImplementedError.new "rewritten_source is not handled for #{evaluated.inspect}"
+        raise Synvert::MethodNotSupported.new "rewritten_source is not handled for #{evaluated.inspect}"
       end
     end
   end
@@ -196,7 +196,7 @@ private
     when Parser::AST::Node
       actual == expected
     else
-      raise NotImplementedError.new "#{expected.class} is not handled for match_value?"
+      raise Synvert::MethodNotSupported.new "#{expected.class} is not handled for match_value?"
     end
   end
 
