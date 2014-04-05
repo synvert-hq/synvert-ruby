@@ -1,6 +1,5 @@
 # coding: utf-8
 require 'optparse'
-require 'find'
 require 'open-uri'
 
 module Synvert
@@ -52,6 +51,11 @@ module Synvert
           puts "%-40s %s" % [rewriter.name, rewriter.description]
         end
       end
+
+      true
+    rescue Exception => e
+      puts "Error: " + e.message
+      false
     end
   end
 end
