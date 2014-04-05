@@ -1,13 +1,21 @@
 # encoding: utf-8
 
 module Synvert
+  # Scope finds the child nodes which match rules.
   class Rewriter::Scope
+    # Initialize a scope
+    #
+    # @param instance [Synvert::Rewriter::Instance]
+    # @param rules [Hash]
+    # @param block [Block]
     def initialize(instance, rules, &block)
       @instance = instance
       @rules = rules
       @block = block
     end
 
+    # Find the matching nodes. It checks the current node and iterates all child nodes,
+    # then run the block code for each matching node.
     def process
       current_node = @instance.current_node
       return unless current_node
@@ -27,6 +35,8 @@ module Synvert
 
   private
 
+    # Set instance current node properly and process.
+    # @param node [Parser::AST::Node]
     def process_with_node(node)
       @instance.current_node = node
       yield

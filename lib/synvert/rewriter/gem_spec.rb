@@ -1,8 +1,15 @@
 # encoding: utf-8
 
 module Synvert
+  # GemSpec checks and compares gem version.
   class Rewriter::GemSpec
     OPERATORS = {eq: '==', lt: '<', gt: '>', lte: '<=', gte: '>=', ne: '!='}
+
+    # Initialize a gem_spec.
+    #
+    # @param name [String] gem name
+    # @param comparator [Hash] comparator to gem version, e.g. {eg: '2.0.0'},
+    #   comparator key can be eq, lt, gt, lte, gte or ne.
     def initialize(name, comparator)
       @name = name
       if Hash === comparator
@@ -14,6 +21,10 @@ module Synvert
       end
     end
 
+    # Check if the specified gem version in Gemfile.lock matches gem_spec comparator.
+    #
+    # @return [Boolean] true if matches, otherwise false.
+    # @raise [Synvert::GemfileLockNotFound] raise if Gemfile.lock does not exist.
     def match?
       gemfile_lock_path = File.join(Configuration.instance.get(:path), 'Gemfile.lock')
       if File.exists? gemfile_lock_path
@@ -24,7 +35,7 @@ module Synvert
           false
         end
       else
-        raise LoadError.new 'Gemfile.lock does not exist'
+        raise GemfileLockNotFound.new 'Gemfile.lock does not exist'
       end
     end
   end
