@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.0.15
+
+* Support attr_protected for strong_parameters snippet.
+
 ## 0.0.14
 
 * Complement code comments.
