@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.0.14
+
+* Complement code comments.
+* Add MethodNotSupported and RewriterNotFound exceptions.
+* Add description dsl to define multi lines description.
+* Improve cli, query snippets and show snippet.
+* Process rewriter in sandbox mode.
+
 ## 0.0.13
 
 * Add keys and values rules for hash node
