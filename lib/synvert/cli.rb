@@ -25,8 +25,9 @@ module Synvert
       run_option_parser(args)
       load_rewriters
 
-      if 'list' == @options[:command]
-        list_available_rewriters
+      case @options[:command]
+      when 'list' then list_available_rewriters
+      when 'query' then query_available_rewriters
       else
         @options[:snippet_names].each do |snippet_name|
           puts "===== #{snippet_name} started ====="
@@ -53,6 +54,10 @@ module Synvert
         opts.on '-l', '--list', 'list all available snippets' do
           @options[:command] = 'list'
         end
+        opts.on '-q', '--query QUERY', 'query specified snippets' do |query|
+          @options[:command] = 'query'
+          @options[:query] = query
+        end
         opts.on '-r', '--run SNIPPET_NAMES', 'run specified snippets' do |snippet_names|
           @options[:snippet_names] = snippet_names.split(',').map(&:strip)
         end
@@ -75,10 +80,20 @@ module Synvert
       end
     end
 
-    # Print all available rewriters.
+    # List and print all available rewriters.
     def list_available_rewriters
       Rewriter.availables.each do |rewriter|
         print rewriter.name + "  "
+      end
+      puts
+    end
+
+    # Query and print available rewriters.
+    def query_available_rewriters
+      Rewriter.availables.each do |rewriter|
+        if rewriter.name.include? @options[:query]
+          print rewriter.name + "  "
+        end
       end
       puts
     end
