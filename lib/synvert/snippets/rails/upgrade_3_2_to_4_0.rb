@@ -1,6 +1,76 @@
 require 'securerandom'
 
-Synvert::Rewriter.new "upgrade_rails_3_2_to_4_0", "Upgrade rails from 3.2 to 4.0, it contains convert_dynamic_finder and strong_parameters snippets" do
+Synvert::Rewriter.new "upgrade_rails_3_2_to_4_0" do
+  description <<-EOF
+It upgrades rails from 3.2 to 4.0.
+
+1. it removes assets group in config/application.rb.
+
+    if defined?(Bundler)
+      Bundler.require(*Rails.groups(:assets => %w(development test)))
+    end
+    => Bundler.require(:default, Rails.env)
+
+2. it removes config.active_record.identity_map = true from config files.
+
+3. it changes config.assets.compress = ... to config.assets.js_compressor = ...
+
+4. it removes include_root_in_json from config/initializers/secret_token.rb.
+
+    ActiveSupport.on_load(:active_record) do
+      self.include_root_in_json = false
+    end
+
+5. it inserts secret_key_base to config/initializers/session_store.rb.
+
+    Application.config.secret_key_base = '...'
+
+6. it removes config.action_dispatch.best_standards_support = ... from config files.
+
+7. it inserts config.eager_load = true in config/environments/production.rb.
+
+8. it inserts config.eager_load = false in config/environments/development.rb.
+
+9. it inserts config.eager_load = false in config/environments/test.rb.
+
+10. it removes any code using ActionDispatch::BestStandardsSupport in config files.
+
+11. it replaces ActionController::Base.page_cache_extension = ... with ActionController::Base.default_static_extension = ... in config files.
+
+12. it removes Rack::Utils.escape in config/routes.rb.
+
+    Rack::Utils.escape('こんにちは') => 'こんにちは'
+
+13. it replaces match in config/routes.rb.
+
+    match "/" => "root#index" => get "/" => "root#index"
+
+14. it removes rename_index in db migrations.
+
+15. it replaces instance method serialized_attributes with class method.
+
+    self.serialized_attributes => self.class.serialized_attributes
+
+16. it adds lambda for scope.
+
+    scope :active, where(active: true) => scope :active, -> { where(active: true) }
+
+17. it replaces ActiveRecord::Fixtures with ActiveRecord::FixtureSet.
+       replaces ActiveRecord::TestCase with ActiveSupport::TestCase.
+       replaces ActionController::Integration with ActionDispatch::Integration
+       replaces ActionController::IntegrationTest with ActionDispatch::IntegrationTest
+       replaces ActionController::PerformanceTest with ActionDispatch::PerformanceTest
+       replaces ActionController::AbstractRequest with ActionDispatch::Request
+       replaces ActionController::Request with ActionDispatch::Request
+       replaces ActionController::AbstractResponse with ActionDispatch::Response
+       replaces ActionController::Response with ActionDispatch::Response
+       replaces ActionController::Routing with ActionDispatch::Routing
+
+18. it calls another snippet convert_rails_dynamic_finder.
+
+19. it calls another snippet strong_parameters.
+  EOF
+
   if_gem 'rails', {gte: '3.2.0'}
 
   within_file 'config/application.rb' do
@@ -85,7 +155,7 @@ Synvert::Rewriter.new "upgrade_rails_3_2_to_4_0", "Upgrade rails from 3.2 to 4.0
   end
 
   within_files 'config/**/*.rb' do
-    # remove ActionController::Base.page_cache_extension = ... => ActionController::Base.default_static_extension = ...
+    # ActionController::Base.page_cache_extension = ... => ActionController::Base.default_static_extension = ...
     with_node type: 'send', message: 'page_cache_extension=' do
       replace_with 'ActionController::Base.default_static_extension = {{arguments}}'
     end
@@ -128,22 +198,17 @@ Synvert::Rewriter.new "upgrade_rails_3_2_to_4_0", "Upgrade rails from 3.2 to 4.0
     end
   end
 
-  within_files 'test/unit/**/*.rb' do
-    # ActiveRecord::TestCase => ActiveSupport::TestCase
-    with_node source: 'ActiveRecord::TestCase' do
-      replace_with 'ActiveSupport::TestCase'
-    end
-  end
-
-  {'ActionController::Integration' => 'ActionDispatch::Integration',
-   'ActionController::IntegrationTest' => 'ActionDispatch::IntegrationTest',
-   'ActionController::PerformanceTest' => 'ActionDispatch::PerformanceTest',
-   'ActionController::AbstractRequest' => 'ActionDispatch::Request',
-   'ActionController::Request' => 'ActionDispatch::Request',
-   'ActionController::AbstractResponse' => 'ActionDispatch::Response',
-   'ActionController::Response' => 'ActionDispatch::Response',
-   'ActionController::Routing' => 'ActionDispatch::Routing'}.each do |deprecated, favor|
-    within_files '**/*.rb' do
+  within_files '**/*.rb' do
+    {'ActiveRecord::Fixtures' => 'ActiveRecord::FixtureSet',
+     'ActiveRecord::TestCase' => 'ActiveSupport::TestCase',
+     'ActionController::Integration' => 'ActionDispatch::Integration',
+     'ActionController::IntegrationTest' => 'ActionDispatch::IntegrationTest',
+     'ActionController::PerformanceTest' => 'ActionDispatch::PerformanceTest',
+     'ActionController::AbstractRequest' => 'ActionDispatch::Request',
+     'ActionController::Request' => 'ActionDispatch::Request',
+     'ActionController::AbstractResponse' => 'ActionDispatch::Response',
+     'ActionController::Response' => 'ActionDispatch::Response',
+     'ActionController::Routing' => 'ActionDispatch::Routing'}.each do |deprecated, favor|
       with_node source: deprecated do
         replace_with favor
       end
@@ -154,6 +219,12 @@ Synvert::Rewriter.new "upgrade_rails_3_2_to_4_0", "Upgrade rails from 3.2 to 4.0
   add_snippet 'strong_parameters'
 
   todo <<-EOF
-Rails 4.0 no longer supports loading plugins from vendor/plugins. You must replace any plugins by extracting them to gems and adding them to your Gemfile. If you choose not to make them gems, you can move them into, say, lib/my_plugin/* and add an appropriate initializer in config/initializers/my_plugin.rb.
+1. Rails 4.0 no longer supports loading plugins from vendor/plugins. You must replace any plugins by extracting them to gems and adding them to your Gemfile. If you choose not to make them gems, you can move them into, say, lib/my_plugin/* and add an appropriate initializer in config/initializers/my_plugin.rb.
+
+2.  Make the following changes to your Gemfile.
+
+    gem 'sass-rails', '~> 4.0.0'
+    gem 'coffee-rails', '~> 4.0.0'
+    gem 'uglifier', '>= 1.3.0'
   EOF
 end

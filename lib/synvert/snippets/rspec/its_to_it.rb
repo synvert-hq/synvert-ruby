@@ -1,4 +1,37 @@
-Synvert::Rewriter.new "convert_rspec_its_to_it", "RSpec converts its to it" do
+Synvert::Rewriter.new "convert_rspec_its_to_it" do
+  description <<-EOF
+It converts rspec its to it.
+
+    describe 'example' do
+      subject { { foo: 1, bar: 2 } }
+      its(:size) { should == 2 }
+      its([:foo]) { should == 1 }
+      its('keys.first') { should == :foo }
+    end
+    =>
+    describe 'example' do
+      subject { { foo: 1, bar: 2 } }
+
+      describe '#size' do
+        subject { super().size }
+        it { should == 2 }
+      end
+
+      describe '[:foo]' do
+        subject { super()[:foo] }
+        it { should == 1 }
+      end
+
+      describe '#keys' do
+        subject { super().keys }
+        describe '#first' do
+          subject { super().first }
+          it { should == :foo }
+        end
+      end
+    end
+  EOF
+
   if_gem 'rspec', {gte: '2.99.0'}
 
   within_files 'spec/**/*.rb' do

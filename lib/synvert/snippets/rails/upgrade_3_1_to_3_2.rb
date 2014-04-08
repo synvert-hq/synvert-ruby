@@ -1,4 +1,17 @@
-Synvert::Rewriter.new 'upgrade_rails_3_1_to_3_2', 'Upgrade rails from 3.1 to 3.2' do
+Synvert::Rewriter.new 'upgrade_rails_3_1_to_3_2' do
+  description <<-EOF
+It upgrades rails from 3.1 to 3.2.
+
+1. it insrts new configs in config/environments/development.rb.
+
+    config.active_record.mass_assignment_sanitizer = :strict
+    config.active_record.auto_explain_threshold_in_seconds = 0.5
+
+2. it insert new configs in config/environments/test.rb.
+
+    config.active_record.mass_assignment_sanitizer = :strict
+  EOF
+
   if_gem 'rails', {gte: '3.1.0'}
 
   within_file 'config/environments/development.rb' do

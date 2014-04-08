@@ -11,14 +11,12 @@ describe 'Upgrade rails from 3.0 to 3.1' do
   describe 'with fakefs', fakefs: true do
     let(:application_content) {"""
 Synvert::Application.configure do
-  config.assets.prefix = '/assets'
 end
     """}
     let(:application_rewritten_content) {"""
 Synvert::Application.configure do
   config.assets.enabled = true
   config.assets.version = '1.0'
-  config.assets.prefix = '/asset-files'
 end
     """}
     let(:development_content) {"""
@@ -54,10 +52,12 @@ Synvert::Application.configure do
 end
     '''}
     let(:wrap_parameters_rewritten_content) {"""
+# Enable parameter wrapping for JSON. You can disable this by setting :format to an empty array.
 ActiveSupport.on_load(:action_controller) do
   wrap_parameters format: [:json]
 end
 
+# Disable root element in JSON by default.
 ActiveSupport.on_load(:active_record) do
   self.include_root_in_json = false
 end

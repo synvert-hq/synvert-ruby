@@ -73,22 +73,16 @@ module Synvert
 
     # @!attribute [r] name
     #   @return [String] the unique name of rewriter
-    # @!attribute [r] description
-    #   @return [String] description of rewriter
-    # @!attribute [r] todo_list
-    #   @return [String] a text that describe what the rewriter doesn't do or will do
-    attr_reader :name, :description, :todo_list
+    attr_reader :name
 
     # Initialize a rewriter.
     # When a rewriter is initialized, it is also registered.
     #
     # @param name [String] name of the rewriter.
-    # @param description [String] description of the rewriter.
     # @param block [Block] a block defines the behaviors of the rewriter, block code won't be called when initialization.
     # @return [Synvert::Rewriter]
-    def initialize(name, description, &block)
+    def initialize(name, &block)
       @name = name
-      @description = description
       @block = block
       @helpers = []
       self.class.register(name, self)
@@ -103,6 +97,19 @@ module Synvert
     #######
     # DSL #
     #######
+
+    # Parse description dsl, it sets description of the rewrite.
+    # Or get description.
+    #
+    # @param description [String] rewriter description.
+    # @return rewriter description.
+    def description(description=nil)
+      if description
+        @description = description
+      else
+        @description
+      end
+    end
 
     # Parse if_gem dsl, it compares version of the specified gem.
     #
@@ -154,11 +161,17 @@ module Synvert
       @helpers << {name: name, block: block}
     end
 
-    # Parse todo dsl, it sets todo_list instance variable.
+    # Parse todo dsl, it sets todo of the rewriter.
+    # Or get todo.
     #
-    # @param list [String] todo list string.
-    def todo(list)
-      @todo_list = list
+    # @param todo_list [String] rewriter todo.
+    # @return [String] rewriter todo.
+    def todo(todo=nil)
+      if todo
+        @todo = todo
+      else
+        @todo
+      end
     end
   end
 end

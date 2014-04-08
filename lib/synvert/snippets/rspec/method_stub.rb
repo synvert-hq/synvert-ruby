@@ -1,4 +1,25 @@
-Synvert::Rewriter.new "convert_rspec_method_stub", "RSpec converts method stub" do
+Synvert::Rewriter.new "convert_rspec_method_stub" do
+  description <<-EOF
+It converts rspec method stub.
+
+    obj.stub!(:message) => obj.stub(:message)
+    obj.unstub!(:message) => obj.unstub(:message)
+
+    obj.stub(:message).any_number_of_times => allow(obj).to receive(:message)
+    obj.stub(:message).at_least(0) => allow(obj).to receive(:message)
+
+    obj.stub(:message) => allow(obj).to receive(:message)
+    Klass.any_instance.stub(:message) => allow_any_instance_of(Klass).to receive(:message)
+
+    obj.stub_chain(:foo, :bar, :baz) => allow(obj).to receive_message_chain(:foo, :bar, :baz)
+
+    obj.stub(:foo => 1, :bar => 2) => allow(obj).to receive_messages(:foo => 1, :bar => 2)
+
+    allow(obj).to receive(:message).and_return { 1 } => allow(obj).to receive(:message) { 1 }
+
+    allow(obj).to receive(:message).and_return => allow(obj).to receive(:message)
+  EOF
+
   if_gem 'rspec', {gte: '2.14.0'}
 
   within_files 'spec/**/*.rb' do

@@ -1,4 +1,10 @@
-Synvert::Rewriter.new "ruby_new_hash_syntax", "Ruby uses new hash syntax" do
+Synvert::Rewriter.new "ruby_new_hash_syntax" do
+  description <<-EOF
+Use ruby new hash syntax.
+
+    {:foo => 'bar'} => {foo: 'bar'}
+  EOF
+
   if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("1.9.0")
     within_files '**/*.rb' do
       # {:foo => 'bar'} => {foo: 'bar'}

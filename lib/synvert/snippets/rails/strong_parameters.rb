@@ -1,4 +1,25 @@
-Synvert::Rewriter.new "strong_parameters", "Use strong_parameters syntax" do
+Synvert::Rewriter.new "strong_parameters" do
+  description <<-EOF
+It uses string_parameters to replace attr_accessible.
+
+1. it removes active_record configurations.
+
+    config.active_record.whitelist_attributes = ...
+    config.active_record.mass_assignment_sanitizer = ...
+
+2. it removes attr_accessible code in models.
+
+3. it adds xxx_params in controllers
+
+    def xxx_params
+      params.require(:xxx).permit(...)
+    end
+
+4. it replaces params[:xxx] with xxx_params.
+
+    params[:xxx] => xxx_params
+  EOF
+
   within_files 'config/**/*.rb' do
     # remove config.active_record.whitelist_attributes = ...
     with_node type: 'send', receiver: {type: 'send', receiver: {type: 'send', message: 'config'}, message: 'active_record'}, message: 'whitelist_attributes=' do

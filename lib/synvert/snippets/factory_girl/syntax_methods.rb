@@ -1,4 +1,54 @@
-Synvert::Rewriter.new "factory_girl_short_syntax", "FactoryGirl uses short syntax" do
+Synvert::Rewriter.new "factory_girl_short_syntax" do
+  description <<-EOF
+Uses FactoryGirl short syntax.
+
+1. it adds FactoryGirl::Syntax::methods module to RSpec, Test::Unit, Cucumber, Spainach, MiniTest, MiniTest::Spec, minitest-rails.
+
+    # rspec
+    RSpec.configure do |config|
+      config.include FactoryGirl::Syntax::Methods
+    end
+
+    # Test::Unit
+    class Test::Unit::TestCase
+      include FactoryGirl::Syntax::Methods
+    end
+
+    # Cucumber
+    World(FactoryGirl::Syntax::Methods)
+
+    # Spinach
+    class Spinach::FeatureSteps
+      include FactoryGirl::Syntax::Methods
+    end
+
+    # MiniTest
+    class MiniTest::Unit::TestCase
+      include FactoryGirl::Syntax::Methods
+    end
+
+    # MiniTest::Spec
+    class MiniTest::Spec
+      include FactoryGirl::Syntax::Methods
+    end
+
+    # minitest-rails
+    class MiniTest::Rails::ActiveSupport::TestCase
+      include FactoryGirl::Syntax::Methods
+    end
+
+2. it converts to short syntax.
+
+    FactoryGirl.create(...) => create(...)
+    FactoryGirl.build(...) => build(...)
+    FactoryGirl.attributes_for(...) => attributes_for(...)
+    FactoryGirl.build_stubbed(...) => build_stubbed(...)
+    FactoryGirl.create_list(...) => create_list(...)
+    FactoryGirl.build_list(...) => build_list(...)
+    FactoryGirl.create_pair(...) => create_pair(...)
+    FactoryGirl.build_pair(...) => build_pair(...)
+  EOF
+
   if_gem 'factory_girl', {gte: '2.0.0'}
 
   # insert include FactoryGirl::Syntax::Methods

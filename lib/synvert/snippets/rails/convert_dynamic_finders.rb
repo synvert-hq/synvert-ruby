@@ -1,4 +1,15 @@
-Synvert::Rewriter.new "convert_rails_dynamic_finders", "Convert rails dynamic finders" do
+Synvert::Rewriter.new "convert_rails_dynamic_finders" do
+  description <<-EOF
+It converts rails dynamic finders to arel syntax.
+
+    find_all_by_... => where(...)
+    find_by_... => where(...).first
+    find_last_by_... => where(...).last
+    scoped_by_... => where(...)
+    find_or_initialize_by_... => find_or_initialize_by(...)
+    find_or_create_by_... => find_or_create_by(...)
+  EOF
+
   helper_method 'dynamic_finder_to_hash' do |prefix|
     fields = node.message.to_s[prefix.length..-1].split("_and_")
     if fields.length == node.arguments.length && :hash != node.arguments.first.type

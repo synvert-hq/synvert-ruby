@@ -34,7 +34,7 @@ module Synvert
         Configuration.instance.get('snippet_names').each do |snippet_name|
           puts "===== #{snippet_name} started ====="
           rewriter = Rewriter.call snippet_name
-          puts rewriter.todo_list if rewriter.todo_list
+          puts rewriter.todo if rewriter.todo
           puts "===== #{snippet_name} done ====="
         end
       end
@@ -80,10 +80,8 @@ module Synvert
 
     # Print all available rewriters.
     def list_available_rewriters
-      puts "%-40s %s" % ['name', 'description']
-      puts "%-40s %s" % ['----', '-----------']
       Rewriter.availables.each do |rewriter|
-        puts "%-40s %s" % [rewriter.name, rewriter.description]
+        puts rewriter.name
       end
     end
   end
