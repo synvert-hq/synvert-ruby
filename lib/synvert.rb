@@ -13,4 +13,5 @@ module Synvert
   autoload :Rewriter, 'synvert/rewriter'
   autoload :RewriterNotFound, 'synvert/exceptions'
   autoload :GemfileLockNotFound, 'synvert/exceptions'
+  autoload :MethodNotSupported, 'synvert/exceptions'
 end
