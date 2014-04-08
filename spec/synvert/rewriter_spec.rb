@@ -102,13 +102,18 @@ module Synvert
         Rewriter.clear
       end
 
+      it 'registers and fetches' do
+        rewriter = Rewriter.new 'rewriter'
+        expect(Rewriter.fetch('rewriter')).to eq rewriter
+      end
+
       it 'registers and calls rewriter' do
         rewriter = Rewriter.new 'rewriter'
         expect(rewriter).to receive(:process)
         Rewriter.call 'rewriter'
       end
 
-      it 'registers and list all available rewriters' do
+      it 'registers and lists all available rewriters' do
         rewriter1 = Rewriter.new 'rewriter1'
         rewriter2 = Rewriter.new 'rewriter2'
         expect(Rewriter.availables).to eq [rewriter1, rewriter2]

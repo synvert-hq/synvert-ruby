@@ -44,6 +44,14 @@ module Synvert
         @rewriters[name.to_s] = rewriter
       end
 
+      # Fetch a rewriter by name.
+      #
+      # @param name [String] rewrtier name.
+      # @return [Synvert::Rewriter] the matching rewriter.
+      def fetch(name)
+        @rewriters[name.to_s]
+      end
+
       # Get a registered rewriter by name and process that rewriter.
       #
       # @param name [String] the rewriter name.
