@@ -87,6 +87,16 @@ module Synvert
         rewriter2.process
       end
 
+      it 'adds sub_snippets' do
+        rewriter1 = Rewriter.new 'rewriter1'
+        rewriter2 = Rewriter.new 'rewriter2' do
+          add_snippet :rewriter1
+        end
+        expect(rewriter1).to receive(:process)
+        rewriter2.process
+        expect(rewriter2.sub_snippets).to eq [rewriter1]
+      end
+
       it 'raises RewriterNotFound' do
         rewriter = Rewriter.new 'name' do
           add_snippet :not_exist

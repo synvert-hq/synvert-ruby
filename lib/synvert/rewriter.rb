@@ -81,7 +81,9 @@ module Synvert
 
     # @!attribute [r] name
     #   @return [String] the unique name of rewriter
-    attr_reader :name
+    # @!attribute [r] sub_snippets
+    #   @return [Array<Synvert::Rewriter>] all rewriters this rewiter calls.
+    attr_reader :name, :sub_snippets
 
     # Initialize a rewriter.
     # When a rewriter is initialized, it is also registered.
@@ -93,6 +95,7 @@ module Synvert
       @name = name
       @block = block
       @helpers = []
+      @sub_snippets = []
       self.class.register(name, self)
     end
 
@@ -170,7 +173,7 @@ module Synvert
     #
     # @param name [String] name of another rewriter.
     def add_snippet(name)
-      self.class.call(name)
+      @sub_snippets << self.class.call(name)
     end
 
     # Parse helper_method dsl, it defines helper method for [Synvert::Rewriter::Instance].
