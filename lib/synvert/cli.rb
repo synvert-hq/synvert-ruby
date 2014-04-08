@@ -15,10 +15,7 @@ module Synvert
 
     # Initialize a CLI.
     def initialize
-      Configuration.instance.set 'snippet_paths', []
-      Configuration.instance.set 'snippet_names', []
-
-      @command = :run
+      @options = {command: 'run', snippet_paths: [], snippet_names: []}
     end
 
     # Run the CLI.
@@ -28,10 +25,10 @@ module Synvert
       run_option_parser(args)
       load_rewriters
 
-      if :list == @command
+      if 'list' == @options[:command]
         list_available_rewriters
       else
-        Configuration.instance.get('snippet_names').each do |snippet_name|
+        @options[:snippet_names].each do |snippet_name|
           puts "===== #{snippet_name} started ====="
           rewriter = Rewriter.call snippet_name
           puts rewriter.todo if rewriter.todo
@@ -51,13 +48,13 @@ module Synvert
       optparse = OptionParser.new do |opts|
         opts.banner = "Usage: synvert [project_path]"
         opts.on '-d', '--load SNIPPET_PATHS', 'load additional snippets, snippet paths can be local file path or remote http url' do |snippet_paths|
-          Configuration.instance.set 'snippet_paths', snippet_paths.split(',')
+          @options[:snippet_paths] = snippet_paths.split(',').map(&:strip)
         end
         opts.on '-l', '--list', 'list all available snippets' do
-          @command = :list
+          @options[:command] = 'list'
         end
         opts.on '-r', '--run SNIPPET_NAMES', 'run specified snippets' do |snippet_names|
-          Configuration.instance.set 'snippet_names', snippet_names.split(',')
+          @options[:snippet_names] = snippet_names.split(',').map(&:strip)
         end
       end
       paths = optparse.parse(args)
@@ -68,7 +65,7 @@ module Synvert
     def load_rewriters
       Dir.glob(File.join(File.dirname(__FILE__), 'snippets/**/*.rb')).each { |file| eval(File.read(file)) }
 
-      Configuration.instance.get('snippet_paths').each do |snippet_path|
+      @options[:snippet_paths].each do |snippet_path|
         if snippet_path =~ /^http/
           uri = URI.parse snippet_path
           eval(uri.read)
@@ -81,8 +78,9 @@ module Synvert
     # Print all available rewriters.
     def list_available_rewriters
       Rewriter.availables.each do |rewriter|
-        puts rewriter.name
+        print rewriter.name + "  "
       end
+      puts
     end
   end
 end
