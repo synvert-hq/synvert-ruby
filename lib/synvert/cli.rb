@@ -38,6 +38,8 @@ module Synvert
         end
       end
       true
+    rescue SystemExit
+      true
     rescue Exception => e
       puts "Error: " + e.message
       false
