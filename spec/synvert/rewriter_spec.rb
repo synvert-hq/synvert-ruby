@@ -46,15 +46,35 @@ module Synvert
         end
         rewriter.process
       end
+
+      it 'does nothing in sandbox mode' do
+        expect_any_instance_of(Rewriter::GemSpec).not_to receive(:match?)
+        expect_any_instance_of(Rewriter::Instance).not_to receive(:process)
+        rewriter = Rewriter.new 'name' do
+          if_gem 'synvert', '1.0.0'
+          within_file 'config/routes.rb' do; end
+        end
+        rewriter.process_with_sandbox
+      end
     end
 
-    it 'parses add_file' do
-      rewriter = Rewriter.new 'rewriter2' do
-        add_file './foo.bar', 'FooBar'
+    describe 'parses add_file' do
+      it 'creates a new file' do
+        rewriter = Rewriter.new 'rewriter2' do
+          add_file './foo.bar', 'FooBar'
+        end
+        rewriter.process
+        expect(File.read './foo.bar').to eq 'FooBar'
+        FileUtils.rm './foo.bar'
       end
-      rewriter.process
-      expect(File.read './foo.bar').to eq 'FooBar'
-      FileUtils.rm './foo.bar'
+
+      it 'does nothing in sandbox mode' do
+        rewriter = Rewriter.new 'rewriter2' do
+          add_file './foo.bar', 'FooBar'
+        end
+        rewriter.process_with_sandbox
+        expect(File.exist?('./foo.bar')).to be_false
+      end
     end
 
     describe 'parses add_snippet' do

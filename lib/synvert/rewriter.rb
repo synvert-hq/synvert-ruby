@@ -102,6 +102,14 @@ module Synvert
       self.instance_eval &@block
     end
 
+    # Process rewriter with sandbox mode.
+    # It will call the block but doesn't change any file.
+    def process_with_sandbox
+      @sandbox = true
+      self.process
+      @sandbox = false
+    end
+
     #######
     # DSL #
     #######
@@ -134,6 +142,8 @@ module Synvert
     # @param file_pattern [String] pattern to find files, e.g. spec/**/*_spec.rb
     # @param block [Block] the block to rewrite code in the matching files.
     def within_files(file_pattern, &block)
+      return if @sandbox
+
       if !@gem_spec || @gem_spec.match?
         instance = Rewriter::Instance.new(file_pattern, &block)
         @helpers.each { |helper| instance.singleton_class.send(:define_method, helper[:name], &helper[:block]) }
@@ -149,6 +159,8 @@ module Synvert
     # @param filename [String] file name of newly created file.
     # @param content [String] file body of newly created file.
     def add_file(filename, content)
+      return if @sandbox
+
       File.open filename, 'w' do |file|
         file.write content
       end
