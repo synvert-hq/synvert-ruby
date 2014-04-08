@@ -11,7 +11,7 @@ Adds `include FactoryGirl::Syntax::Methods` to class
 `Test::Unit::TestCase` in file `test/test_helper.rb`
 
 ```ruby
-Synvert::Rewriter.new 'factory_girl_short_syntax', 'FactoryGirl uses short syntax' do
+Synvert::Rewriter.new 'factory_girl_short_syntax' do
   within_file 'test/test_helper.rb' do
     with_node type: 'class', name: 'Test::Unit::TestCase' do
       insert 'include FactoryGirl::Syntax::Methods'
@@ -24,7 +24,7 @@ FactoryGirl short syntax only works from factory_girl 2.0.0, so let's
 check the gem version.
 
 ```ruby
-Synvert::Rewriter.new 'factory_girl_short_syntax', 'FactoryGirl uses short syntax' do
+Synvert::Rewriter.new 'factory_girl_short_syntax' do
   if_gem 'factory_girl', {gte: '2.0.0'}
 
   within_file 'test/test_helper.rb' do
@@ -40,7 +40,7 @@ FactoryGirl::Syntax::Methods` already exist in the class, so let's check
 if code doesn't exist, then insert.
 
 ```ruby
-Synvert::Rewriter.new 'factory_girl_short_syntax', 'FactoryGirl uses short syntax' do
+Synvert::Rewriter.new 'factory_girl_short_syntax' do
   if_gem 'factory_girl', {gte: '2.0.0'}
 
   within_file 'test/test_helper.rb' do
@@ -56,7 +56,7 @@ end
 It should also work in minitest and activesupport testcase
 
 ```ruby
-Synvert::Rewriter.new 'factory_girl_short_syntax', 'FactoryGirl uses short syntax' do
+Synvert::Rewriter.new 'factory_girl_short_syntax' do
   if_gem 'factory_girl', {gte: '2.0.0'}
 
   within_file 'test/test_helper.rb' do
@@ -76,7 +76,7 @@ For rspec, it does a bit different
 
 ```ruby
 {% raw %}
-Synvert::Rewriter.new 'factory_girl_short_syntax', 'FactoryGirl uses short syntax' do
+Synvert::Rewriter.new 'factory_girl_short_syntax' do
   if_gem 'factory_girl', {gte: '2.0.0'}
 
   within_file 'spec/spec_helper.rb' do
@@ -97,7 +97,7 @@ end
 Finally, apply it for cucumber as well.
 
 ```ruby
-Synvert::Rewriter.new 'factory_girl_short_syntax', 'FactoryGirl uses short syntax' do
+Synvert::Rewriter.new 'factory_girl_short_syntax' do
   if_gem 'factory_girl', {gte: '2.0.0'}
 
   within_file 'features/support/env.rb' do
@@ -115,7 +115,7 @@ replace `FactoryGirl.create` with `create` now.
 
 ```ruby
 {% raw %}
-Synvert::Rewriter.new 'factory_girl_short_syntax', 'FactoryGirl uses short syntax' do
+Synvert::Rewriter.new 'factory_girl_short_syntax' do
   if_gem 'factory_girl', {gte: '2.0.0'}
 
   %w(test/**/*.rb spec/**/*.rb features/**/*.rb).each do |file_pattern|
@@ -136,7 +136,7 @@ There are more short syntax, e.g. `build`, `create_list`, `build_list`, etc.
 
 ```ruby
 {% raw %}
-Synvert::Rewriter.new 'factory_girl_short_syntax', 'FactoryGirl uses short syntax' do
+Synvert::Rewriter.new 'factory_girl_short_syntax' do
   if_gem 'factory_girl', {gte: '2.0.0'}
 
   %w(test/**/*.rb spec/**/*.rb features/**/*.rb).each do |file_pattern|
@@ -153,6 +153,29 @@ end
 {% endraw %}
 ```
 
+Finally don't forget to add description for the rewriter
+
+```ruby
+{% raw %}
+Synvert::Rewriter.new 'factory_girl_short_syntax' do
+  description <<-EOF
+1. it adds FactoryGirl::Syntax::methods module to RSpec, Test::Unit,
+   Cucumber, Spainach, MiniTest, MiniTest::Spec, minitest-rails.
+
+2. it converts to short syntax.
+
+    FactoryGirl.create(...) => create(...)
+    FactoryGirl.build(...) => build(...)
+    ......
+  EOF
+
+  if_gem 'factory_girl', {gte: '2.0.0'}
+
+  ......
+end
+{% endraw %}
+```
+
 ### Convert dynamic finders
 
 From rails 4, dynamic finder methods (e.g.
@@ -161,7 +184,7 @@ From rails 4, dynamic finder methods (e.g.
 
 ```ruby
 {% raw %}
-Synvert::Rewriter.new "convert_dynamic_finders", "Convert dynamic finders" do
+Synvert::Rewriter.new "convert_dynamic_finders" do
   within_files '**/*.rb' do
     with_node type: 'send', message: /find_all_by_(.*)/ do
       # node is current matching ast node
@@ -189,7 +212,7 @@ in each instance, so let's use helper_method for reuse.
 
 ```ruby
 {% raw %}
-Synvert::Rewriter.new "convert_dynamic_finders", "Convert dynamic finders" do
+Synvert::Rewriter.new "convert_dynamic_finders" do
   helper_method 'dynamic_finder_to_hash' do |prefix|
     fields = node.message.to_s[prefix.length..-1].split("_and_")
     fields.length.times.map { |i|

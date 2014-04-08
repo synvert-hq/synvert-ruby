@@ -6,7 +6,9 @@ title: DSL
 Synvert provides a simple dsl to define a snippet.
 
 ```ruby
-Synvert::Rewriter.new "name", "description" do
+Synvert::Rewriter.new "name" do
+  description "description"
+
   if_gem gem_name, {gte: gem_version}
 
   within_file file_pattern do
@@ -26,6 +28,14 @@ Synvert::Rewriter.new "name", "description" do
   end
 end
 ```
+
+### describe what snippet does
+
+```ruby
+description 'descriptin of rewriter'
+```
+
+`description` describes what the rewriter does.
 
 ### check gem version
 
