@@ -26,17 +26,19 @@ $ synvert -h
 Usage: synvert [project_path]
     -d, --load SNIPPET_PATHS         load additional snippets, snippet paths can be local file path or remote http url
     -l, --list                       list all available snippets
+    -q, --query QUERY                query specified snippets
+    -s, --show SNIPPET_NAME          show specified snippet description
     -r, --run SNIPPET_NAMES          run specified snippets
 ```
 
 e.g.
 
 ```
-$ synvert --list-snippets
+$ synvert -l
 ```
 
 ```
-$ synvert --run-snippets factory_girl_short_syntax,upgrade_rails_3_2_to_4_0 ~/Sites/railsbp/rails-bestpractices.com
+$ synvert -r factory_girl_short_syntax,upgrade_rails_3_2_to_4_0 ~/Sites/railsbp/rails-bestpractices.com
 ```
 
 ## Snippets
