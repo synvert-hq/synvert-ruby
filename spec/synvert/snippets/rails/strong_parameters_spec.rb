@@ -32,6 +32,27 @@ end
 class Post < ActiveRecord::Base
 end
     '''}
+    let(:user_model_content) {'''
+class User < ActiveRecord::Base
+  attr_protected :role, :admin
+end
+    '''}
+    let(:user_model_rewritten_content) {'''
+class User < ActiveRecord::Base
+end
+    '''}
+    let(:schema_content) {'''
+ActiveRecord::Schema.define(version: 20140211112752) do
+  create_table "users", force: true do |t|
+    t.string   "login"
+    t.string   "email"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "role",                      default: 0,     null: false
+    t.boolean  "admin",                     default: false, null: false
+  end
+end
+    '''}
     let(:posts_controller_content) {'''
 class PostsController < ApplicationController
   def update
@@ -60,18 +81,52 @@ class PostsController < ApplicationController
   end
 end
     '''}
+    let(:users_controller_content) {'''
+class UsersController < ApplicationController
+  def update
+    @user = User.find(params[:id])
+    if @user.update_attributes params[:user]
+      redirect_to user_path(@user)
+    else
+      render :action => :edit
+    end
+  end
+end
+    '''}
+    let(:users_controller_rewritten_content) {'''
+class UsersController < ApplicationController
+  def update
+    @user = User.find(params[:id])
+    if @user.update_attributes user_params
+      redirect_to user_path(@user)
+    else
+      render :action => :edit
+    end
+  end
+
+  def user_params
+    params.require(:user).permit(:login, :email, :created_at, :updated_at)
+  end
+end
+    '''}
 
     it 'process' do
       FileUtils.mkdir_p 'config'
+      FileUtils.mkdir_p 'db'
       FileUtils.mkdir_p 'app/models'
       FileUtils.mkdir_p 'app/controllers'
       File.write 'config/application.rb', application_content
+      File.write 'db/schema.rb', schema_content
       File.write 'app/models/post.rb', post_model_content
+      File.write 'app/models/user.rb', user_model_content
       File.write 'app/controllers/posts_controller.rb', posts_controller_content
+      File.write 'app/controllers/users_controller.rb', users_controller_content
       @rewriter.process
       expect(File.read 'config/application.rb').to eq application_rewritten_content
       expect(File.read 'app/models/post.rb').to eq post_model_rewritten_content
+      expect(File.read 'app/models/user.rb').to eq user_model_rewritten_content
       expect(File.read 'app/controllers/posts_controller.rb').to eq posts_controller_rewritten_content
+      expect(File.read 'app/controllers/users_controller.rb').to eq users_controller_rewritten_content
     end
   end
 end

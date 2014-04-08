@@ -7,7 +7,7 @@ It uses string_parameters to replace attr_accessible.
     config.active_record.whitelist_attributes = ...
     config.active_record.mass_assignment_sanitizer = ...
 
-2. it removes attr_accessible code in models.
+2. it removes attr_accessible and attr_protected code in models.
 
 3. it adds xxx_params in controllers
 
@@ -32,13 +32,34 @@ It uses string_parameters to replace attr_accessible.
     end
   end
 
+  attributes = {}
+  within_file 'db/schema.rb' do
+    within_node type: 'block', caller: {type: 'send', message: 'create_table'} do
+      object_name = eval(node.caller.arguments.first.source(self)).singularize
+      attributes[object_name] = []
+      with_node type: 'send', receiver: 't' do
+        attribute_name = eval(node.arguments.first.source(self)).to_sym
+        attributes[object_name] << attribute_name
+      end
+    end
+  end
+
   parameters = {}
   within_files 'app/models/**/*.rb' do
     # assign and remove attr_accessible ...
     within_node type: 'class' do
       object_name = node.name.source(self).underscore
       with_node type: 'send', message: 'attr_accessible' do
-        parameters[object_name] = node.arguments.map { |key| key.source(self) }.join(', ')
+        parameters[object_name] = node.arguments.map { |key| eval(key.source(self)) }
+        remove
+      end
+    end
+
+    # assign and remove attr_protected ...
+    within_node type: 'class' do
+      object_name = node.name.source(self).underscore
+      with_node type: 'send', message: 'attr_protected' do
+        parameters[object_name] = attributes[object_name] - node.arguments.map { |key| eval(key.source(self)) }
         remove
       end
     end
@@ -50,9 +71,10 @@ It uses string_parameters to replace attr_accessible.
       if_exist_node type: 'send', receiver: 'params', message: '[]', arguments: [object_name.to_sym] do
         if parameters[object_name]
           # append def xxx_params; ...; end
+          permit_params = ":" + parameters[object_name].join(", :")
           unless_exist_node type: 'def', name: "#{object_name}_params" do
             new_code =  "def #{object_name}_params\n"
-            new_code << "  params.require(:#{object_name}).permit(#{parameters[object_name]})\n"
+            new_code << "  params.require(:#{object_name}).permit(#{permit_params})\n"
             new_code << "end"
             append new_code
           end
