@@ -28,6 +28,7 @@ module Synvert
       case @options[:command]
       when 'list' then list_available_rewriters
       when 'query' then query_available_rewriters
+      when 'show' then show_rewriter
       else
         @options[:snippet_names].each do |snippet_name|
           puts "===== #{snippet_name} started ====="
@@ -57,6 +58,10 @@ module Synvert
         opts.on '-q', '--query QUERY', 'query specified snippets' do |query|
           @options[:command] = 'query'
           @options[:query] = query
+        end
+        opts.on '-s', '--show SNIPPET_NAME', 'show specified snippet description' do |snippet_name|
+          @options[:command] = 'show'
+          @options[:snippet_name] = snippet_name
         end
         opts.on '-r', '--run SNIPPET_NAMES', 'run specified snippets' do |snippet_names|
           @options[:snippet_names] = snippet_names.split(',').map(&:strip)
@@ -96,6 +101,24 @@ module Synvert
         end
       end
       puts
+    end
+
+    # Show and print one rewriter.
+    def show_rewriter
+      rewriter = Rewriter.fetch(@options[:snippet_name])
+      if rewriter
+        rewriter.process_with_sandbox
+        puts rewriter.description
+        rewriter.sub_snippets.each do |sub_rewriter|
+          puts
+          puts "=" * 80
+          puts "snippet: #{sub_rewriter.name}"
+          puts "=" * 80
+          puts sub_rewriter.description
+        end
+      else
+        puts "snippet #{@options[:snippet_name]} not found"
+      end
     end
   end
 end
