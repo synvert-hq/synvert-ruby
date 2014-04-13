@@ -29,6 +29,7 @@ Usage: synvert [project_path]
     -q, --query QUERY                query specified snippets
     -s, --show SNIPPET_NAME          show specified snippet description
     -r, --run SNIPPET_NAMES          run specified snippets
+    -v, --version                    show this version
 ```
 
 e.g.

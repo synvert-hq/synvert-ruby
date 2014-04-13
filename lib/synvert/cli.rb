@@ -68,6 +68,10 @@ module Synvert
         opts.on '-r', '--run SNIPPET_NAMES', 'run specified snippets' do |snippet_names|
           @options[:snippet_names] = snippet_names.split(',').map(&:strip)
         end
+        opts.on '-v', '--version', 'show this version' do
+          puts Synvert::VERSION
+          exit
+        end
       end
       paths = optparse.parse(args)
       Configuration.instance.set :path, paths.first || Dir.pwd
