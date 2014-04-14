@@ -20,11 +20,12 @@ Synvert::Rewriter.new 'factory_girl_short_syntax' do
 end
 ```
 
-FactoryGirl short syntax only works from factory_girl 2.0.0, so let's
+FactoryGirl short syntax only works from factory\_girl 2.0.0, so let's
 check the gem version.
 
 ```ruby
 Synvert::Rewriter.new 'factory_girl_short_syntax' do
+  # check factory_girl gem greater than 2.0.0 in Gemfile.lock
   if_gem 'factory_girl', {gte: '2.0.0'}
 
   within_file 'test/test_helper.rb' do
@@ -45,6 +46,7 @@ Synvert::Rewriter.new 'factory_girl_short_syntax' do
 
   within_file 'test/test_helper.rb' do
     with_node type: 'class', name: 'Test::Unit::TestCase' do
+      # unless include FactoryGirl::Syntax::Methods exists
       unless_exist_node type: 'send', message: 'include', arguments: ['FactoryGirl::Syntax::Methods'] do
         insert 'include FactoryGirl::Syntax::Methods'
       end
@@ -80,8 +82,8 @@ Synvert::Rewriter.new 'factory_girl_short_syntax' do
   if_gem 'factory_girl', {gte: '2.0.0'}
 
   within_file 'spec/spec_helper.rb' do
+    # match code RSpec.configure do |config|; ... end
     within_node type: 'block', caller: {receiver: 'RSpec', message: 'configure'} do
-      # match code RSpec.configure do |config|; ... end
       unless_exist_node type: 'send', message: 'include', arguments: ['FactoryGirl::Syntax::Methods'] do
         # {{ }} is executed on current node, so we can add or replace with some old code,
         # arguments are [config], arguments.first is config,
@@ -123,7 +125,7 @@ Synvert::Rewriter.new 'factory_girl_short_syntax' do
     within_files file_pattern do
       with_node type: 'send', receiver: 'FactoryGirl', message: 'create' do
         # for FactoryGirl.create(:post, title: 'post'),
-        # arguments are `:post, title: 'post'
+        # arguments are `:post, title: 'post'`
         replace_with "create({{arguments}})"
       end
     end
@@ -132,7 +134,7 @@ end
 {% endraw %}
 ```
 
-There are more short syntax, e.g. `build`, `create_list`, `build_list`, etc.
+There are other short syntaxes, e.g. `build`, `create_list`, `build_list`, etc.
 
 ```ruby
 {% raw %}
@@ -207,8 +209,8 @@ end
 ```
 
 We can use this snippet to convert other dynamic finders, e.g.
-`find_last_by_`, but we don't want to calculate the hash_params
-in each instance, so let's use helper_method for reuse.
+`find_last_by_`, but we don't want to calculate the hash\_params
+in each instance, so let's use helper\_method for reuse.
 
 ```ruby
 {% raw %}

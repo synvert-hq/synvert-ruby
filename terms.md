@@ -13,7 +13,7 @@ to convert the code.
 Rewriter is the top level namespace in a snippet.
 
 One rewriter checks if the gem version matches, e.g. we can say the
-rewriter only works if factory_girl gem is greater than or equal to
+rewriter only works if factory\_girl gem is greater than or equal to
 2.0.0.
 
 One rewriter contains one or many instances.

@@ -76,7 +76,7 @@ within_file 'spec/spec_helper.rb' do
 end
 ```
 
-`within_file` finds matching file according to file_pattern, the block
+`within_file` finds matching file according to file\_pattern, the block
 will be executed only for matching file.
 
 ```ruby
@@ -87,7 +87,7 @@ within_files 'spec/**/*_spec.rb' do
 end
 ```
 
-`within_files` is an alias to within_file, but used to find multiple
+`within_files` is an alias to within\_file, but used to find multiple
 files.
 
 ### find nodes

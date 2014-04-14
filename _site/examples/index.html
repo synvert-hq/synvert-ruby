@@ -67,6 +67,7 @@
 <p>FactoryGirl short syntax only works from factory_girl 2.0.0, so let&#39;s
 check the gem version.</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span> <span class="k">do</span>
+  <span class="c1"># check factory_girl gem greater than 2.0.0 in Gemfile.lock</span>
   <span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">gte</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
 
   <span class="n">within_file</span> <span class="s1">&#39;test/test_helper.rb&#39;</span> <span class="k">do</span>
@@ -84,6 +85,7 @@ if code doesn&#39;t exist, then insert.</p>
 
   <span class="n">within_file</span> <span class="s1">&#39;test/test_helper.rb&#39;</span> <span class="k">do</span>
     <span class="n">with_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="nb">name</span><span class="p">:</span> <span class="s1">&#39;Test::Unit::TestCase&#39;</span> <span class="k">do</span>
+      <span class="c1"># unless include FactoryGirl::Syntax::Methods exists</span>
       <span class="n">unless_exist_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;include&#39;</span><span class="p">,</span> <span class="ss">arguments</span><span class="p">:</span> <span class="o">[</span><span class="s1">&#39;FactoryGirl::Syntax::Methods&#39;</span><span class="o">]</span> <span class="k">do</span>
         <span class="n">insert</span> <span class="s1">&#39;include FactoryGirl::Syntax::Methods&#39;</span>
       <span class="k">end</span>
@@ -112,8 +114,8 @@ if code doesn&#39;t exist, then insert.</p>
   <span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">gte</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
 
   <span class="n">within_file</span> <span class="s1">&#39;spec/spec_helper.rb&#39;</span> <span class="k">do</span>
+    <span class="c1"># match code RSpec.configure do |config|; ... end</span>
     <span class="n">within_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;block&#39;</span><span class="p">,</span> <span class="nb">caller</span><span class="p">:</span> <span class="p">{</span><span class="ss">receiver</span><span class="p">:</span> <span class="s1">&#39;RSpec&#39;</span><span class="p">,</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;configure&#39;</span><span class="p">}</span> <span class="k">do</span>
-      <span class="c1"># match code RSpec.configure do |config|; ... end</span>
       <span class="n">unless_exist_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;include&#39;</span><span class="p">,</span> <span class="ss">arguments</span><span class="p">:</span> <span class="o">[</span><span class="s1">&#39;FactoryGirl::Syntax::Methods&#39;</span><span class="o">]</span> <span class="k">do</span>
         <span class="c1"># {{ }} is executed on current node, so we can add or replace with some old code,</span>
         <span class="c1"># arguments are [config], arguments.first is config,</span>
@@ -147,14 +149,14 @@ replace <code>FactoryGirl.create</code> with <code>create</code> now.</p>
     <span class="n">within_files</span> <span class="n">file_pattern</span> <span class="k">do</span>
       <span class="n">with_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">receiver</span><span class="p">:</span> <span class="s1">&#39;FactoryGirl&#39;</span><span class="p">,</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;create&#39;</span> <span class="k">do</span>
         <span class="c1"># for FactoryGirl.create(:post, title: &#39;post&#39;),</span>
-        <span class="c1"># arguments are `:post, title: &#39;post&#39;</span>
+        <span class="c1"># arguments are `:post, title: &#39;post&#39;`</span>
         <span class="n">replace_with</span> <span class="s2">&quot;create({{arguments}})&quot;</span>
       <span class="k">end</span>
     <span class="k">end</span>
   <span class="k">end</span>
 <span class="k">end</span>
 </code></pre></div>
-<p>There are more short syntax, e.g. <code>build</code>, <code>create_list</code>, <code>build_list</code>, etc.</p>
+<p>There are other short syntaxes, e.g. <code>build</code>, <code>create_list</code>, <code>build_list</code>, etc.</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span> <span class="k">do</span>
   <span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">gte</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
 
@@ -214,8 +216,8 @@ replace <code>FactoryGirl.create</code> with <code>create</code> now.</p>
 <span class="k">end</span>
 </code></pre></div>
 <p>We can use this snippet to convert other dynamic finders, e.g.
-<code>find_last_by_</code>, but we don&#39;t want to calculate the hash<em>params
-in each instance, so let&#39;s use helper</em>method for reuse.</p>
+<code>find_last_by_</code>, but we don&#39;t want to calculate the hash_params
+in each instance, so let&#39;s use helper_method for reuse.</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s2">&quot;convert_dynamic_finders&quot;</span> <span class="k">do</span>
   <span class="n">helper_method</span> <span class="s1">&#39;dynamic_finder_to_hash&#39;</span> <span class="k">do</span> <span class="o">|</span><span class="n">prefix</span><span class="o">|</span>
     <span class="n">fields</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">to_s</span><span class="o">[</span><span class="n">prefix</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">.</span><span class="o">-</span><span class="mi">1</span><span class="o">].</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_and_&quot;</span><span class="p">)</span>
