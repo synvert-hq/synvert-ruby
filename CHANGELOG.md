@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.0.16
+
+* Add -v, --version cli option.
+* Ouput file and line number if there's syntax error.
+* Add check_syntax snippet.
+
 ## 0.0.15
 
 * Support attr_protected for strong_parameters snippet.
