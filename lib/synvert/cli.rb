@@ -40,8 +40,14 @@ module Synvert
       true
     rescue SystemExit
       true
+    rescue Parser::SyntaxError => e
+      puts "Syntax error: #{e.message}"
+      puts "file #{e.diagnostic.location.source_buffer.name}"
+      puts "line #{e.diagnostic.location.line}"
+      false
     rescue Exception => e
-      puts "Error: " + e.message
+      print "Error: "
+      p e
       false
     end
 
