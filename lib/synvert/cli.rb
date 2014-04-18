@@ -100,7 +100,7 @@ module Synvert
     # List and print all available rewriters.
     def list_available_rewriters
       Rewriter.availables.each do |rewriter|
-        print rewriter.name + "  "
+        print rewriter.name.to_s + "  "
       end
       puts
     end

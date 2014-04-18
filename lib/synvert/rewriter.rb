@@ -41,7 +41,7 @@ module Synvert
       # @param rewriter [Synvert::Rewriter] the rewriter to register.
       def register(name, rewriter)
         @rewriters ||= {}
-        @rewriters[name.to_s] = rewriter
+        @rewriters[name] = rewriter
       end
 
       # Fetch a rewriter by name.
@@ -49,7 +49,7 @@ module Synvert
       # @param name [String] rewrtier name.
       # @return [Synvert::Rewriter] the matching rewriter.
       def fetch(name)
-        @rewriters[name.to_s]
+        @rewriters[name]
       end
 
       # Get a registered rewriter by name and process that rewriter.
@@ -58,7 +58,7 @@ module Synvert
       # @return [Synvert::Rewriter] the registered rewriter.
       # @raise [Synvert::RewriterNotFound] if the registered rewriter is not found.
       def call(name)
-        if (rewriter = @rewriters[name.to_s])
+        if (rewriter = @rewriters[name])
           rewriter.process
           rewriter
         else
@@ -92,11 +92,11 @@ module Synvert
     # @param block [Block] a block defines the behaviors of the rewriter, block code won't be called when initialization.
     # @return [Synvert::Rewriter]
     def initialize(name, &block)
-      @name = name
+      @name = name.to_s
       @block = block
       @helpers = []
       @sub_snippets = []
-      self.class.register(name, self)
+      self.class.register(@name, self)
     end
 
     # Process the rewriter.
@@ -173,7 +173,7 @@ module Synvert
     #
     # @param name [String] name of another rewriter.
     def add_snippet(name)
-      @sub_snippets << self.class.call(name)
+      @sub_snippets << self.class.call(name.to_s)
     end
 
     # Parse helper_method dsl, it defines helper method for [Synvert::Rewriter::Instance].
