@@ -23,7 +23,7 @@ It converts rails dynamic finders to arel syntax.
 
   within_files '**/*.rb' do
     # find_all_by_... => where(...)
-    with_node type: 'send', message: /find_all_by_/ do
+    with_node type: 'send', message: /^find_all_by_/ do
       hash_params = dynamic_finder_to_hash("find_all_by_")
       if node.receiver
         replace_with "{{receiver}}.where(#{hash_params})"
@@ -33,7 +33,7 @@ It converts rails dynamic finders to arel syntax.
     end
 
     # find_by_... => where(...).first
-    with_node type: 'send', message: /find_by_/ do
+    with_node type: 'send', message: /^find_by_/ do
       if :find_by_id == node.message
         if node.receiver
           replace_with "{{receiver}}.find({{arguments}})"
@@ -51,7 +51,7 @@ It converts rails dynamic finders to arel syntax.
     end
 
     # find_last_by_... => where(...).last
-    with_node type: 'send', message: /find_last_by_/ do
+    with_node type: 'send', message: /^find_last_by_/ do
       hash_params = dynamic_finder_to_hash("find_last_by_")
       if node.receiver
         replace_with "{{receiver}}.where(#{hash_params}).last"
@@ -61,7 +61,7 @@ It converts rails dynamic finders to arel syntax.
     end
 
     # scoped_by_... => where(...)
-    with_node type: 'send', message: /scoped_by_/ do
+    with_node type: 'send', message: /^scoped_by_/ do
       hash_params = dynamic_finder_to_hash("scoped_by_")
       if node.receiver
         replace_with "{{receiver}}.where(#{hash_params})"
@@ -71,7 +71,7 @@ It converts rails dynamic finders to arel syntax.
     end
 
     # find_or_initialize_by_... => find_or_initialize_by(...)
-    with_node type: 'send', message: /find_or_initialize_by_/ do
+    with_node type: 'send', message: /^find_or_initialize_by_/ do
       hash_params = dynamic_finder_to_hash("find_or_initialize_by_")
       if node.receiver
         replace_with "{{receiver}}.find_or_initialize_by(#{hash_params})"
@@ -81,7 +81,7 @@ It converts rails dynamic finders to arel syntax.
     end
 
     # find_or_create_by_... => find_or_create_by(...)
-    with_node type: 'send', message: /find_or_create_by_/ do
+    with_node type: 'send', message: /^find_or_create_by_/ do
       hash_params = dynamic_finder_to_hash("find_or_create_by_")
       if node.receiver
         replace_with "{{receiver}}.find_or_create_by(#{hash_params})"
