@@ -32,30 +32,32 @@ module Synvert
       parser = Parser::CurrentRuby.new
       file_pattern = File.join(Configuration.instance.get(:path), @file_pattern)
       Dir.glob(file_pattern).each do |file_path|
-        begin
-          source = File.read(file_path)
-          buffer = Parser::Source::Buffer.new file_path
-          buffer.source = source
+        unless Configuration.instance.get(:skip_files).include? file_path
+          begin
+            source = File.read(file_path)
+            buffer = Parser::Source::Buffer.new file_path
+            buffer.source = source
 
-          parser.reset
-          ast = parser.parse buffer
+            parser.reset
+            ast = parser.parse buffer
 
-          @current_file = file_path
-          @current_source = source
-          @current_node = ast
-          instance_eval &@block
-          @current_node = ast
+            @current_file = file_path
+            @current_source = source
+            @current_node = ast
+            instance_eval &@block
+            @current_node = ast
 
-          @actions.sort!
-          check_conflict_actions
-          @actions.reverse.each do |action|
-            source[action.begin_pos...action.end_pos] = action.rewritten_code
-            source = remove_code_or_whole_line(source, action.line)
-          end
-          @actions = []
+            @actions.sort!
+            check_conflict_actions
+            @actions.reverse.each do |action|
+              source[action.begin_pos...action.end_pos] = action.rewritten_code
+              source = remove_code_or_whole_line(source, action.line)
+            end
+            @actions = []
 
-          File.write file_path, source
-        end while !@conflict_actions.empty?
+            File.write file_path, source
+          end while !@conflict_actions.empty?
+        end
       end
     end
 

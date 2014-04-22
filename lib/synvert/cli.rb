@@ -16,6 +16,7 @@ module Synvert
     # Initialize a CLI.
     def initialize
       @options = {command: 'run', snippet_paths: [], snippet_names: []}
+      Configuration.instance.set :skip_files, []
     end
 
     # Run the CLI.
@@ -67,6 +68,9 @@ module Synvert
           @options[:command] = 'query'
           @options[:query] = query
         end
+        opts.on '--skip FILE_PATTERNS', 'skip specified files or directories, separated by comma, e.g. app/models/post.rb,vendor/plugins/**/*.rb' do |file_patterns|
+          @options[:skip_file_patterns] = file_patterns.split(',')
+        end
         opts.on '-s', '--show SNIPPET_NAME', 'show specified snippet description' do |snippet_name|
           @options[:command] = 'show'
           @options[:snippet_name] = snippet_name
@@ -81,6 +85,13 @@ module Synvert
       end
       paths = optparse.parse(args)
       Configuration.instance.set :path, paths.first || Dir.pwd
+      if @options[:skip_file_patterns] && !@options[:skip_file_patterns].empty?
+        skip_files = @options[:skip_file_patterns].map { |file_pattern|
+          full_file_pattern = File.join(Configuration.instance.get(:path), file_pattern)
+          Dir.glob(full_file_pattern)
+        }.flatten
+        Configuration.instance.set :skip_files, skip_files
+      end
     end
 
     # Load all rewriters.

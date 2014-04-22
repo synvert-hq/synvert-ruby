@@ -19,4 +19,8 @@ RSpec.configure do |config|
   config.filter_run :focus
 
   config.order = 'random'
+
+  config.before do
+    Synvert::Configuration.instance.set :skip_files, []
+  end
 end
