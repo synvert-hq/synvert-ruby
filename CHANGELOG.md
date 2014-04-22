@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.0.17
+
+* Polish convert_rails_dynamic_finders snippet.
+* Add --skip option to cli to skip files and directories.
+
 ## 0.0.16
 
 * Add -v, --version cli option.
