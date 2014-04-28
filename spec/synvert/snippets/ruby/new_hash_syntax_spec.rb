@@ -12,10 +12,12 @@ describe 'Ruby uses new hash synax' do
     let(:test_content) {"""
 {:foo => 'bar', 'foo' => 'bar'}
 {:key1 => 'value1', :key2 => 'value2'}
+{foo_key: 'foo_value', bar_key: 42}
     """}
     let(:test_rewritten_content) {"""
 {foo: 'bar', 'foo' => 'bar'}
 {key1: 'value1', key2: 'value2'}
+{foo_key: 'foo_value', bar_key: 42}
     """}
 
     it 'process' do

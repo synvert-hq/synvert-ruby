@@ -11,7 +11,7 @@ Use ruby new hash syntax.
       within_node type: 'hash' do
         with_node type: 'pair' do
           if :sym == node.key.type
-            new_key = node.key.source(self)[1..-1]
+            new_key = node.key.source(self)[/:?(.*)/, 1]
             replace_with "#{new_key}: {{value}}"
           end
         end
