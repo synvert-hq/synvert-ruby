@@ -16,7 +16,7 @@ module Synvert
     # Initialize a CLI.
     def initialize
       @options = {command: 'run', snippet_paths: [], snippet_names: []}
-      Configuration.instance.set :skip_files, []
+      Synvert::Core::Configuration.instance.set :skip_files, []
     end
 
     # Run the CLI.
@@ -33,7 +33,7 @@ module Synvert
       else
         @options[:snippet_names].each do |snippet_name|
           puts "===== #{snippet_name} started ====="
-          rewriter = Rewriter.call snippet_name
+          rewriter = Core::Rewriter.call snippet_name
           puts rewriter.todo if rewriter.todo
           puts "===== #{snippet_name} done ====="
         end
@@ -79,18 +79,18 @@ module Synvert
           @options[:snippet_names] = snippet_names.split(',').map(&:strip)
         end
         opts.on '-v', '--version', 'show this version' do
-          puts Synvert::VERSION
+          puts Core::VERSION
           exit
         end
       end
       paths = optparse.parse(args)
-      Configuration.instance.set :path, paths.first || Dir.pwd
+      Core::Configuration.instance.set :path, paths.first || Dir.pwd
       if @options[:skip_file_patterns] && !@options[:skip_file_patterns].empty?
         skip_files = @options[:skip_file_patterns].map { |file_pattern|
-          full_file_pattern = File.join(Configuration.instance.get(:path), file_pattern)
+          full_file_pattern = File.join(Core::Configuration.instance.get(:path), file_pattern)
           Dir.glob(full_file_pattern)
         }.flatten
-        Configuration.instance.set :skip_files, skip_files
+        Core::Configuration.instance.set :skip_files, skip_files
       end
     end
 
@@ -110,7 +110,7 @@ module Synvert
 
     # List and print all available rewriters.
     def list_available_rewriters
-      Rewriter.availables.each do |rewriter|
+      Core::Rewriter.availables.each do |rewriter|
         print rewriter.name.to_s + "  "
       end
       puts
@@ -118,7 +118,7 @@ module Synvert
 
     # Query and print available rewriters.
     def query_available_rewriters
-      Rewriter.availables.each do |rewriter|
+      Core::Rewriter.availables.each do |rewriter|
         if rewriter.name.include? @options[:query]
           print rewriter.name + "  "
         end
@@ -128,7 +128,7 @@ module Synvert
 
     # Show and print one rewriter.
     def show_rewriter
-      rewriter = Rewriter.fetch(@options[:snippet_name])
+      rewriter = Core::Rewriter.fetch(@options[:snippet_name])
       if rewriter
         rewriter.process_with_sandbox
         puts rewriter.description
