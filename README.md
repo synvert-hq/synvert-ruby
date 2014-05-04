@@ -9,6 +9,12 @@ automatically.
 
 Synvert is tested against MRI 1.9.3, 2.0.0 and 2.1.1.
 
+Synvert is composed by synvert-core and synvert-snippets.
+
+[synvert-core][1] provides a dsl to convert ruby code.
+[synvert-snippets][2] lists all snippets to convert ruby code based on
+synvert-core.
+
 ## Installation
 
 Install it using rubygems
@@ -42,13 +48,9 @@ $ synvert --sync
 $ synvert -r factory_girl_short_syntax,upgrade_rails_3_2_to_4_0 ~/Sites/railsbp/rails-bestpractices.com
 ```
 
-## Snippets
-
-[https://github.com/xinminlabs/synvert-snippets/][1]
-
 ## Documentation
 
-[http://xinminlabs.github.io/synvert/][2]
+[http://xinminlabs.github.io/synvert/][3]
 
 ## Contributing
 
@@ -58,5 +60,6 @@ $ synvert -r factory_girl_short_syntax,upgrade_rails_3_2_to_4_0 ~/Sites/railsbp/
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-[1]: https://github.com/xinminlabs/synvert-snippets/
-[2]: http://xinminlabs.github.io/synvert/
+[1]: https://github.com/xinminlabs/synvert-core/
+[2]: https://github.com/xinminlabs/synvert-snippets/
+[3]: http://xinminlabs.github.io/synvert/
