@@ -15,8 +15,9 @@ module Synvert
 
     # Initialize a CLI.
     def initialize
-      @options = {command: 'run', snippet_paths: [], snippet_names: []}
-      Synvert::Core::Configuration.instance.set :skip_files, []
+      @options = {command: 'run', custom_snippet_paths: [], snippet_names: []}
+      Core::Configuration.instance.set :skip_files, []
+      Core::Configuration.instance.set :default_snippets_path, File.join(ENV['HOME'], '.synvert')
     end
 
     # Run the CLI.
@@ -30,6 +31,7 @@ module Synvert
       when 'list' then list_available_rewriters
       when 'query' then query_available_rewriters
       when 'show' then show_rewriter
+      when 'sync' then sync_snippets
       else
         @options[:snippet_names].each do |snippet_name|
           puts "===== #{snippet_name} started ====="
@@ -58,8 +60,8 @@ module Synvert
     def run_option_parser(args)
       optparse = OptionParser.new do |opts|
         opts.banner = "Usage: synvert [project_path]"
-        opts.on '-d', '--load SNIPPET_PATHS', 'load additional snippets, snippet paths can be local file path or remote http url' do |snippet_paths|
-          @options[:snippet_paths] = snippet_paths.split(',').map(&:strip)
+        opts.on '-d', '--load SNIPPET_PATHS', 'load custom snippets, snippet paths can be local file path or remote http url' do |snippet_paths|
+          @options[:custom_snippet_paths] = snippet_paths.split(',').map(&:strip)
         end
         opts.on '-l', '--list', 'list all available snippets' do
           @options[:command] = 'list'
@@ -74,6 +76,9 @@ module Synvert
         opts.on '-s', '--show SNIPPET_NAME', 'show specified snippet description' do |snippet_name|
           @options[:command] = 'show'
           @options[:snippet_name] = snippet_name
+        end
+        opts.on '--sync', 'sync snippets' do
+          @options[:command] = 'sync'
         end
         opts.on '-r', '--run SNIPPET_NAMES', 'run specified snippets' do |snippet_names|
           @options[:snippet_names] = snippet_names.split(',').map(&:strip)
@@ -96,9 +101,10 @@ module Synvert
 
     # Load all rewriters.
     def load_rewriters
-      Dir.glob(File.join(File.dirname(__FILE__), 'snippets/**/*.rb')).each { |file| eval(File.read(file)) }
+      default_snippets_path = Core::Configuration.instance.get :default_snippets_path
+      Dir.glob(File.join(default_snippets_path, 'lib/**/*.rb')).each { |file| eval(File.read(file)) }
 
-      @options[:snippet_paths].each do |snippet_path|
+      @options[:custom_snippet_paths].each do |snippet_path|
         if snippet_path =~ /^http/
           uri = URI.parse snippet_path
           eval(uri.read)
@@ -142,6 +148,12 @@ module Synvert
       else
         puts "snippet #{@options[:snippet_name]} not found"
       end
+    end
+
+    # sync snippets
+    def sync_snippets
+      Snippet.sync
+      puts "synvert snippets are synced"
     end
   end
 end

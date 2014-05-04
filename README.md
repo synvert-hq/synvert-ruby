@@ -24,11 +24,12 @@ $ gem install synvert
 ```
 $ synvert -h
 Usage: synvert [project_path]
-    -d, --load SNIPPET_PATHS         load additional snippets, snippet paths can be local file path or remote http url
+    -d, --load SNIPPET_PATHS         load custom snippets, snippet paths can be local file path or remote http url
     -l, --list                       list all available snippets
     -q, --query QUERY                query specified snippets
         --skip FILE_PATTERNS         skip specified files or directories, separated by comma, e.g. app/models/post.rb,vendor/plugins/**/*.rb
     -s, --show SNIPPET_NAME          show specified snippet description
+        --sync                       sync snippets
     -r, --run SNIPPET_NAMES          run specified snippets
     -v, --version                    show this version
 ```
@@ -36,7 +37,7 @@ Usage: synvert [project_path]
 e.g.
 
 ```
-$ synvert -l
+$ synvert --sync
 ```
 
 ```
@@ -45,32 +46,11 @@ $ synvert -r factory_girl_short_syntax,upgrade_rails_3_2_to_4_0 ~/Sites/railsbp/
 
 ## Snippets
 
-name | description
---- | ---
-factory_girl_short_syntax                | FactoryGirl uses short syntax
-convert_rails_dynamic_finders            | Convert rails dynamic finders
-strong_parameters                        | Use strong_parameters syntax
-upgrade_rails_3_0_to_3_1                 | Upgrade rails from 3.0 to 3.1
-upgrade_rails_3_1_to_3_2                 | Upgrade rails from 3.1 to 3.2
-upgrade_rails_3_2_to_4_0                 | Upgrade rails from 3.2 to 4.0, it contains convert_dynamic_finder and strong_parameters snippets
-convert_rspec_be_close_to_be_within      | RSpec converts be_close to be_within
-convert_rspec_block_to_expect            | RSpec converts block to expect
-convert_rspec_boolean_matcher            | RSpec converts boolean matcher
-convert_rspec_collection_matcher         | RSpec converts collection matcher
-convert_rspec_its_to_it                  | RSpec converts its to it
-convert_rspec_message_expectation        | RSpec converts message expectation
-convert_rspec_method_stub                | RSpec converts method stub
-convert_rspec_negative_error_expectation | RSpec converts negative error expectation
-rspec_new_syntax                         | Use RSpec new syntax, it contains all convert_rspec_* snippets
-convert_rspec_one_liner_expectation      | RSpec converts one liner expectation
-convert_rspec_should_to_expect           | RSpec converts should to expect
-convert_rspec_stub_and_mock_to_double    | RSpec converts stub and mock to double
-ruby_new_hash_syntax                     | Ruby uses new hash syntax
-ruby_new_lambda_syntax                   | Ruby uses new lambda syntax
+[https://github.com/xinminlabs/synvert-snippets/][1]
 
 ## Documentation
 
-[http://xinminlabs.github.io/synvert/][1]
+[http://xinminlabs.github.io/synvert/][2]
 
 ## Contributing
 
@@ -80,4 +60,5 @@ ruby_new_lambda_syntax                   | Ruby uses new lambda syntax
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-[1]: http://xinminlabs.github.io/synvert/
+[1]: https://github.com/xinminlabs/synvert-snippets/
+[2]: http://xinminlabs.github.io/synvert/
