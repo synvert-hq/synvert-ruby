@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.1
+
+* Ask to run `synvert --sync` if no snippet available
+
 ## 0.1.0
 
 * Abstract synvert-core and synvert-snippets

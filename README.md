@@ -4,12 +4,10 @@
 [![Coverage Status](https://coveralls.io/repos/xinminlabs/synvert/badge.png?branch=master)](https://coveralls.io/r/xinminlabs/synvert)
 [![Gem Version](https://badge.fury.io/rb/synvert.png)](http://badge.fury.io/rb/synvert)
 
-synvert = syntax + convert, makes it easy to rewrite ruby code
+Synvert = syntax + convert, makes it easy to convert ruby code
 automatically.
 
-**synvert is still in alpha stage**
-
-synvert supports ruby >= 1.9.3
+Synvert is tested against MRI 1.9.3, 2.0.0 and 2.1.1.
 
 ## Installation
 
