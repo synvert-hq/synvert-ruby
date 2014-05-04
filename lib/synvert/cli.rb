@@ -116,10 +116,14 @@ module Synvert
 
     # List and print all available rewriters.
     def list_available_rewriters
-      Core::Rewriter.availables.each do |rewriter|
-        print rewriter.name.to_s + "  "
+      if Core::Rewriter.availables.empty?
+        puts "There is no snippet under ~/.synvert, please run `synvert --sync` to fetch snippets."
+      else
+        Core::Rewriter.availables.each do |rewriter|
+          print rewriter.name.to_s + "  "
+        end
+        puts
       end
-      puts
     end
 
     # Query and print available rewriters.
