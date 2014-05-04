@@ -1,2 +1,4 @@
 pkg/
 .bundle/
+.yardoc/
+coverage/

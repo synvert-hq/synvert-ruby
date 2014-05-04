@@ -40,7 +40,6 @@ description 'descriptin of rewriter'
 ### check gem version
 
 ```ruby
-if_gem 'factory_girl', '2.0.0'
 if_gem 'factory_girl', {eq: '2.0.0'}
 if_gem 'factory_girl', {ne: '2.0.0'}
 if_gem 'factory_girl', {gt: '2.0.0'}
