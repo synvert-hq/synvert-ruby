@@ -3,7 +3,6 @@
 
 $LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
 require 'synvert'
-require 'synvert/cli'
 
 result = Synvert::CLI.run
 exit(result ? 0 : 1)

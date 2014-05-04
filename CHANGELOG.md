@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.0
+
+* Abstract synvert-core and synvert-snippets
+
 ## 0.0.17
 
 * Polish convert_rails_dynamic_finders snippet.

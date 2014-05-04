@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["flyerhzm@gmail.com"]
   spec.description   = %q{synvert is used to convert ruby code to better syntax.}
   spec.summary       = %q{synvert = syntax + convert.}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/xinminlabs/synvert"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
@@ -18,8 +18,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_runtime_dependency "parser"
-  spec.add_runtime_dependency "activesupport"
+  spec.add_runtime_dependency "synvert-core"
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
