@@ -51,6 +51,7 @@ module Synvert
     rescue Exception => e
       print "Error: "
       p e
+      puts e.backtrace.join("\n") if ENV['DEBUG']
       false
     end
 
