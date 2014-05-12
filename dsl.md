@@ -65,6 +65,14 @@ end
 
 `add_file` adds a new file and writes the content.
 
+### remove file
+
+```ruby
+remove_file 'config/initiliazers/secret_token.rb'
+```
+
+`remove_file` removes a file.
+
 ### match file / files
 
 ```ruby
