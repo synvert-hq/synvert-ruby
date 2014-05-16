@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.2.0
+
+* Output rewriter warnings
+
 ## 0.1.1
 
 * Ask to run `synvert --sync` if no snippet available
