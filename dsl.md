@@ -187,6 +187,14 @@ remove
 
 `remove` removes the current node.
 
+### warn code
+
+```ruby
+warn 'Using a return statement in an inline callback block causes a LocalJumpError to be raised when the callback is executed.'
+```
+
+`warn` doesn't change any code, but will give a warning message.
+
 ### add other snippet
 
 ```ruby
