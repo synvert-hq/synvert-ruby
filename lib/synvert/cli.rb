@@ -36,6 +36,9 @@ module Synvert
         @options[:snippet_names].each do |snippet_name|
           puts "===== #{snippet_name} started ====="
           rewriter = Core::Rewriter.call snippet_name
+          rewriter.warnings.each do |warning|
+            puts "[Warn] " + warning.message
+          end
           puts rewriter.todo if rewriter.todo
           puts "===== #{snippet_name} done ====="
         end
