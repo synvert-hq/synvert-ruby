@@ -454,6 +454,24 @@ Parser::CurrentRuby.parse(&quot;self.class.serialized_attributes&quot;)</code></
 <span class="n">node</span><span class="o">.</span><span class="n">hash_value</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span> <span class="c1">#=&gt; nil</span>
 <span class="n">node</span><span class="o">.</span><span class="n">hash_value</span><span class="p">(</span><span class="ss">:bar</span><span class="p">)</span> <span class="c1">#=&gt; nil</span>
 </code></pre></div>
+<h3>to_source</h3>
+
+<p>returns exactly source code for an ast node</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="c1"># node = (hash</span>
+           <span class="p">(</span><span class="n">pair</span>
+             <span class="p">(</span><span class="n">sym</span>  <span class="ss">:foo</span><span class="p">)</span>
+             <span class="p">(</span><span class="n">str</span>  <span class="s2">&quot;bar&quot;</span><span class="p">)))</span>
+<span class="n">node</span><span class="o">.</span><span class="n">to_source</span> <span class="c1">#=&gt; {foo: &quot;bar&quot;}</span>
+</code></pre></div>
+<h3>to_value</h3>
+
+<p>returns exactly value for an ast node</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="c1"># node = (hash</span>
+           <span class="p">(</span><span class="n">pair</span>
+             <span class="p">(</span><span class="n">sym</span>  <span class="ss">:foo</span><span class="p">)</span>
+             <span class="p">(</span><span class="n">str</span>  <span class="s2">&quot;bar&quot;</span><span class="p">)))</span>
+<span class="n">node</span><span class="o">.</span><span class="n">hash_value</span><span class="p">(</span><span class="ss">:foo</span><span class="p">)</span><span class="o">.</span><span class="n">to_value</span> <span class="c1">#=&gt; &quot;bar&quot;</span>
+</code></pre></div>
 <h2>Ast node operator</h2>
 
 <h3>any</h3>

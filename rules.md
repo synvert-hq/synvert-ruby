@@ -588,6 +588,30 @@ node.hash_value('foo') #=> nil
 node.hash_value(:bar) #=> nil
 ```
 
+### to_source
+
+returns exactly source code for an ast node
+
+```ruby
+# node = (hash
+           (pair
+             (sym  :foo)
+             (str  "bar")))
+node.to_source #=> {foo: "bar"}
+```
+
+### to_value
+
+returns exactly value for an ast node
+
+```ruby
+# node = (hash
+           (pair
+             (sym  :foo)
+             (str  "bar")))
+node.hash_value(:foo).to_value #=> "bar"
+```
+
 ## Ast node operator
 
 ### any
