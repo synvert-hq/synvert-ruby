@@ -1,11 +1,12 @@
 # CHANGELOG
 
+## 0.4.0
+
+* Use synvert-core 0.4.0
+
 ## 0.2.0
 
 * Output rewriter warnings
-
-## 0.1.1
-
 * Ask to run `synvert --sync` if no snippet available
 
 ## 0.1.0
