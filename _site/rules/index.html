@@ -418,6 +418,42 @@ Parser::CurrentRuby.parse(&quot;self.class.serialized_attributes&quot;)</code></
 <p>condition</p>
 <div class="highlight"><pre><code class="text language-text" data-lang="text">(defined? (const nil :Bundler))
 </code></pre></div>
+<h2>Ast node method</h2>
+
+<h3>has_key?(key)</h3>
+
+<h5>hash node</h5>
+
+<p>source code</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="p">{</span><span class="ss">foo</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">}</span>
+</code></pre></div>
+<p>ast node</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">(hash
+  (pair
+    (sym  :foo)
+    (str  &quot;bar&quot;)))
+</code></pre></div>
+<p>example</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">node</span><span class="o">.</span><span class="n">has_key?</span><span class="p">(</span><span class="ss">:foo</span><span class="p">)</span> <span class="c1">#=&gt; true</span>
+<span class="n">node</span><span class="o">.</span><span class="n">has_key?</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span> <span class="c1">#=&gt; false</span>
+<span class="n">node</span><span class="o">.</span><span class="n">has_key?</span><span class="p">(</span><span class="ss">:bar</span><span class="p">)</span> <span class="c1">#=&gt; false</span>
+</code></pre></div>
+<h3>hash_value(key)</h3>
+
+<p>source code</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="p">{</span><span class="ss">foo</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">}</span>
+</code></pre></div>
+<p>ast node</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">(hash
+  (pair
+    (sym  :foo)
+    (str  &quot;bar&quot;)))
+</code></pre></div>
+<p>example</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">node</span><span class="o">.</span><span class="n">hash_value</span><span class="p">(</span><span class="ss">:foo</span><span class="p">)</span> <span class="c1">#=&gt;  (str  &quot;bar&quot;)</span>
+<span class="n">node</span><span class="o">.</span><span class="n">hash_value</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span> <span class="c1">#=&gt; nil</span>
+<span class="n">node</span><span class="o">.</span><span class="n">hash_value</span><span class="p">(</span><span class="ss">:bar</span><span class="p">)</span> <span class="c1">#=&gt; nil</span>
+</code></pre></div>
 <h2>Ast node operator</h2>
 
 <h3>any</h3>

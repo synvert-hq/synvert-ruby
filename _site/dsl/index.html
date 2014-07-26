@@ -100,6 +100,11 @@ will be ignored.</p>
 </code></pre></div>
 <p><code>add_file</code> adds a new file and writes the content.</p>
 
+<h3>remove file</h3>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">remove_file</span> <span class="s1">&#39;config/initiliazers/secret_token.rb&#39;</span>
+</code></pre></div>
+<p><code>remove_file</code> removes a file.</p>
+
 <h3>match file / files</h3>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">within_file</span> <span class="s1">&#39;spec/spec_helper.rb&#39;</span> <span class="k">do</span>
   <span class="c1"># find nodes</span>
@@ -173,6 +178,11 @@ node.</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">remove</span>
 </code></pre></div>
 <p><code>remove</code> removes the current node.</p>
+
+<h3>warn code</h3>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="nb">warn</span> <span class="s1">&#39;Using a return statement in an inline callback block causes a LocalJumpError to be raised when the callback is executed.&#39;</span>
+</code></pre></div>
+<p><code>warn</code> doesn&#39;t change any code, but will give a warning message.</p>
 
 <h3>add other snippet</h3>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">add_snippet</span> <span class="s1">&#39;convert_dynamic_finders&#39;</span>

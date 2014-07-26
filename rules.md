@@ -534,6 +534,60 @@ condition
 (defined? (const nil :Bundler))
 ```
 
+## Ast node method
+
+### has_key?(key)
+
+##### hash node
+
+source code
+
+```ruby
+{foo: 'bar'}
+```
+
+ast node
+
+```
+(hash
+  (pair
+    (sym  :foo)
+    (str  "bar")))
+```
+
+example
+
+```ruby
+node.has_key?(:foo) #=> true
+node.has_key?('foo') #=> false
+node.has_key?(:bar) #=> false
+```
+
+### hash_value(key)
+
+source code
+
+```ruby
+{foo: 'bar'}
+```
+
+ast node
+
+```
+(hash
+  (pair
+    (sym  :foo)
+    (str  "bar")))
+```
+
+example
+
+```ruby
+node.hash_value(:foo) #=>  (str  "bar")
+node.hash_value('foo') #=> nil
+node.hash_value(:bar) #=> nil
+```
+
 ## Ast node operator
 
 ### any
