@@ -195,11 +195,11 @@ Synvert::Rewriter.new "convert_dynamic_finders" do
       # login_and_email('login', 'email') to
       # login: 'login', email: 'email'
       #
-      # node.source(self) is used to get original ruby source code
+      # node.to_source is used to get original ruby source code
       # {{receiver}} gets the receiver of current ast node
       fields = node.message.to_s["find_all_by_".length..-1].split("_and_")
       hash_params = fields.length.times.map { |i|
-        fields[i] + ": " + node.arguments[i].source(self)
+        fields[i] + ": " + node.arguments[i].to_source
       }.join(", ")
       replace_with "{{receiver}}.where(#{hash_params})"
     end
@@ -218,7 +218,7 @@ Synvert::Rewriter.new "convert_dynamic_finders" do
   helper_method 'dynamic_finder_to_hash' do |prefix|
     fields = node.message.to_s[prefix.length..-1].split("_and_")
     fields.length.times.map { |i|
-      fields[i] + ": " + node.arguments[i].source(self)
+      fields[i] + ": " + node.arguments[i].to_source
     }.join(", ")
   end
 

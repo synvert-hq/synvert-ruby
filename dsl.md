@@ -210,7 +210,7 @@ add_snippet 'convert_dynamic_finders'
 helper_method 'dynamic_finder_to_hash' do |prefix|
   fields = node.message.to_s[prefix.length..-1].split("_and_")
   fields.length.times.map { |i|
-    fields[i] + ": " + node.arguments[i].source(self)
+    fields[i] + ": " + node.arguments[i].to_source
   }.join(", ")
 end
 ```
