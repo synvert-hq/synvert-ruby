@@ -179,6 +179,18 @@ node.</p>
 </code></pre></div>
 <p><code>remove</code> removes the current node.</p>
 
+<h3>replace erb statement with expression code</h3>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">replace_erb_stmt_with_expr</span>
+</code></pre></div>
+<p><code>replace_erb_stmt_with_expr</code> will replace erb statemet code with expression code, e.g.</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">&lt;% form_for :post do |f| %&gt;
+&lt;% end %&gt;
+
+=&gt;
+
+&lt;%= form_for :post do |f| %&gt;
+&lt;% end %&gt;
+</code></pre></div>
 <h3>warn code</h3>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="nb">warn</span> <span class="s1">&#39;Using a return statement in an inline callback block causes a LocalJumpError to be raised when the callback is executed.&#39;</span>
 </code></pre></div>

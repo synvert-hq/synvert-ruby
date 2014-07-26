@@ -187,6 +187,24 @@ remove
 
 `remove` removes the current node.
 
+### replace erb statement with expression code
+
+```ruby
+replace_erb_stmt_with_expr
+```
+
+`replace_erb_stmt_with_expr` will replace erb statemet code with expression code, e.g.
+
+```
+<% form_for :post do |f| %>
+<% end %>
+
+=>
+
+<%= form_for :post do |f| %>
+<% end %>
+```
+
 ### warn code
 
 ```ruby
