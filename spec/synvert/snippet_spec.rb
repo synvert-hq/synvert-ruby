@@ -8,13 +8,13 @@ module Synvert
 
     it 'git clones snippets' do
       Snippet.sync
-      expect(File.exist?(default_snippets_path)).to be_true
+      expect(File.exist?(default_snippets_path)).to be_truthy
     end
 
     it 'git pull snippets' do
       Snippet.sync
       Snippet.sync
-      expect(File.exist?(default_snippets_path)).to be_true
+      expect(File.exist?(default_snippets_path)).to be_truthy
     end
   end
 end
