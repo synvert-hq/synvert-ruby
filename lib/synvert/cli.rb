@@ -161,6 +161,10 @@ module Synvert
     def sync_snippets
       Snippet.sync
       puts "synvert snippets are synced"
+      core_version = Snippet.fetch_core_version
+      if Gem::Version.new(core_version) > Gem::Version.new(Synvert::Core::VERSION)
+        puts "synvert-core is updated, please install synvert-core #{core_version}"
+      end
     end
   end
 end

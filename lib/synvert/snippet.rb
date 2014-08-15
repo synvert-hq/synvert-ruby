@@ -1,4 +1,5 @@
 # coding: utf-8
+require 'json'
 
 module Synvert
   # Manage synvert snippets.
@@ -12,6 +13,11 @@ module Synvert
       else
         `git clone https://github.com/xinminlabs/synvert-snippets.git #{snippets_path} --quiet`
       end
+    end
+
+    def self.fetch_core_version
+      content = open("https://rubygems.org/api/v1/versions/synvert-core.json").read
+      JSON.parse(content).first["number"]
     end
   end
 end
