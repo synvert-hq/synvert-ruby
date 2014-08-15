@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.4.2
+
+* Tell user to update synvert-core if necessary after syncing snippets.
+
 ## 0.4.0
 
 * Use synvert-core 0.4.0
