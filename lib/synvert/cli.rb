@@ -1,6 +1,5 @@
 # coding: utf-8
 require 'optparse'
-require 'open-uri'
 
 module Synvert
   # Synvert command line interface.

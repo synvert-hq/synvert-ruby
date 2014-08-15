@@ -1,6 +1,7 @@
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 
 require 'synvert'
+require 'webmock/rspec'
 
 require 'coveralls'
 Coveralls.wear!
