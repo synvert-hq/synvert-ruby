@@ -8,14 +8,14 @@ module Synvert
       after { FileUtils.rm_rf default_snippets_path }
 
       it 'git clones snippets' do
+        expect(Snippet).to receive(:system).with("git clone https://github.com/xinminlabs/synvert-snippets.git #{default_snippets_path}")
         Snippet.sync
-        expect(File.exist?(default_snippets_path)).to be_truthy
       end
 
       it 'git pull snippets' do
+        FileUtils.mkdir default_snippets_path
+        expect(Snippet).to receive(:system).with("git pull --rebase")
         Snippet.sync
-        Snippet.sync
-        expect(File.exist?(default_snippets_path)).to be_truthy
       end
     end
 
