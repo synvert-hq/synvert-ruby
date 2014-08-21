@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.5.0
+
+* rewrite cli for rewriter group
+
 ## 0.4.2
 
 * Tell user to update synvert-core if necessary after syncing snippets.
