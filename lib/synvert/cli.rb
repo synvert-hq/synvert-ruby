@@ -34,7 +34,8 @@ module Synvert
       else
         @options[:snippet_names].each do |snippet_name|
           puts "===== #{snippet_name} started ====="
-          rewriter = Core::Rewriter.call snippet_name
+          group, name = snippet_name.split('/')
+          rewriter = Core::Rewriter.call group, name
           rewriter.warnings.each do |warning|
             puts "[Warn] " + warning.message
           end
@@ -49,10 +50,6 @@ module Synvert
       puts "Syntax error: #{e.message}"
       puts "file #{e.diagnostic.location.source_buffer.name}"
       puts "line #{e.diagnostic.location.line}"
-      false
-    rescue Exception => e
-      print "Error: "
-      p e
       false
     end
 
@@ -75,14 +72,14 @@ module Synvert
         opts.on '--skip FILE_PATTERNS', 'skip specified files or directories, separated by comma, e.g. app/models/post.rb,vendor/plugins/**/*.rb' do |file_patterns|
           @options[:skip_file_patterns] = file_patterns.split(',')
         end
-        opts.on '-s', '--show SNIPPET_NAME', 'show specified snippet description' do |snippet_name|
+        opts.on '-s', '--show SNIPPET_NAME', 'show specified snippet description, SNIPPET_NAME is combined by group and name, e.g. ruby/new_hash_syntax' do |snippet_name|
           @options[:command] = 'show'
           @options[:snippet_name] = snippet_name
         end
         opts.on '--sync', 'sync snippets' do
           @options[:command] = 'sync'
         end
-        opts.on '-r', '--run SNIPPET_NAMES', 'run specified snippets' do |snippet_names|
+        opts.on '-r', '--run SNIPPET_NAMES', 'run specified snippets, each SNIPPET_NAME is combined by group and name, e.g. ruby/new_hash_syntax,ruby/new_lambda_syntax' do |snippet_names|
           @options[:snippet_names] = snippet_names.split(',').map(&:strip)
         end
         opts.on '-v', '--version', 'show this version' do
@@ -114,6 +111,9 @@ module Synvert
           eval(File.read(snippet_path))
         end
       end
+    rescue
+      FileUtils.rm_rf default_snippets_path
+      retry
     end
 
     # List and print all available rewriters.
@@ -121,8 +121,11 @@ module Synvert
       if Core::Rewriter.availables.empty?
         puts "There is no snippet under ~/.synvert, please run `synvert --sync` to fetch snippets."
       else
-        Core::Rewriter.availables.each do |rewriter|
-          print rewriter.name.to_s + "  "
+        Core::Rewriter.availables.each do |group, rewriters|
+          puts group
+          rewriters.each do |name, rewriter|
+            puts "    " + name
+          end
         end
         puts
       end
@@ -130,9 +133,17 @@ module Synvert
 
     # Query and print available rewriters.
     def query_available_rewriters
-      Core::Rewriter.availables.each do |rewriter|
-        if rewriter.name.include? @options[:query]
-          print rewriter.name + "  "
+      Core::Rewriter.availables.each do |group, rewriters|
+        if group.include? @options[:query]
+          puts group
+          rewriters.each do |name, rewriter|
+            puts "    " + name
+          end
+        elsif rewriters.keys.any? { |name| name.include? @options[:query] }
+          puts group
+          rewriters.each do |name, rewriter|
+            puts "    " + name if name.include?(@options[:query])
+          end
         end
       end
       puts
@@ -140,7 +151,8 @@ module Synvert
 
     # Show and print one rewriter.
     def show_rewriter
-      rewriter = Core::Rewriter.fetch(@options[:snippet_name])
+      group, name = @options[:snippet_name].split('/')
+      rewriter = Core::Rewriter.fetch(group, name)
       if rewriter
         rewriter.process_with_sandbox
         puts rewriter.description
