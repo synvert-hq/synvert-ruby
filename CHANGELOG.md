@@ -1,8 +1,12 @@
 # CHANGELOG
 
+## 0.5.3
+
+* Show warning message if rewriter not found
+
 ## 0.5.0
 
-* rewrite cli for rewriter group
+* Rewrite cli for rewriter group
 
 ## 0.4.2
 
