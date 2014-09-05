@@ -29,15 +29,19 @@ Synvert::Rewriter.new "name" do
 end
 ```
 
-### describe what snippet does
+### describe
+
+Describe what the snippet does.
 
 ```ruby
-description 'descriptin of rewriter'
+description 'descriptin of snippet'
 ```
 
-`description` describes what the rewriter does.
+### if\_gem
 
-### check gem version
+Checks the gem in `Gemfile.lock`, if gem version in `Gemfile.lock`
+is less than, greater than or equal to the version in `if_gem`,
+the snippet will be executed, otherwise, the snippet will be ignored.
 
 ```ruby
 if_gem 'factory_girl', {eq: '2.0.0'}
@@ -48,32 +52,31 @@ if_gem 'factory_girl', {gte: '2.0.0'}
 if_gem 'factory_girl', {lte: '2.0.0'}
 ```
 
-`if_gem` checks the gem in `Gemfile.lock`, if gem version in
-`Gemfile.lock` is less than, greater than or equal to the version in
-`if_gem`, the rewriter will be executed, otherwise, the rewriter
-will be ignored.
+### add\_file
 
-### add file
+Add a new file and write content.
 
 ```ruby
-add_file 'config/initializers/wrap_parameters.rb', """
+content =<<- EOF
 ActiveSupport.on_load(:action_controller) do
   wrap_parameters format: [:json]
 end
-""".strip
+EOF
+add_file 'config/initializers/wrap_parameters.rb', content.strip
 ```
 
-`add_file` adds a new file and writes the content.
+### remove\_file
 
-### remove file
+Remove a file.
 
 ```ruby
 remove_file 'config/initiliazers/secret_token.rb'
 ```
 
-`remove_file` removes a file.
+### within\_file / within\_files
 
-### match file / files
+Find files according to file pattern, the block will be executed
+only for the matching files.
 
 ```ruby
 within_file 'spec/spec_helper.rb' do
@@ -83,9 +86,6 @@ within_file 'spec/spec_helper.rb' do
 end
 ```
 
-`within_file` finds matching file according to file\_pattern, the block
-will be executed only for matching file.
-
 ```ruby
 within_files 'spec/**/*_spec.rb' do
   # find nodes
@@ -94,21 +94,10 @@ within_files 'spec/**/*_spec.rb' do
 end
 ```
 
-`within_files` is an alias to within\_file, but used to find multiple
-files.
+### with\_node / within\_node
 
-### find nodes
-
-```ruby
-within_node type: 'class', name: 'Test::Unit::TestCase' do
-  # find nodes
-  # check nodes
-  # add / replace / remove code
-end
-```
-
-`within_node` finds ast nodes according to the [rules][1], the block
-will be executed for the matching nodes.
+Find ast nodes according to the [rules][1], the block will be executed
+for the matching nodes.
 
 ```ruby
 with_node type: 'send', 'receiver: 'FactoryGirl', message: 'create' do
@@ -117,10 +106,30 @@ with_node type: 'send', 'receiver: 'FactoryGirl', message: 'create' do
 end
 ```
 
-`with_node` is an alias to `within_node`, it indicates this is the node
-we are looking for and we would do some action on that node.
+```ruby
+within_node type: 'class', name: 'Test::Unit::TestCase' do
+  # find child nodes
+  # check nodes
+  # add / replace / remove code
+end
+```
 
-### check conditions
+### goto\_node
+
+Go to the specified child code.
+
+```ruby
+with_node type: 'block' do
+  goto_node :caller do
+    # change code in block caller
+  end
+end
+```
+
+### if\_exist\_node
+
+Check if the node matches [rules][1] exists, if matches, then executes
+the block.
 
 ```ruby
 if_exist_node type: 'send', receiver: 'params', message: '[]' do
@@ -128,8 +137,10 @@ if_exist_node type: 'send', receiver: 'params', message: '[]' do
 end
 ```
 
-`if_exist_node` checks if the node matches [rules][1] exists, if
-matches, then executes the block to add / replace / remove code.
+### unless\_exist\_node
+
+Check if the node matches [rules][1] does not exist, if does not match,
+then executes the block.
 
 ```ruby
 unless_exist_node type: 'send', message: 'include', arguments: ['FactoryGirl::Syntax::Methods'] do
@@ -137,8 +148,10 @@ unless_exist_node type: 'send', message: 'include', arguments: ['FactoryGirl::Sy
 end
 ```
 
-`unless_exist_node` checks if the node matches [rules][1] does not
-exist, if does not match, then executes the block.
+### if\_noly\_exist\_node
+
+Check if the current node contains only one child node and the child
+node matches [rules][1], if matches, then executes the node.
 
 ```ruby
 if_only_exist_node type: 'send', receiver: 'self', message: 'include_root_in_json=', arguments: [false] do
@@ -146,23 +159,25 @@ if_only_exist_node type: 'send', receiver: 'self', message: 'include_root_in_jso
 end
 ```
 
-`if_only_exist_node` checks if the body of current node contains only
-one node and the node matches [rules][1], if matches, then executes the
-node.
+### append
 
-### add / replace / remove code
+Add the code at the bottom of the current node body.
 
 ```ruby
 append 'config.eager_load = false'
 ```
 
-`append` adds the code at the bottom of the current node.
+### insert
+
+Add the code at the top of the current node body.
 
 ```ruby
 insert "include FactoryGirl::Syntax::Methods"
 ```
 
-`insert` adds the code at the top of the current node.
+### insert\_after
+
+Add the code next to the current node.
 
 ```ruby
 {% raw %}
@@ -171,7 +186,9 @@ insert_after "{{receiver}}.secret_key_base = '#{secret}'"
 {% endraw %}
 ```
 
-`insert_after` adds the code next to the current node.
+### replace\_with
+
+Replace the current node with the code.
 
 ```ruby
 {% raw %}
@@ -179,64 +196,57 @@ replace_with "create({{arguments}})"
 {% endraw %}
 ```
 
-`replace_with` replaces the current node with the code.
+### remove
+
+Remove the current node.
 
 ```ruby
-remove
+with_node type: 'send', message: 'rename_index' do
+  remove
+end
 ```
 
-`remove` removes the current node.
+### replace\_erb\_stmt\_with\_expr
 
-### replace erb statement with expression code
+Replace erb statemet code with expression code.
 
 ```ruby
-replace_erb_stmt_with_expr
+with_node type: 'block', caller: {type: 'send', receiver: nil, message: 'form_for'} do
+  replace_erb_stmt_with_expr
+end
 ```
 
-`replace_erb_stmt_with_expr` will replace erb statemet code with expression code, e.g.
+### warn
 
-```
-<% form_for :post do |f| %>
-<% end %>
-
-=>
-
-<%= form_for :post do |f| %>
-<% end %>
-```
-
-### warn code
+Don't change any code, but will give a warning message.
 
 ```ruby
 warn 'Using a return statement in an inline callback block causes a LocalJumpError to be raised when the callback is executed.'
 ```
 
-`warn` doesn't change any code, but will give a warning message.
+### add\_snippet
 
-### add other snippet
+Add other snippet, it's easy to reuse other snippets.
 
 ```ruby
-add_snippet 'convert_dynamic_finders'
+add_snippet 'rails', 'convert_dynamic_finders'
 ```
 
-`add_snippet` adds other snippet, it's easy to reuse snippets.
+### helper\_method
 
-
-### add helper methods
+Add a method which is available in the current snippet.
 
 ```ruby
-helper_method 'dynamic_finder_to_hash' do |prefix|
-  fields = node.message.to_s[prefix.length..-1].split("_and_")
-  fields.length.times.map { |i|
-    fields[i] + ": " + node.arguments[i].to_source
-  }.join(", ")
+helper_method :method1 do |arg1, arg2|
+  # do anything you want
 end
+
+method1(arg1, arg2)
 ```
 
-`helper_method` dynamically adds methods to all instances in the current
-rewriter.
+### todo
 
-#### add todo list
+List somethings the snippet should do, but not do yet.
 
 ```ruby
 todo <<-EOF
@@ -246,8 +256,6 @@ your Gemfile. If you choose not to make them gems, you can move them
 into, say, lib/my_plugin/* and add an appropriate initializer in
 config/initializers/my_plugin.rb.
 EOF
-
-`todo` is a list that developers have to do by themselves or anything
-you want to warn developers.
+```
 
 [1]: /rules/

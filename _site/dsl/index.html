@@ -73,12 +73,16 @@
   <span class="k">end</span>
 <span class="k">end</span>
 </code></pre></div>
-<h3>describe what snippet does</h3>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">description</span> <span class="s1">&#39;descriptin of rewriter&#39;</span>
-</code></pre></div>
-<p><code>description</code> describes what the rewriter does.</p>
+<h3>describe</h3>
 
-<h3>check gem version</h3>
+<p>Describe what the snippet does.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">description</span> <span class="s1">&#39;descriptin of snippet&#39;</span>
+</code></pre></div>
+<h3>if_gem</h3>
+
+<p>Checks the gem in <code>Gemfile.lock</code>, if gem version in <code>Gemfile.lock</code>
+is less than, greater than or equal to the version in <code>if_gem</code>,
+the snippet will be executed, otherwise, the snippet will be ignored.</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">eq</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
 <span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">ne</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
 <span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">gt</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
@@ -86,133 +90,140 @@
 <span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">gte</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
 <span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">lte</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
 </code></pre></div>
-<p><code>if_gem</code> checks the gem in <code>Gemfile.lock</code>, if gem version in
-<code>Gemfile.lock</code> is less than, greater than or equal to the version in
-<code>if_gem</code>, the rewriter will be executed, otherwise, the rewriter
-will be ignored.</p>
+<h3>add_file</h3>
 
-<h3>add file</h3>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">add_file</span> <span class="s1">&#39;config/initializers/wrap_parameters.rb&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">ActiveSupport.on_load(:action_controller) do</span>
-<span class="s2">  wrap_parameters format: [:json]</span>
-<span class="s2">end</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="o">.</span><span class="n">strip</span>
+<p>Add a new file and write content.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">content</span> <span class="o">=&lt;&lt;-</span> <span class="no">EOF</span>
+<span class="no">ActiveSupport</span><span class="o">.</span><span class="n">on_load</span><span class="p">(</span><span class="ss">:action_controller</span><span class="p">)</span> <span class="k">do</span>
+  <span class="n">wrap_parameters</span> <span class="nb">format</span><span class="p">:</span> <span class="o">[</span><span class="ss">:json</span><span class="o">]</span>
+<span class="k">end</span>
+<span class="no">EOF</span>
+<span class="n">add_file</span> <span class="s1">&#39;config/initializers/wrap_parameters.rb&#39;</span><span class="p">,</span> <span class="n">content</span><span class="o">.</span><span class="n">strip</span>
 </code></pre></div>
-<p><code>add_file</code> adds a new file and writes the content.</p>
+<h3>remove_file</h3>
 
-<h3>remove file</h3>
+<p>Remove a file.</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">remove_file</span> <span class="s1">&#39;config/initiliazers/secret_token.rb&#39;</span>
 </code></pre></div>
-<p><code>remove_file</code> removes a file.</p>
+<h3>within_file / within_files</h3>
 
-<h3>match file / files</h3>
+<p>Find files according to file pattern, the block will be executed
+only for the matching files.</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">within_file</span> <span class="s1">&#39;spec/spec_helper.rb&#39;</span> <span class="k">do</span>
   <span class="c1"># find nodes</span>
   <span class="c1"># check nodes</span>
   <span class="c1"># add / replace / remove code</span>
 <span class="k">end</span>
-</code></pre></div>
-<p><code>within_file</code> finds matching file according to file_pattern, the block
-will be executed only for matching file.</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">within_files</span> <span class="s1">&#39;spec/**/*_spec.rb&#39;</span> <span class="k">do</span>
+</code></pre></div><div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">within_files</span> <span class="s1">&#39;spec/**/*_spec.rb&#39;</span> <span class="k">do</span>
   <span class="c1"># find nodes</span>
   <span class="c1"># check nodes</span>
   <span class="c1"># add / replace / remove code</span>
 <span class="k">end</span>
 </code></pre></div>
-<p><code>within_files</code> is an alias to within_file, but used to find multiple
-files.</p>
+<h3>with_node / within_node</h3>
 
-<h3>find nodes</h3>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">within_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="nb">name</span><span class="p">:</span> <span class="s1">&#39;Test::Unit::TestCase&#39;</span> <span class="k">do</span>
-  <span class="c1"># find nodes</span>
-  <span class="c1"># check nodes</span>
-  <span class="c1"># add / replace / remove code</span>
-<span class="k">end</span>
-</code></pre></div>
-<p><code>within_node</code> finds ast nodes according to the <a href="/rules/">rules</a>, the block
-will be executed for the matching nodes.</p>
+<p>Find ast nodes according to the <a href="/rules/">rules</a>, the block will be executed
+for the matching nodes.</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">with_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="s1">&#39;receiver: &#39;</span><span class="no">FactoryGirl</span><span class="s1">&#39;, message: &#39;</span><span class="n">create</span><span class="err">&#39;</span> <span class="k">do</span>
   <span class="c1"># check nodes</span>
   <span class="c1"># add / replace / remove code</span>
 <span class="k">end</span>
+</code></pre></div><div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">within_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="nb">name</span><span class="p">:</span> <span class="s1">&#39;Test::Unit::TestCase&#39;</span> <span class="k">do</span>
+  <span class="c1"># find child nodes</span>
+  <span class="c1"># check nodes</span>
+  <span class="c1"># add / replace / remove code</span>
+<span class="k">end</span>
 </code></pre></div>
-<p><code>with_node</code> is an alias to <code>within_node</code>, it indicates this is the node
-we are looking for and we would do some action on that node.</p>
+<h3>goto_node</h3>
 
-<h3>check conditions</h3>
+<p>Go to the specified child code.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">with_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;block&#39;</span> <span class="k">do</span>
+  <span class="n">goto_node</span> <span class="ss">:caller</span> <span class="k">do</span>
+    <span class="c1"># change code in block caller</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+<h3>if_exist_node</h3>
+
+<p>Check if the node matches <a href="/rules/">rules</a> exists, if matches, then executes
+the block.</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">if_exist_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">receiver</span><span class="p">:</span> <span class="s1">&#39;params&#39;</span><span class="p">,</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;[]&#39;</span> <span class="k">do</span>
   <span class="c1"># add / replace / remove code</span>
 <span class="k">end</span>
 </code></pre></div>
-<p><code>if_exist_node</code> checks if the node matches <a href="/rules/">rules</a> exists, if
-matches, then executes the block to add / replace / remove code.</p>
+<h3>unless_exist_node</h3>
+
+<p>Check if the node matches <a href="/rules/">rules</a> does not exist, if does not match,
+then executes the block.</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">unless_exist_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;include&#39;</span><span class="p">,</span> <span class="ss">arguments</span><span class="p">:</span> <span class="o">[</span><span class="s1">&#39;FactoryGirl::Syntax::Methods&#39;</span><span class="o">]</span> <span class="k">do</span>
   <span class="c1"># add / replace / remove code</span>
 <span class="k">end</span>
 </code></pre></div>
-<p><code>unless_exist_node</code> checks if the node matches <a href="/rules/">rules</a> does not
-exist, if does not match, then executes the block.</p>
+<h3>if_noly_exist_node</h3>
+
+<p>Check if the current node contains only one child node and the child
+node matches <a href="/rules/">rules</a>, if matches, then executes the node.</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">if_only_exist_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">receiver</span><span class="p">:</span> <span class="s1">&#39;self&#39;</span><span class="p">,</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;include_root_in_json=&#39;</span><span class="p">,</span> <span class="ss">arguments</span><span class="p">:</span> <span class="o">[</span><span class="kp">false</span><span class="o">]</span> <span class="k">do</span>
   <span class="c1"># add / replace / remove code</span>
 <span class="k">end</span>
 </code></pre></div>
-<p><code>if_only_exist_node</code> checks if the body of current node contains only
-one node and the node matches <a href="/rules/">rules</a>, if matches, then executes the
-node.</p>
+<h3>append</h3>
 
-<h3>add / replace / remove code</h3>
+<p>Add the code at the bottom of the current node body.</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">append</span> <span class="s1">&#39;config.eager_load = false&#39;</span>
 </code></pre></div>
-<p><code>append</code> adds the code at the bottom of the current node.</p>
+<h3>insert</h3>
+
+<p>Add the code at the top of the current node body.</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">insert</span> <span class="s2">&quot;include FactoryGirl::Syntax::Methods&quot;</span>
 </code></pre></div>
-<p><code>insert</code> adds the code at the top of the current node.</p>
+<h3>insert_after</h3>
+
+<p>Add the code next to the current node.</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">secret</span> <span class="o">=</span> <span class="no">SecureRandom</span><span class="o">.</span><span class="n">hex</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span>
 <span class="n">insert_after</span> <span class="s2">&quot;{{receiver}}.secret_key_base = &#39;</span><span class="si">#{</span><span class="n">secret</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
 </code></pre></div>
-<p><code>insert_after</code> adds the code next to the current node.</p>
+<h3>replace_with</h3>
+
+<p>Replace the current node with the code.</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">replace_with</span> <span class="s2">&quot;create({{arguments}})&quot;</span>
 </code></pre></div>
-<p><code>replace_with</code> replaces the current node with the code.</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">remove</span>
-</code></pre></div>
-<p><code>remove</code> removes the current node.</p>
+<h3>remove</h3>
 
-<h3>replace erb statement with expression code</h3>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">replace_erb_stmt_with_expr</span>
-</code></pre></div>
-<p><code>replace_erb_stmt_with_expr</code> will replace erb statemet code with expression code, e.g.</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">&lt;% form_for :post do |f| %&gt;
-&lt;% end %&gt;
-
-=&gt;
-
-&lt;%= form_for :post do |f| %&gt;
-&lt;% end %&gt;
-</code></pre></div>
-<h3>warn code</h3>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="nb">warn</span> <span class="s1">&#39;Using a return statement in an inline callback block causes a LocalJumpError to be raised when the callback is executed.&#39;</span>
-</code></pre></div>
-<p><code>warn</code> doesn&#39;t change any code, but will give a warning message.</p>
-
-<h3>add other snippet</h3>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">add_snippet</span> <span class="s1">&#39;convert_dynamic_finders&#39;</span>
-</code></pre></div>
-<p><code>add_snippet</code> adds other snippet, it&#39;s easy to reuse snippets.</p>
-
-<h3>add helper methods</h3>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">helper_method</span> <span class="s1">&#39;dynamic_finder_to_hash&#39;</span> <span class="k">do</span> <span class="o">|</span><span class="n">prefix</span><span class="o">|</span>
-  <span class="n">fields</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">to_s</span><span class="o">[</span><span class="n">prefix</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">.</span><span class="o">-</span><span class="mi">1</span><span class="o">].</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_and_&quot;</span><span class="p">)</span>
-  <span class="n">fields</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span>
-    <span class="n">fields</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span> <span class="n">node</span><span class="o">.</span><span class="n">arguments</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="n">to_source</span>
-  <span class="p">}</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">)</span>
+<p>Remove the current node.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">with_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;rename_index&#39;</span> <span class="k">do</span>
+  <span class="n">remove</span>
 <span class="k">end</span>
 </code></pre></div>
-<p><code>helper_method</code> dynamically adds methods to all instances in the current
-rewriter.</p>
+<h3>replace_erb_stmt_with_expr</h3>
 
-<h4>add todo list</h4>
+<p>Replace erb statemet code with expression code.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">with_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;block&#39;</span><span class="p">,</span> <span class="nb">caller</span><span class="p">:</span> <span class="p">{</span><span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">receiver</span><span class="p">:</span> <span class="kp">nil</span><span class="p">,</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;form_for&#39;</span><span class="p">}</span> <span class="k">do</span>
+  <span class="n">replace_erb_stmt_with_expr</span>
+<span class="k">end</span>
+</code></pre></div>
+<h3>warn</h3>
+
+<p>Don&#39;t change any code, but will give a warning message.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="nb">warn</span> <span class="s1">&#39;Using a return statement in an inline callback block causes a LocalJumpError to be raised when the callback is executed.&#39;</span>
+</code></pre></div>
+<h3>add_snippet</h3>
+
+<p>Add other snippet, it&#39;s easy to reuse other snippets.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">add_snippet</span> <span class="s1">&#39;rails&#39;</span><span class="p">,</span> <span class="s1">&#39;convert_dynamic_finders&#39;</span>
+</code></pre></div>
+<h3>helper_method</h3>
+
+<p>Add a method which is available in the current snippet.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">helper_method</span> <span class="ss">:method1</span> <span class="k">do</span> <span class="o">|</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="o">|</span>
+  <span class="c1"># do anything you want</span>
+<span class="k">end</span>
+
+<span class="n">method1</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">)</span>
+</code></pre></div>
+<h3>todo</h3>
+
+<p>List somethings the snippet should do, but not do yet.</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">todo</span> <span class="o">&lt;&lt;-</span><span class="no">EOF</span>
 <span class="sh">Rails 4.0 no longer supports loading plugins from vendor/plugins. You</span>
 <span class="sh">must replace any plugins by extracting them to gems and adding them to</span>
@@ -220,9 +231,6 @@ rewriter.</p>
 <span class="sh">into, say, lib/my_plugin/* and add an appropriate initializer in</span>
 <span class="sh">config/initializers/my_plugin.rb.</span>
 <span class="no">EOF</span>
-
-<span class="sb">`todo`</span> <span class="n">is</span> <span class="n">a</span> <span class="n">list</span> <span class="n">that</span> <span class="n">developers</span> <span class="n">have</span> <span class="n">to</span> <span class="k">do</span> <span class="n">by</span> <span class="n">themselves</span> <span class="ow">or</span> <span class="n">anything</span>
-<span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="nb">warn</span> <span class="n">developers</span><span class="o">.</span>
 </code></pre></div>
 </div>
 
