@@ -9,7 +9,7 @@
 
   <title>
     
-      Get Started &middot; Synvert
+      Helper &middot; Synvert
     
   </title>
 
@@ -50,52 +50,38 @@
 
     <div class="content container">
       <div class="page">
-  <h1 class="page-title">Get Started</h1>
-  <h3>Installation</h3>
+  <h1 class="page-title">Helper</h1>
+  <p>Synvert provides some global helper methods that you can use in any snippet.</p>
 
-<p>Synvert is distributed using <a href="https://rubygems.org">RubyGems</a>.</p>
+<h3>add_receiver_if_necessary</h3>
 
-<p>To install the latest version, run</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">$ gem install synvert
+<p>It adds the receiver if original node contains receiver.</p>
+
+<p>It&#39;s useful when you want to replace code but original code receiver can
+be present or nil.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">with_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;find&#39;</span><span class="p">,</span> <span class="ss">arguments</span><span class="p">:</span> <span class="p">{</span><span class="ss">size</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="ss">first</span><span class="p">:</span> <span class="ss">:all</span><span class="p">}</span> <span class="k">do</span>
+  <span class="n">replace_with</span> <span class="n">add_receiver_if_necessary</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="c1"># Post.find(:all) =&gt; Post.all</span>
+<span class="c1"># find(:all) =&gt; all</span>
 </code></pre></div>
-<p>This will install Synvert, along with all of it&#39;s require dependencies.</p>
+<h3>strip_brackets</h3>
 
-<h3>Usage</h3>
+<p>It strips leading <code>{[(</code> and trailing <code>}])</code></p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">strip_brackets</span> <span class="s2">&quot;{foo: &#39;bar&#39;}&quot;</span>
+<span class="c1"># =&gt; &quot;foo: &#39;bar&#39;</span>
 
-<p>Now you can use synvert to convert your ruby code.</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">$ synvert -h
-Usage: synvert [project_path]
-    -d, --load SNIPPET_PATHS         load custom snippets, snippet paths can be local file path or remote http url
-    -l, --list                       list all available snippets
-    -q, --query QUERY                query specified snippets
-        --skip FILE_PATTERNS         skip specified files or directories, separated by comma, e.g.  app/models/post.rb,vendor/plugins/**/*.rb
-    -s, --show SNIPPET_NAME          show specified snippet description
-        --sync                       sync snippets
-    -r, --run SNIPPET_NAMES          run specified snippets
-    -v, --version                    show this version
+<span class="n">strip_brackets</span> <span class="s2">&quot;[&#39;foo&#39;, &#39;bar&#39;]&quot;</span>
+<span class="c1"># =&gt; &quot;&#39;foo&#39;, &#39;bar&#39;&quot;</span>
+
+<span class="n">strip_brackets</span> <span class="s2">&quot;(foo, bar)&quot;</span>
+<span class="c1"># =&gt; &quot;foo, bar&quot;</span>
 </code></pre></div>
-<p>First you should sync <a href="https://github.com/xinminlabs/synvert-snippets">snippets</a> from github</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">$ synvert --sync
-</code></pre></div>
-<p>list all available snippets</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">$ synvert -l
-</code></pre></div>
-<p>run snippets <code>factory_girl_short_syntax</code>, <code>rspec_new_syntax</code> and
-<code>upgrade_rails_3_2_to_4_0</code> in rails-bestpractices.com repo.</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">$ synvert -r factory_girl_short_syntax,rspec_new_syntax,upgrade_rails_3_2_to_4_0 ~/Sites/railsbp/rails-bestpractices.com
-</code></pre></div>
-<p>It&#39;s recommended that you use version control software like <a href="http://git-scm.com/">git</a>,
-after using synvert, you can use check what changes synvert does to
-your ruby code.</p>
+<p>Synvert also requires <code>active_support/core_ext/object</code>, so you can use
+lots of helper methods introduced in <code>active_support/core_ext/object</code>.</p>
 
-<p>You can write your own snippets then load them by <code>--load</code>.</p>
-
-<h3>Dependencies</h3>
-
-<p>Synvert uses <a href="https://github.com/whitequark/parser">parser</a> and <a href="https://github.com/whitequark/ast">ast</a>, parser helps to parse ruby source
-code and rewrite ast nodes, ast is a small library for working with
-immutable abstract syntax trees. It&#39;s highly recommended to look through
-these 2 libraries.</p>
+<p>Check out helper source code <a href="https://github.com/xinminlabs/synvert-core/blob/master/lib/synvert/core/rewriter/helper.rb">here</a></p>
 
 </div>
 
