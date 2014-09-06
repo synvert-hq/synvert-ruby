@@ -122,389 +122,264 @@ Parser::CurrentRuby.parse(&quot;self.class.serialized_attributes&quot;)</code></
 <span class="c1">#       (const</span>
 <span class="c1">#         (const nil :EmailSpec) :Matchers))))</span>
 </code></pre></div>
-<h2>Ast node attributes</h2>
+<h2>AST node attributes</h2>
 
-<p>The followings are all ast node attributes you can use.</p>
+<p>AST node is just an array, by default, it has only 2 attributes,
+the first element is <code>type</code>, the others are <code>children</code>.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">node</span> <span class="o">=</span> <span class="no">Parser</span><span class="o">::</span><span class="no">CurrentRuby</span><span class="o">.</span><span class="n">parse</span> <span class="s2">&quot;user = User.new&quot;</span>
+<span class="c1"># (lvasgn :user</span>
+<span class="c1">#   (send</span>
+<span class="c1">#     (const nil :User) :new))</span>
 
-<h3>type</h3>
+<span class="n">node</span><span class="o">.</span><span class="n">type</span>
+<span class="c1"># =&gt; :lvasgn</span>
 
-<p>type of ast node, e.g. <code>class</code>, <code>def</code>, <code>send</code>.</p>
+<span class="n">node</span><span class="o">.</span><span class="n">children</span>
+<span class="c1"># [:user, (send (const nil :User) :new))</span>
+</code></pre></div>
+<p>synvert adds many additional attributes.</p>
 
-<h3>name</h3>
+<h3>:send node</h3>
 
-<h5>class node</h5>
+<p><code>receiver</code>, <code>message</code> and <code>arguments</code> attributes for :send node.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">node</span> <span class="o">=</span> <span class="no">Parser</span><span class="o">::</span><span class="no">CurrentRuby</span><span class="o">.</span><span class="n">parse</span> <span class="s2">&quot;User.find 1&quot;</span>
+<span class="c1"># (send</span>
+<span class="c1">#   (const nil :User) :find</span>
+<span class="c1">#     (int 1))</span>
 
-<p>source code</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Synvert</span>
-<span class="k">end</span>
-</code></pre></div>
-<p>ast node</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(class
-  (const nil :Synvert) nil nil)
-</code></pre></div>
-<p>name</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(const nil :Synvert)
-</code></pre></div>
-<h5>module node</h5>
+<span class="n">node</span><span class="o">.</span><span class="n">receiver</span>
+<span class="c1"># =&gt; (const nil :user)</span>
 
-<p>source code</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="k">module</span> <span class="nn">Synvert</span>
-<span class="k">end</span>
-</code></pre></div>
-<p>ast node</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(module
-  (const nil :Synvert) nil)
-</code></pre></div>
-<p>name</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(const nil :Synvert)
-</code></pre></div>
-<h5>def node</h5>
+<span class="n">node</span><span class="o">.</span><span class="n">message</span>
+<span class="c1"># =&gt; :find</span>
 
-<p>source code</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">synvert</span>
-<span class="k">end</span>
+<span class="n">node</span><span class="o">.</span><span class="n">arguments</span>
+<span class="c1"># [(int 1)]</span>
 </code></pre></div>
-<p>ast node</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(def :synvert
-  (args) nil)
-</code></pre></div>
-<p>name</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">:synvert
-</code></pre></div>
-<h5>defs node</h5>
+<h3>:class node</h3>
 
-<p>source code</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">defs</span> <span class="nb">self</span><span class="o">.</span><span class="n">current_node</span>
-<span class="k">end</span>
-</code></pre></div>
-<p>ast node</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(defs
-  (self) :current_node
-  (args) nil)
-</code></pre></div>
-<p>name</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">:current_node
-</code></pre></div>
-<h3>receiver</h3>
+<p><code>name</code>, <code>parent_class</code> for :class node.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">node</span> <span class="o">=</span> <span class="no">Parser</span><span class="o">::</span><span class="no">CurrentRuby</span><span class="o">.</span><span class="n">parse</span> <span class="s2">&quot;class Admin &lt; User; end&quot;</span>
+<span class="c1"># (class</span>
+<span class="c1">#   (const nil :Admin)</span>
+<span class="c1">#     (const nil :User) nil)</span>
 
-<h5>send node</h5>
+<span class="n">node</span><span class="o">.</span><span class="n">name</span>
+<span class="c1"># =&gt; (const nil :Admin)</span>
 
-<p>source code</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span> <span class="ss">:post</span>
+<span class="n">node</span><span class="o">.</span><span class="n">parent_class</span>
+<span class="c1"># =&gt; (const nil :User)</span>
 </code></pre></div>
-<p>ast node</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(send
-  (const nil :FactoryGirl) :create
-  (sym :post))
-</code></pre></div>
-<p>receiver</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(const nil :FactoryGirl)
-</code></pre></div>
-<h3>message</h3>
+<h3>:module node</h3>
 
-<h5>send node</h5>
+<p><code>name</code> for :module node.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">node</span> <span class="o">=</span> <span class="no">Parser</span><span class="o">::</span><span class="no">CurrentRuby</span><span class="o">.</span><span class="n">parse</span> <span class="s2">&quot;module Helper; end&quot;</span>
+<span class="c1"># (module</span>
+<span class="c1">#   (const nil :Helper) nil)</span>
 
-<p>source code</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span> <span class="ss">:post</span>
+<span class="n">node</span><span class="o">.</span><span class="n">name</span>
+<span class="c1"># (const nil Helper)</span>
 </code></pre></div>
-<p>ast node</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(send
-  (const nil :FactoryGirl) :create
-  (sym :post))
-</code></pre></div>
-<p>message</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">:create
-</code></pre></div>
-<h3>arguments</h3>
+<h3>:def node</h3>
 
-<h5>send node</h5>
+<p><code>name</code>, <code>arguments</code> and <code>body</code> for :def node.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">code</span> <span class="o">=&lt;&lt;-</span><span class="no">EOC</span>
+<span class="sh">def full_name(first_name, last_name)</span>
+<span class="sh">  first_name + &quot; &quot; + last_name</span>
+<span class="sh">end</span>
+<span class="no">EOC</span>
+<span class="n">node</span> <span class="o">=</span> <span class="no">Parser</span><span class="o">::</span><span class="no">CurrentRuby</span><span class="o">.</span><span class="n">parse</span> <span class="n">code</span>
+<span class="c1"># (def :full_name</span>
+<span class="c1">#   (args</span>
+<span class="c1">#     (arg :first_name)</span>
+<span class="c1">#     (arg :last_name))</span>
+<span class="c1">#   (send</span>
+<span class="c1">#     (send</span>
+<span class="c1">#       (lvar :first_name) :+</span>
+<span class="c1">#       (str &quot; &quot;)) :+</span>
+<span class="c1">#     (lvar :last_name)))</span>
 
-<p>source code</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span> <span class="ss">:post</span><span class="p">,</span> <span class="ss">title</span><span class="p">:</span> <span class="s1">&#39;post&#39;</span>
-</code></pre></div>
-<p>ast node</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(send
-  (const nil :FactoryGirl) :create
-  (sym :post)
-  (hash
-    (pair
-      (sym :title)
-      (send nil :post))))
-</code></pre></div>
-<p>arguments</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">[ (sym :post),
-  (hash
-    (pair
-      (sym :title)
-      (send nil :post)))) ]
-</code></pre></div>
-<h5>block node</h5>
+<span class="n">node</span><span class="o">.</span><span class="n">name</span>
+<span class="c1"># :full_name</span>
 
-<p>source code</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">RSpec</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
-<span class="k">end</span>
-</code></pre></div>
-<p>ast node</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(block
-  (send
-    (const nil :RSpec) :configure)
-  (args
-    (arg :config)) nil)
-</code></pre></div>
-<p>arguments</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">[ (arg :config) ]
-</code></pre></div>
-<h5>defined? node</h5>
+<span class="n">node</span><span class="o">.</span><span class="n">arguments</span>
+<span class="c1"># (args (arg :first_name) (arg :last_name))</span>
 
-<p>source code</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">defined?</span><span class="p">(</span><span class="no">Bundler</span><span class="p">)</span>
+<span class="n">node</span><span class="o">.</span><span class="n">body</span>
+<span class="c1"># (send (send (lvar :first_name) :+ (str &quot; &quot;)) :+ (lvar :last_name))</span>
 </code></pre></div>
-<p>ast node</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(defined?
-  (const nil :Bundler))
-</code></pre></div>
-<p>arguments</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(const nil :Bundler)
-</code></pre></div>
-<h3>caller</h3>
+<h3>:defs node</h3>
 
-<h5>block node</h5>
+<p><code>name</code> and <code>body</code> for :defs node.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">code</span> <span class="o">=&lt;&lt;</span><span class="no">EOC</span>
+<span class="sh">def self.active</span>
+<span class="sh">  where(active: true)</span>
+<span class="sh">end</span>
+<span class="no">EOC</span>
+<span class="n">node</span> <span class="o">=</span> <span class="no">Parser</span><span class="o">::</span><span class="no">CurrentRuby</span><span class="o">.</span><span class="n">parse</span> <span class="n">code</span>
+<span class="c1"># (defs</span>
+<span class="c1">#   (self) :active</span>
+<span class="c1">#   (args)</span>
+<span class="c1">#   (send nil :where</span>
+<span class="c1">#     (hash</span>
+<span class="c1">#       (pair</span>
+<span class="c1">#         (sym :active)</span>
+<span class="c1">#         (true)))))</span>
 
-<p>source code</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">RSpec</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
-<span class="k">end</span>
-</code></pre></div>
-<p>ast node</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(block
-  (send
-    (const nil :RSpec) :configure)
-  (args
-    (arg :config)) nil)
-</code></pre></div>
-<p>caller</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(send (const nil :RSpec) :configure)
-</code></pre></div>
-<h3>body</h3>
+<span class="n">node</span><span class="o">.</span><span class="n">name</span>
+<span class="c1"># :active</span>
 
-<h5>begin node</h5>
+<span class="n">node</span><span class="o">.</span><span class="n">arguments</span>
+<span class="c1"># (send nil :where (hash (pair (sym :active) (true))))</span>
+</code></pre></div>
+<h3>:block node</h3>
 
-<p>source code</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">foo</span>
-<span class="n">bar</span>
-</code></pre></div>
-<p>ast node</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(begin
-  (send nil :foo)
-  (send nil :bar))
-</code></pre></div>
-<p>body</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">[ (send nil :foo),
-  (send nil :bar)) ]
-</code></pre></div>
-<h5>block node</h5>
+<p><code>caller</code>, <code>arguments</code> and <code>body</code> for :block node.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">code</span> <span class="o">=&lt;&lt;-</span><span class="no">EOC</span>
+<span class="sh">RSpec.configure do |config|</span>
+<span class="sh">  config.order = &#39;random&#39;</span>
+<span class="sh">end</span>
+<span class="no">EOC</span>
+<span class="n">node</span> <span class="o">=</span> <span class="no">Parser</span><span class="o">::</span><span class="no">CurrentRuby</span><span class="o">.</span><span class="n">parse</span> <span class="n">code</span>
+<span class="c1"># (block</span>
+<span class="c1">#   (send</span>
+<span class="c1">#     (const nil :RSpec) :configure)</span>
+<span class="c1">#   (args</span>
+<span class="c1">#     (arg :config))</span>
+<span class="c1">#   (send</span>
+<span class="c1">#     (lvar :config) :order=</span>
+<span class="c1">#     (str &quot;random&quot;)))</span>
 
-<p>source code</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">RSpec</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
-  <span class="kp">include</span> <span class="no">EmailSpec</span><span class="o">::</span><span class="no">Helpers</span>
-  <span class="kp">include</span> <span class="no">EmailSpec</span><span class="o">::</span><span class="no">Matchers</span>
-<span class="k">end</span>
-</code></pre></div>
-<p>ast node</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(block
-  (send
-    (const nil :RSpec) :configure)
-  (args
-    (arg :config))
-  (begin
-    (send nil :include
-      (const
-        (const nil :EmailSpec) :Helpers))
-    (send nil :include
-      (const
-        (const nil :EmailSpec) :Matchers))))
-</code></pre></div>
-<p>body</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">[ (send nil :include
-    (const
-      (const nil :EmailSpec) :Helpers)),
-  (send nil :include
-    (const
-      (const nil :EmailSpec) :Matchers)))) ]
-</code></pre></div>
-<h3>keys</h3>
+<span class="n">node</span><span class="o">.</span><span class="n">caller</span>
+<span class="c1"># (send (const nil :RSpec) :configure)</span>
 
-<h5>hash node</h5>
+<span class="n">node</span><span class="o">.</span><span class="n">arguments</span>
+<span class="c1"># (args (arg :config))</span>
 
-<p>source code</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="p">{</span><span class="ss">foo</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span> <span class="o">=&gt;</span> <span class="ss">:bar</span><span class="p">}</span>
+<span class="n">node</span><span class="o">.</span><span class="n">body</span>
+<span class="c1"># (send (lvar :config) :order= (str &quot;random&quot;))</span>
 </code></pre></div>
-<p>ast node</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(hash
-  (pair
-    (sym :foo)
-    (str &quot;bar&quot;))
-  (pair
-    (str &quot;foo&quot;)
-    (sym :bar)))
-</code></pre></div>
-<p>keys</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">[ (sym :foo),
-  (str &quot;foo&quot;) ]
-</code></pre></div>
-<h3>values</h3>
+<h3>:defined? node</h3>
 
-<h5>hash node</h5>
+<p><code>arguments</code> for :defined? node.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">node</span> <span class="o">=</span> <span class="no">Parser</span><span class="o">::</span><span class="no">CurrentRuby</span><span class="o">.</span><span class="n">parse</span> <span class="s2">&quot;defined?(User)&quot;</span>
+<span class="c1"># (defined?</span>
+<span class="c1">#   (const nil :User))</span>
 
-<p>source code</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="p">{</span><span class="ss">foo</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span> <span class="o">=&gt;</span> <span class="ss">:bar</span><span class="p">}</span>
+<span class="n">node</span><span class="o">.</span><span class="n">arguments</span>
+<span class="c1"># [(const nil :User)]</span>
 </code></pre></div>
-<p>ast node</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(hash
-  (pair
-    (sym :foo)
-    (str &quot;bar&quot;))
-  (pair
-    (str &quot;foo&quot;)
-    (sym :bar)))
-</code></pre></div>
-<p>values</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">[ (str &quot;bar&quot;),
-  (sym :bar) ]
-</code></pre></div>
-<h3>key</h3>
+<h3>hash node</h3>
 
-<h5>pair node</h5>
+<p><code>keys</code>, <code>values</code> for :hash node.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">node</span> <span class="o">=</span> <span class="no">Parser</span><span class="o">::</span><span class="no">CurrentRuby</span><span class="o">.</span><span class="n">parse</span> <span class="s2">&quot;{first_name: &#39;richard&#39;, last_name: &#39;huang&#39;}&quot;</span>
+<span class="c1"># (hash</span>
+<span class="c1">#   (pair</span>
+<span class="c1">#     (sym :first_name)</span>
+<span class="c1">#     (str &quot;richard&quot;))</span>
+<span class="c1">#   (pair</span>
+<span class="c1">#     (sym :last_name)</span>
+<span class="c1">#     (str &quot;huang&quot;)))</span>
 
-<p>source code</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="p">{</span><span class="ss">foo</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">}</span>
-</code></pre></div>
-<p>ast node</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(hash
-  (pair
-    (sym :foo)
-    (str &quot;bar&quot;)))
-</code></pre></div>
-<p>key</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(sym :foo)
-</code></pre></div>
-<h3>value</h3>
+<span class="n">node</span><span class="o">.</span><span class="n">keys</span>
+<span class="c1"># [(sym :first_name), (sym :last_name)]</span>
 
-<h5>pair node</h5>
+<span class="n">node</span><span class="o">.</span><span class="n">values</span>
+<span class="c1"># [(str &quot;richard&quot;), (str &quot;huang&quot;)]</span>
+</code></pre></div>
+<h3>pair node</h3>
 
-<p>source code</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="p">{</span><span class="ss">foo</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">}</span>
-</code></pre></div>
-<p>ast node</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(hash
-  (pair
-    (sym :foo)
-    (str &quot;bar&quot;)))
-</code></pre></div>
-<p>value</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(str &quot;bar&quot;)
-</code></pre></div>
-<h3>condition</h3>
+<p><code>key</code> and <code>value</code> for :pair node.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">node</span> <span class="o">=</span> <span class="no">Parser</span><span class="o">::</span><span class="no">CurrentRuby</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;{first_name: &#39;richard&#39;, last_name: &#39;huang&#39;}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">first</span>
+<span class="c1"># (pair</span>
+<span class="c1">#   (sym :first_name)</span>
+<span class="c1">#   (str &quot;richard&quot;))</span>
 
-<h5>if node</h5>
+<span class="n">node</span><span class="o">.</span><span class="n">key</span>
+<span class="c1"># (sym :first_name)</span>
 
-<p>source code</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="k">if</span> <span class="n">defined?</span><span class="p">(</span><span class="no">Bundler</span><span class="p">)</span>
-<span class="k">end</span>
+<span class="n">node</span><span class="o">.</span><span class="n">value</span>
+<span class="c1"># (str &quot;richard&quot;)</span>
 </code></pre></div>
-<p>ast node</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(if
-  (defined?
-    (const nil :Bundler)) nil nil)
-</code></pre></div>
-<p>condition</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(defined? (const nil :Bundler))
-</code></pre></div>
-<h2>Ast node method</h2>
+<h2>AST node method</h2>
 
 <h3>has_key?(key)</h3>
 
-<h5>hash node</h5>
+<p>check if :hash node contains key.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">node</span> <span class="o">=</span> <span class="no">Parser</span><span class="o">::</span><span class="no">CurrentRuby</span><span class="o">.</span><span class="n">parse</span> <span class="s2">&quot;{first_name: &#39;richard&#39;, last_name: &#39;huang&#39;}&quot;</span>
+<span class="c1"># (hash</span>
+<span class="c1">#   (pair</span>
+<span class="c1">#     (sym :first_name)</span>
+<span class="c1">#     (str &quot;richard&quot;))</span>
+<span class="c1">#   (pair</span>
+<span class="c1">#     (sym :last_name)</span>
+<span class="c1">#     (str &quot;huang&quot;)))</span>
 
-<p>source code</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="p">{</span><span class="ss">foo</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">}</span>
-</code></pre></div>
-<p>ast node</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(hash
-  (pair
-    (sym  :foo)
-    (str  &quot;bar&quot;)))
-</code></pre></div>
-<p>example</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">node</span><span class="o">.</span><span class="n">has_key?</span><span class="p">(</span><span class="ss">:foo</span><span class="p">)</span> <span class="c1">#=&gt; true</span>
-<span class="n">node</span><span class="o">.</span><span class="n">has_key?</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span> <span class="c1">#=&gt; false</span>
-<span class="n">node</span><span class="o">.</span><span class="n">has_key?</span><span class="p">(</span><span class="ss">:bar</span><span class="p">)</span> <span class="c1">#=&gt; false</span>
+<span class="n">node</span><span class="o">.</span><span class="n">has_key?</span> <span class="ss">:first_name</span>
+<span class="c1"># true</span>
+
+<span class="n">node</span><span class="o">.</span><span class="n">has_key?</span> <span class="ss">:full_name</span>
+<span class="c1"># false</span>
 </code></pre></div>
 <h3>hash_value(key)</h3>
 
-<p>source code</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="p">{</span><span class="ss">foo</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">}</span>
-</code></pre></div>
-<p>ast node</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(hash
-  (pair
-    (sym  :foo)
-    (str  &quot;bar&quot;)))
-</code></pre></div>
-<p>example</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">node</span><span class="o">.</span><span class="n">hash_value</span><span class="p">(</span><span class="ss">:foo</span><span class="p">)</span> <span class="c1">#=&gt;  (str  &quot;bar&quot;)</span>
-<span class="n">node</span><span class="o">.</span><span class="n">hash_value</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span> <span class="c1">#=&gt; nil</span>
-<span class="n">node</span><span class="o">.</span><span class="n">hash_value</span><span class="p">(</span><span class="ss">:bar</span><span class="p">)</span> <span class="c1">#=&gt; nil</span>
+<p>fetch value for specified hash key.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">node</span> <span class="o">=</span> <span class="no">Parser</span><span class="o">::</span><span class="no">CurrentRuby</span><span class="o">.</span><span class="n">parse</span> <span class="s2">&quot;{first_name: &#39;richard&#39;, last_name: &#39;huang&#39;}&quot;</span>
+<span class="c1"># (hash</span>
+<span class="c1">#   (pair</span>
+<span class="c1">#     (sym :first_name)</span>
+<span class="c1">#     (str &quot;richard&quot;))</span>
+<span class="c1">#   (pair</span>
+<span class="c1">#     (sym :last_name)</span>
+<span class="c1">#     (str &quot;huang&quot;)))</span>
+
+<span class="n">node</span><span class="o">.</span><span class="n">hash_value</span> <span class="ss">:first_name</span>
+<span class="c1"># (str &quot;richard&quot;)</span>
 </code></pre></div>
 <h3>to_source</h3>
 
-<p>returns exactly source code for an ast node</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="c1"># node = (hash</span>
-           <span class="p">(</span><span class="n">pair</span>
-             <span class="p">(</span><span class="n">sym</span>  <span class="ss">:foo</span><span class="p">)</span>
-             <span class="p">(</span><span class="n">str</span>  <span class="s2">&quot;bar&quot;</span><span class="p">)))</span>
-<span class="n">node</span><span class="o">.</span><span class="n">to_source</span> <span class="c1">#=&gt; {foo: &quot;bar&quot;}</span>
+<p>return exactly source code for an ast node.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">node</span> <span class="o">=</span> <span class="no">Parser</span><span class="o">::</span><span class="no">CurrentRuby</span><span class="o">.</span><span class="n">parse</span> <span class="s2">&quot;{first_name: &#39;richard&#39;, last_name: &#39;huang&#39;}&quot;</span>
+<span class="n">node</span><span class="o">.</span><span class="n">to_source</span>
+<span class="c1"># {first_name: &#39;richard&#39;, last_name: &#39;huang&#39;}</span>
 </code></pre></div>
 <h3>to_value</h3>
 
-<p>returns exactly value for an ast node</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="c1"># node = (hash</span>
-           <span class="p">(</span><span class="n">pair</span>
-             <span class="p">(</span><span class="n">sym</span>  <span class="ss">:foo</span><span class="p">)</span>
-             <span class="p">(</span><span class="n">str</span>  <span class="s2">&quot;bar&quot;</span><span class="p">)))</span>
-<span class="n">node</span><span class="o">.</span><span class="n">hash_value</span><span class="p">(</span><span class="ss">:foo</span><span class="p">)</span><span class="o">.</span><span class="n">to_value</span> <span class="c1">#=&gt; &quot;bar&quot;</span>
+<p>returns exactly value for an ast node.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">node</span> <span class="o">=</span> <span class="no">Parser</span><span class="o">::</span><span class="no">CurrentRuby</span><span class="o">.</span><span class="n">parse</span> <span class="s2">&quot;{first_name: &#39;richard&#39;, last_name: &#39;huang&#39;}&quot;</span>
+<span class="n">node</span><span class="o">.</span><span class="n">hash_value</span><span class="p">(</span><span class="ss">:first_name</span><span class="p">)</span><span class="o">.</span><span class="n">to_value</span>
+<span class="c1"># &quot;richard&quot;</span>
 </code></pre></div>
-<h2>Ast node operator</h2>
+<h2>AST node operator</h2>
 
 <h3>any</h3>
 
-<p>source code</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">config</span><span class="o">.</span><span class="n">middleware</span><span class="o">.</span><span class="n">swap</span> <span class="no">ActionDispatch</span><span class="o">::</span><span class="no">ShowExceptions</span><span class="p">,</span> <span class="no">Lifo</span><span class="o">::</span><span class="no">ShowExceptions</span>
-</code></pre></div>
-<p>ast node</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(send
-  (send
-    (send nil :config) :middleware) :swap
-  (const
-    (const nil :ActionDispatch) :ShowExceptions)
-  (const
-    (const nil :Lifo) :ShowExceptions))
+<p>Any child node matches.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">node</span> <span class="o">=</span> <span class="no">Parser</span><span class="o">::</span><span class="no">CurrentRuby</span><span class="o">.</span><span class="n">parse</span> <span class="s2">&quot;config.middleware.swap ActionDispatch::ShowExceptions, Lifo::ShowExceptions&quot;</span>
+<span class="c1"># (send</span>
+<span class="c1">#   (send</span>
+<span class="c1">#     (send nil :config) :middleware) :swap</span>
+<span class="c1">#   (const</span>
+<span class="c1">#     (const nil :ActionDispatch) :ShowExceptions)</span>
+<span class="c1">#   (const</span>
+<span class="c1">#     (const nil :Lifo) :ShowExceptions))</span>
 </code></pre></div>
 <p>matches</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">arguments</span><span class="p">:</span> <span class="p">{</span><span class="ss">any</span><span class="p">:</span> <span class="s1">&#39;Lifo::ShowExceptions&#39;</span><span class="p">}</span>
 </code></pre></div>
 <h3>not</h3>
 
-<p>source code</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">obj</span><span class="o">.</span><span class="n">should</span> <span class="n">matcher</span>
-</code></pre></div>
-<p>ast node</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">(send
-  (send nil :obj) :should
-  (send nil :matcher))
+<p>Not matches.</p>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="n">node</span> <span class="o">=</span> <span class="no">Parser</span><span class="o">::</span><span class="no">CurrentRuby</span><span class="o">.</span><span class="n">parse</span> <span class="s2">&quot;obj.should matcher&quot;</span>
+<span class="c1"># (send</span>
+<span class="c1">#   (send nil :obj) :should</span>
+<span class="c1">#   (send nil :matcher))</span>
 </code></pre></div>
 <p>matches</p>
 <div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">receiver</span><span class="p">:</span> <span class="p">{</span><span class="ow">not</span><span class="p">:</span> <span class="kp">nil</span><span class="p">},</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;should&#39;</span>
 </code></pre></div>
+<p>If you want to get more, please read <a href="https://github.com/xinminlabs/synvert-core/blob/master/lib/synvert/core/node_ext.rb">here</a>.</p>
+
 </div>
 
     </div>

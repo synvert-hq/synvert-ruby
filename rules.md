@@ -84,554 +84,291 @@ Parser::CurrentRuby.parse code
 #         (const nil :EmailSpec) :Matchers))))
 ```
 
-## Ast node attributes
+## AST node attributes
 
-The followings are all ast node attributes you can use.
-
-### type
-
-type of ast node, e.g. `class`, `def`, `send`.
-
-### name
-
-##### class node
-
-source code
+AST node is just an array, by default, it has only 2 attributes,
+the first element is `type`, the others are `children`.
 
 ```ruby
-class Synvert
+node = Parser::CurrentRuby.parse "user = User.new"
+# (lvasgn :user
+#   (send
+#     (const nil :User) :new))
+
+node.type
+# => :lvasgn
+
+node.children
+# [:user, (send (const nil :User) :new))
+```
+
+synvert adds many additional attributes.
+
+### :send node
+
+`receiver`, `message` and `arguments` attributes for :send node.
+
+```ruby
+node = Parser::CurrentRuby.parse "User.find 1"
+# (send
+#   (const nil :User) :find
+#     (int 1))
+
+node.receiver
+# => (const nil :user)
+
+node.message
+# => :find
+
+node.arguments
+# [(int 1)]
+```
+
+### :class node
+
+`name`, `parent_class` for :class node.
+
+```ruby
+node = Parser::CurrentRuby.parse "class Admin < User; end"
+# (class
+#   (const nil :Admin)
+#     (const nil :User) nil)
+
+node.name
+# => (const nil :Admin)
+
+node.parent_class
+# => (const nil :User)
+```
+
+### :module node
+
+`name` for :module node.
+
+```ruby
+node = Parser::CurrentRuby.parse "module Helper; end"
+# (module
+#   (const nil :Helper) nil)
+
+node.name
+# (const nil Helper)
+```
+
+### :def node
+
+`name`, `arguments` and `body` for :def node.
+
+```ruby
+code =<<-EOC
+def full_name(first_name, last_name)
+  first_name + " " + last_name
 end
+EOC
+node = Parser::CurrentRuby.parse code
+# (def :full_name
+#   (args
+#     (arg :first_name)
+#     (arg :last_name))
+#   (send
+#     (send
+#       (lvar :first_name) :+
+#       (str " ")) :+
+#     (lvar :last_name)))
+
+node.name
+# :full_name
+
+node.arguments
+# (args (arg :first_name) (arg :last_name))
+
+node.body
+# (send (send (lvar :first_name) :+ (str " ")) :+ (lvar :last_name))
 ```
 
-ast node
+### :defs node
 
-```
-(class
-  (const nil :Synvert) nil nil)
-```
-
-name
-
-```
-(const nil :Synvert)
-```
-
-##### module node
-
-source code
+`name` and `body` for :defs node.
 
 ```ruby
-module Synvert
+code =<<EOC
+def self.active
+  where(active: true)
 end
+EOC
+node = Parser::CurrentRuby.parse code
+# (defs
+#   (self) :active
+#   (args)
+#   (send nil :where
+#     (hash
+#       (pair
+#         (sym :active)
+#         (true)))))
+
+node.name
+# :active
+
+node.arguments
+# (send nil :where (hash (pair (sym :active) (true))))
 ```
 
-ast node
+### :block node
 
-```
-(module
-  (const nil :Synvert) nil)
-```
-
-name
-
-```
-(const nil :Synvert)
-```
-
-##### def node
-
-source code
+`caller`, `arguments` and `body` for :block node.
 
 ```ruby
-def synvert
-end
-```
-
-ast node
-
-```
-(def :synvert
-  (args) nil)
-```
-
-name
-
-```
-:synvert
-```
-
-##### defs node
-
-source code
-
-```ruby
-defs self.current_node
-end
-```
-
-ast node
-
-```
-(defs
-  (self) :current_node
-  (args) nil)
-```
-
-name
-
-```
-:current_node
-```
-
-### receiver
-
-##### send node
-
-source code
-
-```ruby
-FactoryGirl.create :post
-```
-
-ast node
-
-```
-(send
-  (const nil :FactoryGirl) :create
-  (sym :post))
-```
-
-receiver
-
-```
-(const nil :FactoryGirl)
-```
-
-### message
-
-##### send node
-
-source code
-
-```ruby
-FactoryGirl.create :post
-```
-
-ast node
-
-```
-(send
-  (const nil :FactoryGirl) :create
-  (sym :post))
-```
-
-message
-
-```
-:create
-```
-
-### arguments
-
-##### send node
-
-source code
-
-```ruby
-FactoryGirl.create :post, title: 'post'
-```
-
-ast node
-
-```
-(send
-  (const nil :FactoryGirl) :create
-  (sym :post)
-  (hash
-    (pair
-      (sym :title)
-      (send nil :post))))
-```
-
-arguments
-
-```
-[ (sym :post),
-  (hash
-    (pair
-      (sym :title)
-      (send nil :post)))) ]
-```
-
-##### block node
-
-source code
-
-```ruby
+code =<<-EOC
 RSpec.configure do |config|
+  config.order = 'random'
 end
+EOC
+node = Parser::CurrentRuby.parse code
+# (block
+#   (send
+#     (const nil :RSpec) :configure)
+#   (args
+#     (arg :config))
+#   (send
+#     (lvar :config) :order=
+#     (str "random")))
+
+node.caller
+# (send (const nil :RSpec) :configure)
+
+node.arguments
+# (args (arg :config))
+
+node.body
+# (send (lvar :config) :order= (str "random"))
 ```
 
-ast node
+### :defined? node
 
-```
-(block
-  (send
-    (const nil :RSpec) :configure)
-  (args
-    (arg :config)) nil)
-```
-
-arguments
-
-```
-[ (arg :config) ]
-```
-
-##### defined? node
-
-source code
+`arguments` for :defined? node.
 
 ```ruby
-defined?(Bundler)
+node = Parser::CurrentRuby.parse "defined?(User)"
+# (defined?
+#   (const nil :User))
+
+node.arguments
+# [(const nil :User)]
 ```
 
-ast node
+### hash node
 
-```
-(defined?
-  (const nil :Bundler))
-```
-
-arguments
-
-```
-(const nil :Bundler)
-```
-
-### caller
-
-##### block node
-
-source code
+`keys`, `values` for :hash node.
 
 ```ruby
-RSpec.configure do |config|
-end
+node = Parser::CurrentRuby.parse "{first_name: 'richard', last_name: 'huang'}"
+# (hash
+#   (pair
+#     (sym :first_name)
+#     (str "richard"))
+#   (pair
+#     (sym :last_name)
+#     (str "huang")))
+
+node.keys
+# [(sym :first_name), (sym :last_name)]
+
+node.values
+# [(str "richard"), (str "huang")]
 ```
 
-ast node
+### pair node
 
-```
-(block
-  (send
-    (const nil :RSpec) :configure)
-  (args
-    (arg :config)) nil)
-```
-
-caller
-
-```
-(send (const nil :RSpec) :configure)
-```
-
-### body
-
-##### begin node
-
-source code
+`key` and `value` for :pair node.
 
 ```ruby
-foo
-bar
+node = Parser::CurrentRuby.parse("{first_name: 'richard', last_name: 'huang'}").children.first
+# (pair
+#   (sym :first_name)
+#   (str "richard"))
+
+node.key
+# (sym :first_name)
+
+node.value
+# (str "richard")
 ```
 
-ast node
-
-```
-(begin
-  (send nil :foo)
-  (send nil :bar))
-```
-
-body
-
-```
-[ (send nil :foo),
-  (send nil :bar)) ]
-```
-
-##### block node
-
-source code
-
-```ruby
-RSpec.configure do |config|
-  include EmailSpec::Helpers
-  include EmailSpec::Matchers
-end
-```
-
-ast node
-
-```
-(block
-  (send
-    (const nil :RSpec) :configure)
-  (args
-    (arg :config))
-  (begin
-    (send nil :include
-      (const
-        (const nil :EmailSpec) :Helpers))
-    (send nil :include
-      (const
-        (const nil :EmailSpec) :Matchers))))
-```
-
-body
-
-```
-[ (send nil :include
-    (const
-      (const nil :EmailSpec) :Helpers)),
-  (send nil :include
-    (const
-      (const nil :EmailSpec) :Matchers)))) ]
-```
-
-### keys
-
-##### hash node
-
-source code
-
-```ruby
-{foo: 'bar', 'foo' => :bar}
-```
-
-ast node
-
-```
-(hash
-  (pair
-    (sym :foo)
-    (str "bar"))
-  (pair
-    (str "foo")
-    (sym :bar)))
-```
-
-keys
-
-```
-[ (sym :foo),
-  (str "foo") ]
-```
-
-### values
-
-##### hash node
-
-source code
-
-```ruby
-{foo: 'bar', 'foo' => :bar}
-```
-
-ast node
-
-```
-(hash
-  (pair
-    (sym :foo)
-    (str "bar"))
-  (pair
-    (str "foo")
-    (sym :bar)))
-```
-
-values
-
-```
-[ (str "bar"),
-  (sym :bar) ]
-```
-
-### key
-
-##### pair node
-
-source code
-
-```ruby
-{foo: 'bar'}
-```
-
-ast node
-
-```
-(hash
-  (pair
-    (sym :foo)
-    (str "bar")))
-```
-
-key
-
-```
-(sym :foo)
-```
-
-### value
-
-##### pair node
-
-source code
-
-```ruby
-{foo: 'bar'}
-```
-
-ast node
-
-```
-(hash
-  (pair
-    (sym :foo)
-    (str "bar")))
-```
-
-value
-
-```
-(str "bar")
-```
-
-### condition
-
-##### if node
-
-source code
-
-```ruby
-if defined?(Bundler)
-end
-```
-
-ast node
-
-```
-(if
-  (defined?
-    (const nil :Bundler)) nil nil)
-```
-
-condition
-
-```
-(defined? (const nil :Bundler))
-```
-
-## Ast node method
+## AST node method
 
 ### has_key?(key)
 
-##### hash node
-
-source code
+check if :hash node contains key.
 
 ```ruby
-{foo: 'bar'}
-```
+node = Parser::CurrentRuby.parse "{first_name: 'richard', last_name: 'huang'}"
+# (hash
+#   (pair
+#     (sym :first_name)
+#     (str "richard"))
+#   (pair
+#     (sym :last_name)
+#     (str "huang")))
 
-ast node
+node.has_key? :first_name
+# true
 
-```
-(hash
-  (pair
-    (sym  :foo)
-    (str  "bar")))
-```
-
-example
-
-```ruby
-node.has_key?(:foo) #=> true
-node.has_key?('foo') #=> false
-node.has_key?(:bar) #=> false
+node.has_key? :full_name
+# false
 ```
 
 ### hash_value(key)
 
-source code
+fetch value for specified hash key.
 
 ```ruby
-{foo: 'bar'}
-```
+node = Parser::CurrentRuby.parse "{first_name: 'richard', last_name: 'huang'}"
+# (hash
+#   (pair
+#     (sym :first_name)
+#     (str "richard"))
+#   (pair
+#     (sym :last_name)
+#     (str "huang")))
 
-ast node
-
-```
-(hash
-  (pair
-    (sym  :foo)
-    (str  "bar")))
-```
-
-example
-
-```ruby
-node.hash_value(:foo) #=>  (str  "bar")
-node.hash_value('foo') #=> nil
-node.hash_value(:bar) #=> nil
+node.hash_value :first_name
+# (str "richard")
 ```
 
 ### to_source
 
-returns exactly source code for an ast node
+return exactly source code for an ast node.
 
 ```ruby
-# node = (hash
-           (pair
-             (sym  :foo)
-             (str  "bar")))
-node.to_source #=> {foo: "bar"}
+node = Parser::CurrentRuby.parse "{first_name: 'richard', last_name: 'huang'}"
+node.to_source
+# {first_name: 'richard', last_name: 'huang'}
 ```
 
 ### to_value
 
-returns exactly value for an ast node
+returns exactly value for an ast node.
 
 ```ruby
-# node = (hash
-           (pair
-             (sym  :foo)
-             (str  "bar")))
-node.hash_value(:foo).to_value #=> "bar"
+node = Parser::CurrentRuby.parse "{first_name: 'richard', last_name: 'huang'}"
+node.hash_value(:first_name).to_value
+# "richard"
 ```
 
-## Ast node operator
+## AST node operator
 
 ### any
 
-source code
+Any child node matches.
 
 ```ruby
-config.middleware.swap ActionDispatch::ShowExceptions, Lifo::ShowExceptions
-```
-
-ast node
-
-```
-(send
-  (send
-    (send nil :config) :middleware) :swap
-  (const
-    (const nil :ActionDispatch) :ShowExceptions)
-  (const
-    (const nil :Lifo) :ShowExceptions))
+node = Parser::CurrentRuby.parse "config.middleware.swap ActionDispatch::ShowExceptions, Lifo::ShowExceptions"
+# (send
+#   (send
+#     (send nil :config) :middleware) :swap
+#   (const
+#     (const nil :ActionDispatch) :ShowExceptions)
+#   (const
+#     (const nil :Lifo) :ShowExceptions))
 ```
 
 matches
@@ -642,18 +379,13 @@ type: 'send', arguments: {any: 'Lifo::ShowExceptions'}
 
 ### not
 
-source code
+Not matches.
 
 ```ruby
-obj.should matcher
-```
-
-ast node
-
-```
-(send
-  (send nil :obj) :should
-  (send nil :matcher))
+node = Parser::CurrentRuby.parse "obj.should matcher"
+# (send
+#   (send nil :obj) :should
+#   (send nil :matcher))
 ```
 
 matches
@@ -661,3 +393,7 @@ matches
 ```ruby
 type: 'send', receiver: {not: nil}, message: 'should'
 ```
+
+If you want to get more, please read [here][1].
+
+[1]: https://github.com/xinminlabs/synvert-core/blob/master/lib/synvert/core/node_ext.rb
