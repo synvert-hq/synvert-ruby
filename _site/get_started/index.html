@@ -58,7 +58,7 @@
 <p>To install the latest version, run</p>
 <div class="highlight"><pre><code class="text language-text" data-lang="text">$ gem install synvert
 </code></pre></div>
-<p>This will install Synvert, along with all of it&#39;s require dependencies.</p>
+<p>This will install synvert, along with synvert-core and other dependencies.</p>
 
 <h3>Usage</h3>
 
@@ -68,21 +68,31 @@ Usage: synvert [project_path]
     -d, --load SNIPPET_PATHS         load custom snippets, snippet paths can be local file path or remote http url
     -l, --list                       list all available snippets
     -q, --query QUERY                query specified snippets
-        --skip FILE_PATTERNS         skip specified files or directories, separated by comma, e.g.  app/models/post.rb,vendor/plugins/**/*.rb
-    -s, --show SNIPPET_NAME          show specified snippet description
+        --skip FILE_PATTERNS         skip specified files or directories, separated by comma, e.g. app/models/post.rb,vendor/plugins/**/*.rb
+    -s, --show SNIPPET_NAME          show specified snippet description, SNIPPET_NAME is combined by group and name, e.g. ruby/new_hash_syntax
         --sync                       sync snippets
-    -r, --run SNIPPET_NAMES          run specified snippets
+    -r, --run SNIPPET_NAMES          run specified snippets, each SNIPPET_NAME is combined by group and name, e.g. ruby/new_hash_syntax,ruby/new_lambda_syntax
     -v, --version                    show this version
 </code></pre></div>
-<p>First you should sync <a href="https://github.com/xinminlabs/synvert-snippets">snippets</a> from github</p>
+<h5>Sync snippets</h5>
+
+<p><a href="https://github.com/xinminlabs/synvert-snippets">snippets</a> are available on github, you can sync them any time you want.</p>
 <div class="highlight"><pre><code class="text language-text" data-lang="text">$ synvert --sync
 </code></pre></div>
-<p>list all available snippets</p>
+<h5>List snippets</h5>
+
+<p>List all available snippets</p>
 <div class="highlight"><pre><code class="text language-text" data-lang="text">$ synvert -l
 </code></pre></div>
-<p>run snippets <code>factory_girl_short_syntax</code>, <code>rspec_new_syntax</code> and
-<code>upgrade_rails_3_2_to_4_0</code> in rails-bestpractices.com repo.</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">$ synvert -r factory_girl_short_syntax,rspec_new_syntax,upgrade_rails_3_2_to_4_0 ~/Sites/railsbp/rails-bestpractices.com
+<h5>Show a snippet</h5>
+
+<p>Describe what a snippet does.</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">$ synvert -s factory_girl/use_short_syntax
+</code></pre></div>
+<h5>Run a snippet</h5>
+
+<p>Run a snippet, analyze and then change code.</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">$ synvert -r factory_girl/use_short_syntax ~/Sites/railsbp/rails-bestpractices.com
 </code></pre></div>
 <p>It&#39;s recommended that you use version control software like <a href="http://git-scm.com/">git</a>,
 after using synvert, you can use check what changes synvert does to

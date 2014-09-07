@@ -57,7 +57,7 @@
 
 <p>Adds <code>include FactoryGirl::Syntax::Methods</code> to class
 <code>Test::Unit::TestCase</code> in file <code>test/test_helper.rb</code></p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span> <span class="k">do</span>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;use_short_syntax&#39;</span> <span class="k">do</span>
   <span class="n">within_file</span> <span class="s1">&#39;test/test_helper.rb&#39;</span> <span class="k">do</span>
     <span class="n">with_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="nb">name</span><span class="p">:</span> <span class="s1">&#39;Test::Unit::TestCase&#39;</span> <span class="k">do</span>
       <span class="n">insert</span> <span class="s1">&#39;include FactoryGirl::Syntax::Methods&#39;</span>
@@ -67,7 +67,7 @@
 </code></pre></div>
 <p>FactoryGirl short syntax only works from factory_girl 2.0.0, so let&#39;s
 check the gem version.</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span> <span class="k">do</span>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;use_short_syntax&#39;</span> <span class="k">do</span>
   <span class="c1"># check factory_girl gem greater than 2.0.0 in Gemfile.lock</span>
   <span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">gte</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
 
@@ -81,7 +81,7 @@ check the gem version.</p>
 <p>It works, but it inserts code every time even <code>include
 FactoryGirl::Syntax::Methods</code> already exist in the class, so let&#39;s check
 if code doesn&#39;t exist, then insert.</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span> <span class="k">do</span>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;use_short_syntax&#39;</span> <span class="k">do</span>
   <span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">gte</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
 
   <span class="n">within_file</span> <span class="s1">&#39;test/test_helper.rb&#39;</span> <span class="k">do</span>
@@ -95,7 +95,7 @@ if code doesn&#39;t exist, then insert.</p>
 <span class="k">end</span>
 </code></pre></div>
 <p>It should also work in minitest and activesupport testcase</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span> <span class="k">do</span>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;use_short_syntax&#39;</span> <span class="k">do</span>
   <span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">gte</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
 
   <span class="n">within_file</span> <span class="s1">&#39;test/test_helper.rb&#39;</span> <span class="k">do</span>
@@ -111,7 +111,7 @@ if code doesn&#39;t exist, then insert.</p>
 <span class="k">end</span>
 </code></pre></div>
 <p>For rspec, it does a bit different</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span> <span class="k">do</span>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;use_short_syntax&#39;</span> <span class="k">do</span>
   <span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">gte</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
 
   <span class="n">within_file</span> <span class="s1">&#39;spec/spec_helper.rb&#39;</span> <span class="k">do</span>
@@ -128,7 +128,7 @@ if code doesn&#39;t exist, then insert.</p>
 <span class="k">end</span>
 </code></pre></div>
 <p>Finally, apply it for cucumber as well.</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span> <span class="k">do</span>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;use_short_syntax&#39;</span> <span class="k">do</span>
   <span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">gte</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
 
   <span class="n">within_file</span> <span class="s1">&#39;features/support/env.rb&#39;</span> <span class="k">do</span>
@@ -142,7 +142,7 @@ if code doesn&#39;t exist, then insert.</p>
 </code></pre></div>
 <p>We already insert <code>FactoryGirl::Syntax::Methods</code> module, then we can
 replace <code>FactoryGirl.create</code> with <code>create</code> now.</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span> <span class="k">do</span>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;use_short_syntax&#39;</span> <span class="k">do</span>
   <span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">gte</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
 
   <span class="sx">%w(test/**/*.rb spec/**/*.rb features/**/*.rb)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">file_pattern</span><span class="o">|</span>
@@ -158,7 +158,7 @@ replace <code>FactoryGirl.create</code> with <code>create</code> now.</p>
 <span class="k">end</span>
 </code></pre></div>
 <p>There are other short syntaxes, e.g. <code>build</code>, <code>create_list</code>, <code>build_list</code>, etc.</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span> <span class="k">do</span>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;use_short_syntax&#39;</span> <span class="k">do</span>
   <span class="n">if_gem</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="ss">gte</span><span class="p">:</span> <span class="s1">&#39;2.0.0&#39;</span><span class="p">}</span>
 
   <span class="sx">%w(test/**/*.rb spec/**/*.rb features/**/*.rb)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">file_pattern</span><span class="o">|</span>
@@ -174,7 +174,7 @@ replace <code>FactoryGirl.create</code> with <code>create</code> now.</p>
 <span class="k">end</span>
 </code></pre></div>
 <p>Finally don&#39;t forget to add description for the rewriter</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl_short_syntax&#39;</span> <span class="k">do</span>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;factory_girl&#39;</span><span class="p">,</span> <span class="s1">&#39;use_short_syntax&#39;</span> <span class="k">do</span>
   <span class="n">description</span> <span class="o">&lt;&lt;-</span><span class="no">EOF</span>
 <span class="sh">1. it adds FactoryGirl::Syntax::methods module to RSpec, Test::Unit,</span>
 <span class="sh">   Cucumber, Spainach, MiniTest, MiniTest::Spec, minitest-rails.</span>
@@ -196,7 +196,7 @@ replace <code>FactoryGirl.create</code> with <code>create</code> now.</p>
 <p>From rails 4, dynamic finder methods (e.g.
 <code>User.find_all_by_login(&#39;richard&#39;)</code>) is deprecated, we should use
 <code>User.where(login: &#39;richrd&#39;)</code> instead.</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s2">&quot;convert_dynamic_finders&quot;</span> <span class="k">do</span>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;rails&#39;</span><span class="p">,</span> <span class="s1">&#39;convert_dynamic_finders&#39;</span> <span class="k">do</span>
   <span class="n">within_files</span> <span class="s1">&#39;**/*.rb&#39;</span> <span class="k">do</span>
     <span class="n">with_node</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;send&#39;</span><span class="p">,</span> <span class="ss">message</span><span class="p">:</span> <span class="sr">/find_all_by_(.*)/</span> <span class="k">do</span>
       <span class="c1"># node is current matching ast node</span>
@@ -217,9 +217,9 @@ replace <code>FactoryGirl.create</code> with <code>create</code> now.</p>
 <span class="k">end</span>
 </code></pre></div>
 <p>We can use this snippet to convert other dynamic finders, e.g.
-<code>find_last_by_</code>, but we don&#39;t want to calculate the hash_params
+<code>find_last_by_</code>, but we don&#39;t want to repeat the hash_params
 in each instance, so let&#39;s use helper_method for reuse.</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s2">&quot;convert_dynamic_finders&quot;</span> <span class="k">do</span>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;rails&#39;</span><span class="p">,</span> <span class="s1">&#39;convert_dynamic_finders&#39;</span> <span class="k">do</span>
   <span class="n">helper_method</span> <span class="s1">&#39;dynamic_finder_to_hash&#39;</span> <span class="k">do</span> <span class="o">|</span><span class="n">prefix</span><span class="o">|</span>
     <span class="n">fields</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">to_s</span><span class="o">[</span><span class="n">prefix</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">.</span><span class="o">-</span><span class="mi">1</span><span class="o">].</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_and_&quot;</span><span class="p">)</span>
     <span class="n">fields</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span>

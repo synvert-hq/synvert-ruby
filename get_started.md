@@ -13,7 +13,7 @@ To install the latest version, run
 $ gem install synvert
 ```
 
-This will install Synvert, along with all of it's require dependencies.
+This will install synvert, along with synvert-core and other dependencies.
 
 ### Usage
 
@@ -25,29 +25,43 @@ Usage: synvert [project_path]
     -d, --load SNIPPET_PATHS         load custom snippets, snippet paths can be local file path or remote http url
     -l, --list                       list all available snippets
     -q, --query QUERY                query specified snippets
-        --skip FILE_PATTERNS         skip specified files or directories, separated by comma, e.g.  app/models/post.rb,vendor/plugins/**/*.rb
-    -s, --show SNIPPET_NAME          show specified snippet description
+        --skip FILE_PATTERNS         skip specified files or directories, separated by comma, e.g. app/models/post.rb,vendor/plugins/**/*.rb
+    -s, --show SNIPPET_NAME          show specified snippet description, SNIPPET_NAME is combined by group and name, e.g. ruby/new_hash_syntax
         --sync                       sync snippets
-    -r, --run SNIPPET_NAMES          run specified snippets
+    -r, --run SNIPPET_NAMES          run specified snippets, each SNIPPET_NAME is combined by group and name, e.g. ruby/new_hash_syntax,ruby/new_lambda_syntax
     -v, --version                    show this version
 ```
-First you should sync [snippets][2] from github
+
+##### Sync snippets
+
+[snippets][2] are available on github, you can sync them any time you want.
 
 ```
 $ synvert --sync
 ```
 
-list all available snippets
+##### List snippets
+
+List all available snippets
 
 ```
 $ synvert -l
 ```
 
-run snippets `factory_girl_short_syntax`, `rspec_new_syntax` and
-`upgrade_rails_3_2_to_4_0` in rails-bestpractices.com repo.
+##### Show a snippet
+
+Describe what a snippet does.
 
 ```
-$ synvert -r factory_girl_short_syntax,rspec_new_syntax,upgrade_rails_3_2_to_4_0 ~/Sites/railsbp/rails-bestpractices.com
+$ synvert -s factory_girl/use_short_syntax
+```
+
+##### Run a snippet
+
+Run a snippet, analyze and then change code.
+
+```
+$ synvert -r factory_girl/use_short_syntax ~/Sites/railsbp/rails-bestpractices.com
 ```
 
 It's recommended that you use version control software like [git][3],
