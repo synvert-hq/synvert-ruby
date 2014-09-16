@@ -12,6 +12,7 @@ Synvert is tested against MRI 1.9.3, 2.0.0 and 2.1.1.
 Synvert is composed by synvert-core and synvert-snippets.
 
 [synvert-core][1] provides a dsl to convert ruby code.
+
 [synvert-snippets][2] lists all snippets to convert ruby code based on
 synvert-core.
 
