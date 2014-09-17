@@ -52,7 +52,7 @@
       <div class="page">
   <h1 class="page-title">DSL</h1>
   <p>Synvert provides a simple dsl to define a snippet.</p>
-<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s2">&quot;name&quot;</span> <span class="k">do</span>
+<div class="highlight"><pre><code class="ruby language-ruby" data-lang="ruby"><span class="no">Synvert</span><span class="o">::</span><span class="no">Rewriter</span><span class="o">.</span><span class="n">new</span> <span class="s2">&quot;group_name&quot;</span><span class="p">,</span> <span class="s2">&quot;snippet_name&quot;</span> <span class="k">do</span>
   <span class="n">description</span> <span class="s2">&quot;description&quot;</span>
 
   <span class="n">if_gem</span> <span class="n">gem_name</span><span class="p">,</span> <span class="p">{</span><span class="ss">gte</span><span class="p">:</span> <span class="n">gem_version</span><span class="p">}</span>
