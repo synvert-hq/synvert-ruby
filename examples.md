@@ -182,7 +182,7 @@ end
 
 From rails 4, dynamic finder methods (e.g.
 `User.find_all_by_login('richard')`) is deprecated, we should use
-`User.where(login: 'richrd')` instead.
+`User.where(login: 'richard')` instead.
 
 ```ruby
 {% raw %}
