@@ -1,5 +1,6 @@
 # coding: utf-8
 require 'optparse'
+require 'ruby-progressbar'
 
 module Synvert
   # Synvert command line interface.
@@ -32,16 +33,21 @@ module Synvert
       when 'show' then show_rewriter
       when 'sync' then sync_snippets
       else
+        progress = ProgressBar.create total: @options[:snippet_names].length
+
         @options[:snippet_names].each do |snippet_name|
-          puts "===== #{snippet_name} started ====="
           group, name = snippet_name.split('/')
           rewriter = Core::Rewriter.call group, name
           rewriter.warnings.each do |warning|
             puts "[Warn] " + warning.message
           end
           puts rewriter.todo if rewriter.todo
-          puts "===== #{snippet_name} done ====="
+
+          progress.title = "#{group}/#{name}"
+          progress.increment
         end
+
+        puts "\nSynvert complete."
       end
       true
     rescue SystemExit
