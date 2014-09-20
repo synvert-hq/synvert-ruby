@@ -46,7 +46,7 @@ $ synvert --sync
 ```
 
 ```
-$ synvert -r factory_girl_short_syntax,upgrade_rails_3_2_to_4_0 ~/Sites/railsbp/rails-bestpractices.com
+$ synvert -r factory_girl/use_short_syntax,rails/upgrade_3_2_to_4_0 ~/Sites/railsbp/rails-bestpractices.com
 ```
 
 ## Documentation
