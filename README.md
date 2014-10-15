@@ -32,7 +32,7 @@ Usage: synvert [project_path]
     -d, --load SNIPPET_PATHS         load custom snippets, snippet paths can be local file path or remote http url
     -l, --list                       list all available snippets
     -q, --query QUERY                query specified snippets
-        --skip FILE_PATTERNS         skip specified files or directories, separated by comma, e.g. app/models/post.rb,vendor/plugins/**/*.rb
+        --skip FILE_PATTERNS         skip specified files or directories, separated by comma, e.g. app/models/post.rb,vendor/plugins/\*\*/\*.rb
     -s, --show SNIPPET_NAME          show specified snippet description
         --sync                       sync snippets
     -r, --run SNIPPET_NAMES          run specified snippets
