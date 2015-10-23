@@ -1,5 +1,11 @@
 # CHANGELOG
 
+Try to keep same version to gem `synvert-core`.
+
+## 0.9.0
+
+* Add `-o` or `--open` option` to open a snippet
+
 ## 0.5.3
 
 * Show warning message if rewriter not found
