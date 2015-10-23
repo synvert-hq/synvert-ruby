@@ -24,6 +24,7 @@ $ synvert -h
 Usage: synvert [project_path]
     -d, --load SNIPPET_PATHS         load custom snippets, snippet paths can be local file path or remote http url
     -l, --list                       list all available snippets
+    -o, --open SNIPPET_NAME          open a snippet in editor
     -q, --query QUERY                query specified snippets
         --skip FILE_PATTERNS         skip specified files or directories, separated by comma, e.g. app/models/post.rb,vendor/plugins/**/*.rb
     -s, --show SNIPPET_NAME          show specified snippet description, SNIPPET_NAME is combined by group and name, e.g. ruby/new_hash_syntax
@@ -54,6 +55,15 @@ Describe what a snippet does.
 
 ```
 $ synvert -s factory_girl/use_short_syntax
+```
+
+##### Open a snippet
+
+Open a snippet in your editor, editor is defined in
+`ENV['SNIPPET_EDITOR']` or `ENV['EDITOR']`
+
+```
+$ synvert -o factory_girl/use_short_syntax
 ```
 
 ##### Run a snippet
