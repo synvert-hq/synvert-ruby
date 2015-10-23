@@ -37,6 +37,15 @@ Describe what the snippet does.
 description 'descriptin of snippet'
 ```
 
+### if\_ruby
+
+Checks if current ruby version is greater than or equal to the
+specified version.
+
+```ruby
+if_ruby '2.0.0'
+```
+
 ### if\_gem
 
 Checks the gem in `Gemfile.lock`, if gem version in `Gemfile.lock`
