@@ -106,10 +106,10 @@ module Synvert
       paths = optparse.parse(args)
       Core::Configuration.instance.set :path, paths.first || Dir.pwd
       if @options[:skip_file_patterns] && !@options[:skip_file_patterns].empty?
-        skip_files = @options[:skip_file_patterns].map { |file_pattern|
+        skip_files = @options[:skip_file_patterns].map do |file_pattern|
           full_file_pattern = File.join(Core::Configuration.instance.get(:path), file_pattern)
           Dir.glob(full_file_pattern)
-        }.flatten
+        end.flatten
         Core::Configuration.instance.set :skip_files, skip_files
       end
     end
