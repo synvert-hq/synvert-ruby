@@ -24,15 +24,23 @@ module Synvert
     # @return [Boolean] true if command runs successfully.
     def run(args)
       run_option_parser(args)
-      load_rewriters
 
       case @options[:command]
-      when 'list' then list_available_rewriters
-      when 'open' then open_rewriter
-      when 'query' then query_available_rewriters
-      when 'show' then show_rewriter
-      when 'sync' then sync_snippets
+      when 'list'
+        load_rewriters
+        list_available_rewriters
+      when 'open'
+        open_rewriter
+      when 'query'
+        load_rewriters
+        query_available_rewriters
+      when 'show'
+        load_rewriters
+        show_rewriter
+      when 'sync'
+        sync_snippets
       else
+        load_rewriters
         @options[:snippet_names].each do |snippet_name|
           puts "===== #{snippet_name} started ====="
           group, name = snippet_name.split('/')
@@ -57,7 +65,7 @@ module Synvert
       false
     end
 
-  private
+    private
 
     # Run OptionParser to parse arguments.
     def run_option_parser(args)
@@ -108,7 +116,6 @@ module Synvert
 
     # Load all rewriters.
     def load_rewriters
-      default_snippets_path = Core::Configuration.instance.get :default_snippets_path
       Dir.glob(File.join(default_snippets_path, 'lib/**/*.rb')).each { |file| eval(File.read(file)) }
 
       @options[:custom_snippet_paths].each do |snippet_path|
@@ -144,7 +151,6 @@ module Synvert
       editor = [ENV['SYNVERT_EDITOR'], ENV['EDITOR']].find { |e| !e.nil? && !e.empty? }
       return puts "To open a synvert snippet, set $EDITOR or $SYNVERT_EDITOR" unless editor
 
-      default_snippets_path = Core::Configuration.instance.get :default_snippets_path
       path = File.expand_path(File.join(default_snippets_path, "lib/#{@options[:snippet_name]}.rb"))
       if File.exist? path
         system editor, path
@@ -198,6 +204,10 @@ module Synvert
       if Gem::Version.new(core_version) > Gem::Version.new(Synvert::Core::VERSION)
         puts "synvert-core is updated, please install synvert-core #{core_version}"
       end
+    end
+
+    def default_snippets_path
+      Core::Configuration.instance.get :default_snippets_path
     end
   end
 end
