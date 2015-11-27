@@ -7,7 +7,7 @@
 Synvert = syntax + convert, makes it easy to convert ruby code
 automatically.
 
-Synvert is tested against MRI 1.9.3, 2.0.0 and 2.1.1.
+Synvert is tested against MRI 1.9.3, 2.0.0, 2.1.7 and 2.2.3.
 
 Synvert is composed by synvert-core and synvert-snippets.
 
