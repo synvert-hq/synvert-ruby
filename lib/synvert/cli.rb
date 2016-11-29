@@ -116,14 +116,14 @@ module Synvert
 
     # Load all rewriters.
     def load_rewriters
-      Dir.glob(File.join(default_snippets_path, 'lib/**/*.rb')).each { |file| eval(File.read(file)) }
+      Dir.glob(File.join(default_snippets_path, 'lib/**/*.rb')).each { |file| require file }
 
       @options[:custom_snippet_paths].each do |snippet_path|
         if snippet_path =~ /^http/
           uri = URI.parse snippet_path
           eval(uri.read)
         else
-          eval(File.read(snippet_path))
+          require snippet_path
         end
       end
     rescue
