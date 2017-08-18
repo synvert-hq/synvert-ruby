@@ -46,7 +46,7 @@ module Synvert
           group, name = snippet_name.split('/')
           rewriter = Core::Rewriter.call group, name
           rewriter.warnings.each do |warning|
-            puts "[Warn] " + warning.message
+            puts '[Warn] ' + warning.message
           end
           puts rewriter.todo if rewriter.todo
           puts "===== #{snippet_name} done ====="
@@ -70,7 +70,7 @@ module Synvert
     # Run OptionParser to parse arguments.
     def run_option_parser(args)
       optparse = OptionParser.new do |opts|
-        opts.banner = "Usage: synvert [project_path]"
+        opts.banner = 'Usage: synvert [project_path]'
         opts.on '-d', '--load SNIPPET_PATHS', 'load custom snippets, snippet paths can be local file path or remote http url' do |snippet_paths|
           @options[:custom_snippet_paths] = snippet_paths.split(',').map(&:strip)
         end
@@ -134,12 +134,12 @@ module Synvert
     # List and print all available rewriters.
     def list_available_rewriters
       if Core::Rewriter.availables.empty?
-        puts "There is no snippet under ~/.synvert, please run `synvert --sync` to fetch snippets."
+        puts 'There is no snippet under ~/.synvert, please run `synvert --sync` to fetch snippets.'
       else
         Core::Rewriter.availables.each do |group, rewriters|
           puts group
           rewriters.each do |name, rewriter|
-            puts "    " + name
+            puts '    ' + name
           end
         end
         puts
@@ -149,7 +149,7 @@ module Synvert
     # Open one rewriter.
     def open_rewriter
       editor = [ENV['SYNVERT_EDITOR'], ENV['EDITOR']].find { |e| !e.nil? && !e.empty? }
-      return puts "To open a synvert snippet, set $EDITOR or $SYNVERT_EDITOR" unless editor
+      return puts 'To open a synvert snippet, set $EDITOR or $SYNVERT_EDITOR' unless editor
 
       path = File.expand_path(File.join(default_snippets_path, "lib/#{@options[:snippet_name]}.rb"))
       if File.exist? path
@@ -165,12 +165,12 @@ module Synvert
         if group.include? @options[:query]
           puts group
           rewriters.each do |name, rewriter|
-            puts "    " + name
+            puts '    ' + name
           end
         elsif rewriters.keys.any? { |name| name.include? @options[:query] }
           puts group
           rewriters.each do |name, rewriter|
-            puts "    " + name if name.include?(@options[:query])
+            puts '    ' + name if name.include?(@options[:query])
           end
         end
       end
@@ -186,9 +186,9 @@ module Synvert
         puts rewriter.description
         rewriter.sub_snippets.each do |sub_rewriter|
           puts
-          puts "=" * 80
+          puts '=' * 80
           puts "snippet: #{sub_rewriter.name}"
-          puts "=" * 80
+          puts '=' * 80
           puts sub_rewriter.description
         end
       else
@@ -199,7 +199,7 @@ module Synvert
     # sync snippets
     def sync_snippets
       Snippet.sync
-      puts "synvert snippets are synced"
+      puts 'synvert snippets are synced'
       core_version = Snippet.fetch_core_version
       if Gem::Version.new(core_version) > Gem::Version.new(Synvert::Core::VERSION)
         puts "synvert-core is updated, please install synvert-core #{core_version}"
