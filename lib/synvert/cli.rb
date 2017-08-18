@@ -14,7 +14,7 @@ module Synvert
 
     # Initialize a CLI.
     def initialize
-      @options = {command: 'run', custom_snippet_paths: [], snippet_names: []}
+      @options = { command: 'run', custom_snippet_paths: [], snippet_names: [] }
       Core::Configuration.instance.set :skip_files, []
       Core::Configuration.instance.set :default_snippets_path, File.join(ENV['HOME'], '.synvert')
     end
