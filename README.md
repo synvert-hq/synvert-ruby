@@ -1,8 +1,8 @@
 # Synvert
 
-[![Build Status](https://secure.travis-ci.org/xinminlabs/synvert.png)](http://travis-ci.org/xinminlabs/synvert)
-[![Coverage Status](https://coveralls.io/repos/xinminlabs/synvert/badge.png?branch=master)](https://coveralls.io/r/xinminlabs/synvert)
-[![Gem Version](https://badge.fury.io/rb/synvert.png)](http://badge.fury.io/rb/synvert)
+[![Build Status](https://secure.travis-ci.org/xinminlabs/synvert.svg)](http://travis-ci.org/xinminlabs/synvert)
+[![Coverage Status](https://coveralls.io/repos/xinminlabs/synvert/badge.svg?branch=master)](https://coveralls.io/r/xinminlabs/synvert)
+[![Gem Version](https://badge.fury.io/rb/synvert.svg)](http://badge.fury.io/rb/synvert)
 
 Synvert = syntax + convert, makes it easy to convert ruby code
 automatically.
