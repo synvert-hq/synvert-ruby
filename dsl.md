@@ -34,7 +34,7 @@ end
 Describe what the snippet does.
 
 ```ruby
-description 'descriptin of snippet'
+description 'description of snippet'
 ```
 
 ### if\_ruby
@@ -109,7 +109,7 @@ Find ast nodes according to the [rules][1], the block will be executed
 for the matching nodes.
 
 ```ruby
-with_node type: 'send', 'receiver: 'FactoryGirl', message: 'create' do
+with_node type: 'send', receiver: 'FactoryGirl', message: 'create' do
   # check nodes
   # add / replace / remove code
 end
@@ -157,7 +157,7 @@ unless_exist_node type: 'send', message: 'include', arguments: ['FactoryGirl::Sy
 end
 ```
 
-### if\_noly\_exist\_node
+### if\_only\_exist\_node
 
 Check if the current node contains only one child node and the child
 node matches [rules][1], if matches, then executes the node.
