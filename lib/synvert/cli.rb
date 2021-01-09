@@ -14,7 +14,7 @@ module Synvert
 
     # Initialize a CLI.
     def initialize
-      @options = {command: 'run', custom_snippet_paths: [], snippet_names: []}
+      @options = { command: 'run', custom_snippet_paths: [], snippet_names: [] }
       Core::Configuration.instance.set :skip_files, []
       Core::Configuration.instance.set :default_snippets_path, File.join(ENV['HOME'], '.synvert')
     end
@@ -69,47 +69,56 @@ module Synvert
 
     # Run OptionParser to parse arguments.
     def run_option_parser(args)
-      optparse = OptionParser.new do |opts|
-        opts.banner = 'Usage: synvert [project_path]'
-        opts.on '-d', '--load SNIPPET_PATHS', 'load custom snippets, snippet paths can be local file path or remote http url' do |snippet_paths|
-          @options[:custom_snippet_paths] = snippet_paths.split(',').map(&:strip)
+      optparse =
+        OptionParser.new do |opts|
+          opts.banner = 'Usage: synvert [project_path]'
+          opts.on '-d',
+                  '--load SNIPPET_PATHS',
+                  'load custom snippets, snippet paths can be local file path or remote http url' do |snippet_paths|
+            @options[:custom_snippet_paths] = snippet_paths.split(',').map(&:strip)
+          end
+          opts.on '-l', '--list', 'list all available snippets' do
+            @options[:command] = 'list'
+          end
+          opts.on '-o', '--open SNIPPET_NAME', 'Open a snippet' do |snippet_name|
+            @options[:command] = 'open'
+            @options[:snippet_name] = snippet_name
+          end
+          opts.on '-q', '--query QUERY', 'query specified snippets' do |query|
+            @options[:command] = 'query'
+            @options[:query] = query
+          end
+          opts.on '--skip FILE_PATTERNS',
+                  'skip specified files or directories, separated by comma, e.g. app/models/post.rb,vendor/plugins/**/*.rb' do |file_patterns|
+            @options[:skip_file_patterns] = file_patterns.split(',')
+          end
+          opts.on '-s',
+                  '--show SNIPPET_NAME',
+                  'show specified snippet description, SNIPPET_NAME is combined by group and name, e.g. ruby/new_hash_syntax' do |snippet_name|
+            @options[:command] = 'show'
+            @options[:snippet_name] = snippet_name
+          end
+          opts.on '--sync', 'sync snippets' do
+            @options[:command] = 'sync'
+          end
+          opts.on '-r',
+                  '--run SNIPPET_NAMES',
+                  'run specified snippets, each SNIPPET_NAME is combined by group and name, e.g. ruby/new_hash_syntax,ruby/new_lambda_syntax' do |snippet_names|
+            @options[:snippet_names] = snippet_names.split(',').map(&:strip)
+          end
+          opts.on '-v', '--version', 'show this version' do
+            puts Core::VERSION
+            exit
+          end
         end
-        opts.on '-l', '--list', 'list all available snippets' do
-          @options[:command] = 'list'
-        end
-        opts.on '-o', '--open SNIPPET_NAME', 'Open a snippet' do |snippet_name|
-          @options[:command] = 'open'
-          @options[:snippet_name] = snippet_name
-        end
-        opts.on '-q', '--query QUERY', 'query specified snippets' do |query|
-          @options[:command] = 'query'
-          @options[:query] = query
-        end
-        opts.on '--skip FILE_PATTERNS', 'skip specified files or directories, separated by comma, e.g. app/models/post.rb,vendor/plugins/**/*.rb' do |file_patterns|
-          @options[:skip_file_patterns] = file_patterns.split(',')
-        end
-        opts.on '-s', '--show SNIPPET_NAME', 'show specified snippet description, SNIPPET_NAME is combined by group and name, e.g. ruby/new_hash_syntax' do |snippet_name|
-          @options[:command] = 'show'
-          @options[:snippet_name] = snippet_name
-        end
-        opts.on '--sync', 'sync snippets' do
-          @options[:command] = 'sync'
-        end
-        opts.on '-r', '--run SNIPPET_NAMES', 'run specified snippets, each SNIPPET_NAME is combined by group and name, e.g. ruby/new_hash_syntax,ruby/new_lambda_syntax' do |snippet_names|
-          @options[:snippet_names] = snippet_names.split(',').map(&:strip)
-        end
-        opts.on '-v', '--version', 'show this version' do
-          puts Core::VERSION
-          exit
-        end
-      end
       paths = optparse.parse(args)
       Core::Configuration.instance.set :path, paths.first || Dir.pwd
       if @options[:skip_file_patterns] && !@options[:skip_file_patterns].empty?
-        skip_files = @options[:skip_file_patterns].map do |file_pattern|
-          full_file_pattern = File.join(Core::Configuration.instance.get(:path), file_pattern)
-          Dir.glob(full_file_pattern)
-        end.flatten
+        skip_files =
+          @options[:skip_file_patterns].map do |file_pattern|
+            full_file_pattern = File.join(Core::Configuration.instance.get(:path), file_pattern)
+            Dir.glob(full_file_pattern)
+          end.flatten
         Core::Configuration.instance.set :skip_files, skip_files
       end
     end
@@ -126,7 +135,7 @@ module Synvert
           require snippet_path
         end
       end
-    rescue
+    rescue StandardError
       FileUtils.rm_rf default_snippets_path
       retry
     end

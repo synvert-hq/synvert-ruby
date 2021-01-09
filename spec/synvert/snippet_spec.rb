@@ -8,7 +8,9 @@ module Synvert
       after { FileUtils.rm_rf default_snippets_path }
 
       it 'git clones snippets' do
-        expect(Snippet).to receive(:system).with("git clone https://github.com/xinminlabs/synvert-snippets.git #{default_snippets_path}")
+        expect(Snippet).to receive(:system).with(
+          "git clone https://github.com/xinminlabs/synvert-snippets.git #{default_snippets_path}"
+        )
         Snippet.sync
       end
 
@@ -21,8 +23,9 @@ module Synvert
 
     describe 'fetch_core_version' do
       it 'gets remote version' do
-        stub_request(:get, 'https://rubygems.org/api/v1/versions/synvert-core.json').
-          to_return(:body => '[{"number":"0.4.2"}]')
+        stub_request(:get, 'https://rubygems.org/api/v1/versions/synvert-core.json').to_return(
+          body: '[{"number":"0.4.2"}]'
+        )
         expect(Snippet.fetch_core_version).to eq '0.4.2'
       end
     end
