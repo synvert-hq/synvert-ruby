@@ -15,8 +15,6 @@ module Synvert
     # Initialize a CLI.
     def initialize
       @options = {command: 'run', custom_snippet_paths: [], snippet_names: []}
-      Core::Configuration.instance.set :skip_files, []
-      Core::Configuration.instance.set :default_snippets_path, File.join(ENV['HOME'], '.synvert')
     end
 
     # Run the CLI.
@@ -39,7 +37,7 @@ module Synvert
         show_rewriter
       when 'sync'
         sync_snippets
-      else
+      else # run
         load_rewriters
         @options[:snippet_names].each do |snippet_name|
           puts "===== #{snippet_name} started ====="
@@ -104,13 +102,13 @@ module Synvert
         end
       end
       paths = optparse.parse(args)
-      Core::Configuration.instance.set :path, paths.first || Dir.pwd
+      Core::Configuration.path = paths.first || Dir.pwd
       if @options[:skip_file_patterns] && !@options[:skip_file_patterns].empty?
         skip_files = @options[:skip_file_patterns].map do |file_pattern|
-          full_file_pattern = File.join(Core::Configuration.instance.get(:path), file_pattern)
+          full_file_pattern = File.join(Core::Configuration.path, file_pattern)
           Dir.glob(full_file_pattern)
         end.flatten
-        Core::Configuration.instance.set :skip_files, skip_files
+        Core::Configuration.skip_files = skip_files
       end
     end
 
@@ -198,7 +196,7 @@ module Synvert
 
     # sync snippets
     def sync_snippets
-      Snippet.sync
+      Snippet.new(default_snippets_path).sync
       puts 'synvert snippets are synced'
       core_version = Snippet.fetch_core_version
       if Gem::Version.new(core_version) > Gem::Version.new(Synvert::Core::VERSION)
@@ -207,7 +205,7 @@ module Synvert
     end
 
     def default_snippets_path
-      Core::Configuration.instance.get :default_snippets_path
+      File.join(ENV['HOME'], '.synvert')
     end
   end
 end
