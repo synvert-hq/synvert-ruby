@@ -1,6 +1,9 @@
 # CHANGELOG
 
-Try to keep same version to gem `synvert-core`.
+## 0.10.0 (2021-02-07)
+
+* Use new `Core::Confiruation`
+* Use require instead of eval in order to preserve normal Ruby semantics
 
 ## 0.9.0
 
