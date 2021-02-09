@@ -137,7 +137,7 @@ module Synvert
       else
         Core::Rewriter.availables.each do |group, rewriters|
           puts group
-          rewriters.each do |name, rewriter|
+          rewriters.each do |name, _rewriter|
             puts '    ' + name
           end
         end
@@ -163,12 +163,12 @@ module Synvert
       Core::Rewriter.availables.each do |group, rewriters|
         if group.include? @options[:query]
           puts group
-          rewriters.each do |name, rewriter|
+          rewriters.each do |name, _rewriter|
             puts '    ' + name
           end
         elsif rewriters.keys.any? { |name| name.include? @options[:query] }
           puts group
-          rewriters.each do |name, rewriter|
+          rewriters.each do |name, _rewriter|
             puts '    ' + name if name.include?(@options[:query])
           end
         end
