@@ -125,7 +125,7 @@ module Synvert
           require snippet_path
         end
       end
-    rescue
+    rescue StandardError
       FileUtils.rm_rf default_snippets_path
       retry
     end
