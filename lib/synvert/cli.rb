@@ -116,7 +116,7 @@ module Synvert
       Dir.glob(File.join(default_snippets_path, 'lib/**/*.rb')).each { |file| require file }
 
       @options[:custom_snippet_paths].each do |snippet_path|
-        if snippet_path =~ /^http/
+        if /^http/.match?(snippet_path)
           uri = URI.parse snippet_path
           eval(uri.read)
         else
