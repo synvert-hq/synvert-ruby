@@ -10,7 +10,9 @@ module Synvert
 
     describe 'sync' do
       it 'git clones snippets' do
-        expect(Kernel).to receive(:system).with("git clone https://github.com/xinminlabs/synvert-snippets.git #{snippets_path}")
+        expect(Kernel).to receive(:system).with(
+          "git clone https://github.com/xinminlabs/synvert-snippets.git #{snippets_path}"
+        )
         snippet.sync
       end
 
@@ -24,8 +26,9 @@ module Synvert
 
     describe 'fetch_core_version' do
       it 'gets remote version' do
-        stub_request(:get, 'https://rubygems.org/api/v1/versions/synvert-core.json').
-          to_return(:body => '[{"number":"0.4.2"}]')
+        stub_request(:get, 'https://rubygems.org/api/v1/versions/synvert-core.json').to_return(
+          body: '[{"number":"0.4.2"}]'
+        )
         expect(snippet.fetch_core_version).to eq '0.4.2'
       end
     end
