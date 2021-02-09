@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.10.1 (2021-02-09)
+
+* Add post install message
+
 ## 0.10.0 (2021-02-07)
 
 * Use new `Core::Confiruation`
