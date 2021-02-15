@@ -1,8 +1,10 @@
 # CHANGELOG
 
-## 0.10.1 (2021-02-09)
+## 0.11.0 (2021-02-15)
 
+* Add `--list-all` option
 * Add post install message
+* Fix `Synvert::Snippet.fetch_core_version`
 
 ## 0.10.0 (2021-02-07)
 
