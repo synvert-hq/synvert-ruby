@@ -6,6 +6,11 @@ require 'json'
 module Synvert
   # Manage synvert snippets.
   class Snippet
+    def self.fetch_core_version
+      content = URI.open('https://rubygems.org/api/v1/versions/synvert-core.json').read
+      JSON.parse(content).first['number']
+    end
+
     def initialize(snippets_path)
       @snippets_path = snippets_path
     end
@@ -18,11 +23,6 @@ module Synvert
       else
         Kernel.system("git clone https://github.com/xinminlabs/synvert-snippets.git #{@snippets_path}")
       end
-    end
-
-    def fetch_core_version
-      content = URI.open('https://rubygems.org/api/v1/versions/synvert-core.json').read
-      JSON.parse(content).first['number']
     end
   end
 end
