@@ -28,6 +28,9 @@ module Synvert
       when 'list'
         load_rewriters
         list_available_rewriters
+      when 'list-all'
+        load_rewriters
+        list_all_rewriters_in_json
       when 'open'
         open_rewriter
       when 'query'
@@ -76,6 +79,9 @@ module Synvert
                   '--load SNIPPET_PATHS',
                   'load custom snippets, snippet paths can be local file path or remote http url' do |snippet_paths|
             @options[:custom_snippet_paths] = snippet_paths.split(',').map(&:strip)
+          end
+          opts.on '--list-all', 'list all available snippets name and description in json format' do
+            @options[:command] = 'list-all'
           end
           opts.on '-l', '--list', 'list all available snippets' do
             @options[:command] = 'list'
@@ -153,6 +159,28 @@ module Synvert
         end
         puts
       end
+    end
+
+    def list_all_rewriters_in_json
+      if Core::Rewriter.availables.empty?
+        puts 'There is no snippet under ~/.synvert, please run `synvert --sync` to fetch snippets.'
+        return
+      end
+
+      output = []
+      Core::Rewriter.availables.each do |group, rewriters|
+        rewriters.each do |name, rewriter|
+          rewriter.process_with_sandbox
+          output << {
+            group: group,
+            name: name,
+            description: rewriter.description,
+            sub_snippets: rewriter.sub_snippets.map(&:name)
+          }
+        end
+      end
+
+      puts JSON.generate(output)
     end
 
     # Open one rewriter.
