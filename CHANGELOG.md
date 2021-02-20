@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.11.1 (2021-02-20)
+
+* Use `Synvert::VERSION` instead of `Synvert::Core::VERSION`
+
 ## 0.11.0 (2021-02-15)
 
 * Add `--list-all` option
