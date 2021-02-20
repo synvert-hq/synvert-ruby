@@ -113,7 +113,7 @@ module Synvert
             @options[:snippet_names] = snippet_names.split(',').map(&:strip)
           end
           opts.on '-v', '--version', 'show this version' do
-            puts Core::VERSION
+            puts VERSION
             exit
           end
         end
