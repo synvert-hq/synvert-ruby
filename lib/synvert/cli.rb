@@ -114,9 +114,7 @@ module Synvert
                   'run specified snippets, each SNIPPET_NAME is combined by group and name, e.g. ruby/new_hash_syntax,ruby/new_lambda_syntax' do |snippet_names|
             @options[:snippet_names] = snippet_names.split(',').map(&:strip)
           end
-          opts.on '-g',
-                  '--generate NEW_SNIPPET_NAME',
-                  'generate a new snippet' do |name|
+          opts.on '-g', '--generate NEW_SNIPPET_NAME', 'generate a new snippet' do |name|
             @options[:command] = 'generate'
             @options[:snippet_name] = name
           end
