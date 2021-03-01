@@ -41,6 +41,8 @@ module Synvert
         show_rewriter
       when 'sync'
         sync_snippets
+      when 'generate'
+        generate_snippet
       else
         # run
         load_rewriters
@@ -111,6 +113,12 @@ module Synvert
                   '--run SNIPPET_NAMES',
                   'run specified snippets, each SNIPPET_NAME is combined by group and name, e.g. ruby/new_hash_syntax,ruby/new_lambda_syntax' do |snippet_names|
             @options[:snippet_names] = snippet_names.split(',').map(&:strip)
+          end
+          opts.on '-g',
+                  '--generate NEW_SNIPPET_NAME',
+                  'generate a new snippet' do |name|
+            @options[:command] = 'generate'
+            @options[:snippet_name] = name
           end
           opts.on '-v', '--version', 'show this version' do
             puts "#{VERSION} (with synvert-core #{Core::VERSION} and parser #{Parser::VERSION})"
@@ -241,6 +249,54 @@ module Synvert
       if Gem::Version.new(core_version) > Gem::Version.new(Synvert::Core::VERSION)
         puts "synvert-core is updated, please install synvert-core #{core_version}"
       end
+    end
+
+    # generate a new snippet
+    def generate_snippet
+      group, name = @options[:snippet_name].split('/')
+      FileUtils.mkdir_p("lib/#{group}")
+      FileUtils.mkdir_p("spec/#{group}")
+      lib_content = <<~EOF
+        # frozen_string_literal: true
+
+        Synvert::Rewriter.new '#{group}', '#{name}' do
+          description <<~EOS
+            It convert Foo to Bar
+
+            ```ruby
+            Foo
+            ```
+
+            =>
+
+            ```ruby
+            Bar
+            ```
+          EOS
+
+          within_files '**/*.rb' do
+            with_node type: 'const', to_source: 'Foo' do
+              replace_with 'Bar'
+            end
+          end
+        end
+      EOF
+      spec_content = <<~EOF
+        # frozen_string_literal: true
+
+        require 'spec_helper'
+
+        RSpec.describe 'Convert Foo to Bar' do
+          let(:rewriter_name) { '#{group}/#{name}' }
+          let(:fake_file_path) { 'foobar.rb' }
+          let(:test_content) { 'Foo' }
+          let(:test_rewritten_content) { 'Bar' }
+
+          include_examples 'convertable'
+        end
+      EOF
+      File.write("lib/#{group}/#{name}.rb", lib_content)
+      File.write("spec/#{group}/#{name}_spec.rb", spec_content)
     end
 
     def default_snippets_path
