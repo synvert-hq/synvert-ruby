@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.12.0 (2021-03-01)
+
+* Display `synvert-core` and `parser` version
+* Generate a new snippet
+
 ## 0.11.1 (2021-02-20)
 
 * Use `Synvert::VERSION` instead of `Synvert::Core::VERSION`
