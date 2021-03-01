@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.12.1 (2021-03-01)
+
+* Display snippet source code for showing a snippet
+
 ## 0.12.0 (2021-03-01)
 
 * Display `synvert-core` and `parser` version
