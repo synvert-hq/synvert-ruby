@@ -222,18 +222,9 @@ module Synvert
 
     # Show and print one rewriter.
     def show_rewriter
-      group, name = @options[:snippet_name].split('/')
-      rewriter = Core::Rewriter.fetch(group, name)
-      if rewriter
-        rewriter.process_with_sandbox
-        puts rewriter.description
-        rewriter.sub_snippets.each do |sub_rewriter|
-          puts
-          puts '=' * 80
-          puts "snippet: #{sub_rewriter.name}"
-          puts '=' * 80
-          puts sub_rewriter.description
-        end
+      path = File.expand_path(File.join(default_snippets_path, "lib/#{@options[:snippet_name]}.rb"))
+      if File.exist?(path)
+        puts File.read(path)
       else
         puts "snippet #{@options[:snippet_name]} not found"
       end
