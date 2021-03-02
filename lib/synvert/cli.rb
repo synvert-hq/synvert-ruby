@@ -137,7 +137,7 @@ module Synvert
 
     # Load all rewriters.
     def load_rewriters
-      Dir.glob(File.join(default_snippets_path, 'lib/**/*.rb')).each { |file| require file }
+      Dir.glob(File.join(default_snippets_home, 'lib/**/*.rb')).each { |file| require file }
 
       @options[:custom_snippet_paths].each do |snippet_path|
         if /^http/.match?(snippet_path)
@@ -148,7 +148,7 @@ module Synvert
         end
       end
     rescue StandardError
-      FileUtils.rm_rf default_snippets_path
+      FileUtils.rm_rf default_snippets_home
       retry
     end
 
@@ -194,7 +194,7 @@ module Synvert
       editor = [ENV['SYNVERT_EDITOR'], ENV['EDITOR']].find { |e| !e.nil? && !e.empty? }
       return puts 'To open a synvert snippet, set $EDITOR or $SYNVERT_EDITOR' unless editor
 
-      path = File.expand_path(File.join(default_snippets_path, "lib/#{@options[:snippet_name]}.rb"))
+      path = File.expand_path(File.join(default_snippets_home, "lib/#{@options[:snippet_name]}.rb"))
       if File.exist? path
         system editor, path
       else
@@ -222,7 +222,7 @@ module Synvert
 
     # Show and print one rewriter.
     def show_rewriter
-      path = File.expand_path(File.join(default_snippets_path, "lib/#{@options[:snippet_name]}.rb"))
+      path = File.expand_path(File.join(default_snippets_home, "lib/#{@options[:snippet_name]}.rb"))
       if File.exist?(path)
         puts File.read(path)
       else
@@ -232,7 +232,7 @@ module Synvert
 
     # sync snippets
     def sync_snippets
-      Snippet.new(default_snippets_path).sync
+      Snippet.new(default_snippets_home).sync
       puts 'synvert snippets are synced'
       core_version = Snippet.fetch_core_version
       if Gem::Version.new(core_version) > Gem::Version.new(Synvert::Core::VERSION)
@@ -288,8 +288,8 @@ module Synvert
       File.write("spec/#{group}/#{name}_spec.rb", spec_content)
     end
 
-    def default_snippets_path
-      File.join(ENV['HOME'], '.synvert')
+    def default_snippets_home
+      ENV['SYNVERT_SNIPPETS_HOME'] || File.join(ENV['HOME'], '.synvert')
     end
   end
 end
