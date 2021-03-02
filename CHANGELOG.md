@@ -1,7 +1,8 @@
 # CHANGELOG
 
-## 0.12.1 (2021-03-01)
+## 0.13.0 (2021-03-02)
 
+* Use `ENV['SYNVERT_SNIPPETS_HOME']` to change default snippets home
 * Display snippet source code for showing a snippet
 
 ## 0.12.0 (2021-03-01)
