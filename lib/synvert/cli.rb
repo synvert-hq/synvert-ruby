@@ -250,7 +250,7 @@ module Synvert
 
         Synvert::Rewriter.new '#{group}', '#{name}' do
           description <<~EOS
-            It convert Foo to Bar
+            It converts Foo to Bar
 
             ```ruby
             Foo
