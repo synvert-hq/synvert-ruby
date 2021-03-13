@@ -15,7 +15,7 @@ module Synvert
 
     # Initialize a CLI.
     def initialize
-      @options = { command: 'run', custom_snippet_paths: [], snippet_names: [], format: 'plain' }
+      @options = { command: 'run', custom_snippet_paths: [], format: 'plain' }
     end
 
     # Run the CLI.
@@ -43,7 +43,7 @@ module Synvert
       else
         # run
         load_rewriters
-        run_snippets
+        run_snippet
       end
       true
     rescue SystemExit
@@ -95,9 +95,9 @@ module Synvert
             @options[:command] = 'sync'
           end
           opts.on '-r',
-                  '--run SNIPPET_NAMES',
-                  'run specified snippets, each SNIPPET_NAME is combined by group and name, e.g. ruby/new_hash_syntax,ruby/new_lambda_syntax' do |snippet_names|
-            @options[:snippet_names] = snippet_names.split(',').map(&:strip)
+                  '--run SNIPPET_NAME',
+                  'run specified snippet, e.g. ruby/new_hash_syntax' do |snippet_name|
+            @options[:snippet_name] = snippet_name
           end
           opts.on '-g', '--generate NEW_SNIPPET_NAME', 'generate a new snippet' do |name|
             @options[:command] = 'generate'
@@ -115,10 +115,10 @@ module Synvert
       Core::Configuration.path = paths.first || Dir.pwd
       if @options[:skip_file_patterns] && !@options[:skip_file_patterns].empty?
         skip_files =
-          @options[:skip_file_patterns].flat_map do |file_pattern|
-                                                    full_file_pattern = File.join(Core::Configuration.path, file_pattern)
-                                                    Dir.glob(full_file_pattern)
-                                                  end
+          @options[:skip_file_patterns].map do |file_pattern|
+            full_file_pattern = File.join(Core::Configuration.path, file_pattern)
+            Dir.glob(full_file_pattern)
+          end.flatten
         Core::Configuration.skip_files = skip_files
       end
     end
@@ -225,30 +225,25 @@ module Synvert
     end
 
     # run snippets
-    def run_snippets
+    def run_snippet
+      snippet_name = @options[:snippet_name]
       if plain_output?
-        @options[:snippet_names].each do |snippet_name|
-          puts "===== #{snippet_name} started ====="
-          group, name = snippet_name.split('/')
-          rewriter = Core::Rewriter.call group, name
-          rewriter.warnings.each do |warning|
-            puts '[Warn] ' + warning.message
-          end
-          puts rewriter.todo if rewriter.todo
-          puts "===== #{snippet_name} done ====="
+        puts "===== #{snippet_name} started ====="
+        group, name = snippet_name.split('/')
+        rewriter = Core::Rewriter.call group, name
+        rewriter.warnings.each do |warning|
+          puts '[Warn] ' + warning.message
         end
+        puts rewriter.todo if rewriter.todo
+        puts "===== #{snippet_name} done ====="
       elsif json_output?
-        output = []
-        @options[:snippet_names].each do |snippet_name|
-          group, name = snippet_name.split('/')
-          rewriter = Core::Rewriter.call group, name
-          output << {
-            affected_files: rewriter.affected_files.union(rewriter.sub_snippets.map(&:affected_files).reduce(:+)).to_a,
-            warnings: rewriter.warnings.union(rewriter.sub_snippets.map(&:warnings).reduce(:+)),
-            todo: rewriter.todo
-          }
-        end
-        puts JSON.generate(output)
+        group, name = snippet_name.split('/')
+        rewriter = Core::Rewriter.call group, name
+        puts JSON.generate({
+          affected_files: rewriter.affected_files.union(rewriter.sub_snippets.map(&:affected_files).reduce(:+)).to_a,
+          warnings: rewriter.warnings.union(rewriter.sub_snippets.map(&:warnings).reduce(:+)),
+          todo: rewriter.todo
+        })
       end
     end
 
