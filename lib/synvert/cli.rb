@@ -15,7 +15,7 @@ module Synvert
 
     # Initialize a CLI.
     def initialize
-      @options = { command: 'run', custom_snippet_paths: [], snippet_names: [] }
+      @options = { command: 'run', custom_snippet_paths: [], snippet_names: [], format: 'plain' }
     end
 
     # Run the CLI.
@@ -28,9 +28,6 @@ module Synvert
       when 'list'
         load_rewriters
         list_available_rewriters
-      when 'list-all'
-        load_rewriters
-        list_all_rewriters_in_json
       when 'open'
         open_rewriter
       when 'query'
@@ -46,16 +43,7 @@ module Synvert
       else
         # run
         load_rewriters
-        @options[:snippet_names].each do |snippet_name|
-          puts "===== #{snippet_name} started ====="
-          group, name = snippet_name.split('/')
-          rewriter = Core::Rewriter.call group, name
-          rewriter.warnings.each do |warning|
-            puts '[Warn] ' + warning.message
-          end
-          puts rewriter.todo if rewriter.todo
-          puts "===== #{snippet_name} done ====="
-        end
+        run_snippets
       end
       true
     rescue SystemExit
@@ -81,9 +69,6 @@ module Synvert
                   '--load SNIPPET_PATHS',
                   'load custom snippets, snippet paths can be local file path or remote http url' do |snippet_paths|
             @options[:custom_snippet_paths] = snippet_paths.split(',').map(&:strip)
-          end
-          opts.on '--list-all', 'list all available snippets name and description in json format' do
-            @options[:command] = 'list-all'
           end
           opts.on '-l', '--list', 'list all available snippets' do
             @options[:command] = 'list'
@@ -118,6 +103,9 @@ module Synvert
             @options[:command] = 'generate'
             @options[:snippet_name] = name
           end
+          opts.on '-f', '--format FORMAT', 'output format' do |format|
+            @options[:format] = format
+          end
           opts.on '-v', '--version', 'show this version' do
             puts "#{VERSION} (with synvert-core #{Core::VERSION} and parser #{Parser::VERSION})"
             exit
@@ -127,10 +115,10 @@ module Synvert
       Core::Configuration.path = paths.first || Dir.pwd
       if @options[:skip_file_patterns] && !@options[:skip_file_patterns].empty?
         skip_files =
-          @options[:skip_file_patterns].map do |file_pattern|
-            full_file_pattern = File.join(Core::Configuration.path, file_pattern)
-            Dir.glob(full_file_pattern)
-          end.flatten
+          @options[:skip_file_patterns].flat_map do |file_pattern|
+                                                    full_file_pattern = File.join(Core::Configuration.path, file_pattern)
+                                                    Dir.glob(full_file_pattern)
+                                                  end
         Core::Configuration.skip_files = skip_files
       end
     end
@@ -156,7 +144,10 @@ module Synvert
     def list_available_rewriters
       if Core::Rewriter.availables.empty?
         puts 'There is no snippet under ~/.synvert, please run `synvert --sync` to fetch snippets.'
-      else
+        return
+      end
+
+      if plain_output?
         Core::Rewriter.availables.each do |group, rewriters|
           puts group
           rewriters.each do |name, _rewriter|
@@ -164,29 +155,22 @@ module Synvert
           end
         end
         puts
-      end
-    end
-
-    def list_all_rewriters_in_json
-      if Core::Rewriter.availables.empty?
-        puts 'There is no snippet under ~/.synvert, please run `synvert --sync` to fetch snippets.'
-        return
-      end
-
-      output = []
-      Core::Rewriter.availables.each do |group, rewriters|
-        rewriters.each do |name, rewriter|
-          rewriter.process_with_sandbox
-          output << {
-            group: group,
-            name: name,
-            description: rewriter.description,
-            sub_snippets: rewriter.sub_snippets.map(&:name)
-          }
+      elsif json_output?
+        output = []
+        Core::Rewriter.availables.each do |group, rewriters|
+          rewriters.each do |name, rewriter|
+            rewriter.process_with_sandbox
+            output << {
+              group: group,
+              name: name,
+              description: rewriter.description,
+              sub_snippets: rewriter.sub_snippets.map(&:name)
+            }
+          end
         end
-      end
 
-      puts JSON.generate(output)
+        puts JSON.generate(output)
+      end
     end
 
     # Open one rewriter.
@@ -240,6 +224,34 @@ module Synvert
       end
     end
 
+    # run snippets
+    def run_snippets
+      if plain_output?
+        @options[:snippet_names].each do |snippet_name|
+          puts "===== #{snippet_name} started ====="
+          group, name = snippet_name.split('/')
+          rewriter = Core::Rewriter.call group, name
+          rewriter.warnings.each do |warning|
+            puts '[Warn] ' + warning.message
+          end
+          puts rewriter.todo if rewriter.todo
+          puts "===== #{snippet_name} done ====="
+        end
+      elsif json_output?
+        output = []
+        @options[:snippet_names].each do |snippet_name|
+          group, name = snippet_name.split('/')
+          rewriter = Core::Rewriter.call group, name
+          output << {
+            affected_files: rewriter.affected_files.union(rewriter.sub_snippets.map(&:affected_files).reduce(:+)).to_a,
+            warnings: rewriter.warnings.union(rewriter.sub_snippets.map(&:warnings).reduce(:+)),
+            todo: rewriter.todo
+          }
+        end
+        puts JSON.generate(output)
+      end
+    end
+
     # generate a new snippet
     def generate_snippet
       group, name = @options[:snippet_name].split('/')
@@ -290,6 +302,14 @@ module Synvert
 
     def default_snippets_home
       ENV['SYNVERT_SNIPPETS_HOME'] || File.join(ENV['HOME'], '.synvert')
+    end
+
+    def plain_output?
+      @options[:format] == 'plain'
+    end
+
+    def json_output?
+      @options[:format] == 'json'
     end
   end
 end
