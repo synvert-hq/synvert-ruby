@@ -94,9 +94,7 @@ module Synvert
           opts.on '--sync', 'sync snippets' do
             @options[:command] = 'sync'
           end
-          opts.on '-r',
-                  '--run SNIPPET_NAME',
-                  'run specified snippet, e.g. ruby/new_hash_syntax' do |snippet_name|
+          opts.on '-r', '--run SNIPPET_NAME', 'run specified snippet, e.g. ruby/new_hash_syntax' do |snippet_name|
             @options[:snippet_name] = snippet_name
           end
           opts.on '-g', '--generate NEW_SNIPPET_NAME', 'generate a new snippet' do |name|
