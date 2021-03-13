@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.14.1 (2021-03-13)
+
+* Fix reduce on empty array
+
 ## 0.14.0 (2021-03-13)
 
 * Add CLI option `--format`
