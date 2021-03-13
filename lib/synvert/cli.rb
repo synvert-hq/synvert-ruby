@@ -94,9 +94,7 @@ module Synvert
           opts.on '--sync', 'sync snippets' do
             @options[:command] = 'sync'
           end
-          opts.on '-r',
-                  '--run SNIPPET_NAME',
-                  'run specified snippet, e.g. ruby/new_hash_syntax' do |snippet_name|
+          opts.on '-r', '--run SNIPPET_NAME', 'run specified snippet, e.g. ruby/new_hash_syntax' do |snippet_name|
             @options[:snippet_name] = snippet_name
           end
           opts.on '-g', '--generate NEW_SNIPPET_NAME', 'generate a new snippet' do |name|
@@ -239,11 +237,14 @@ module Synvert
       elsif json_output?
         group, name = snippet_name.split('/')
         rewriter = Core::Rewriter.call group, name
-        puts JSON.generate({
-          affected_files: rewriter.affected_files.union(rewriter.sub_snippets.map(&:affected_files).reduce(:+)).to_a,
-          warnings: rewriter.warnings.union(rewriter.sub_snippets.map(&:warnings).reduce(:+)),
-          todo: rewriter.todo
-        })
+        puts JSON.generate(
+               {
+                 affected_files:
+                   rewriter.affected_files.union(rewriter.sub_snippets.map(&:affected_files).reduce(:+)).to_a,
+                 warnings: rewriter.warnings.union(rewriter.sub_snippets.map(&:warnings).reduce(:+)),
+                 todo: rewriter.todo
+               }
+             )
       end
     end
 
