@@ -239,11 +239,12 @@ module Synvert
       elsif json_output?
         group, name = snippet_name.split('/')
         rewriter = Core::Rewriter.call group, name
-        puts JSON.generate({
+        output = {
           affected_files: rewriter.affected_files.union(rewriter.sub_snippets.map(&:affected_files).reduce(:+)).to_a,
           warnings: rewriter.warnings.union(rewriter.sub_snippets.map(&:warnings).reduce(:+)),
           todo: rewriter.todo
-        })
+        }
+        puts JSON.generate(output)
       end
     end
 
