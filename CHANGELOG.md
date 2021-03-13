@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.14.0 (2021-03-13)
+
+* Add CLI option `--format`
+* Run one snippet once
+
 ## 0.13.0 (2021-03-02)
 
 * Use `ENV['SYNVERT_SNIPPETS_HOME']` to change default snippets home
