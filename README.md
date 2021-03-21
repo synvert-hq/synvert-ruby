@@ -49,6 +49,18 @@ $ synvert --sync
 $ synvert -r factory_girl/use_short_syntax,rails/upgrade_3_2_to_4_0 ~/Sites/railsbp/rails-bestpractices.com
 ```
 
+## Docker
+
+We have a docker image to run synvert
+
+```
+$ docker pull xinminlabs/awesomecode-synvert
+
+$ docker run xinminlabs/awesomecode-synvert synvert --list
+
+$ docker run -v <your project path>:/app xinminlabs/awesomecode-synvert synvert --run default/check_syntax /app
+```
+
 ## Documentation
 
 [http://xinminlabs.github.io/synvert/][3]
