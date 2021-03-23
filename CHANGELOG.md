@@ -1,8 +1,9 @@
 # CHANGELOG
 
-## 0.14.1 (2021-03-13)
+## 0.15.0 (2021-03-23)
 
 * Fix reduce on empty array
+* Update synvert-core when syncing snippets
 
 ## 0.14.0 (2021-03-13)
 
