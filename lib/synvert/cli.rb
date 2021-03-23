@@ -218,7 +218,8 @@ module Synvert
       puts 'synvert snippets are synced'
       core_version = Snippet.fetch_core_version
       if Gem::Version.new(core_version) > Gem::Version.new(Synvert::Core::VERSION)
-        puts "synvert-core is updated, please install synvert-core #{core_version}"
+        puts "synvert-core is updated, installing synvert-core #{core_version}"
+        system('gem install synvert-core')
       end
     end
 
