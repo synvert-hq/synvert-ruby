@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.16.0 (2021-03-24)
+
+* Add `ruby_version` and `gem_spec` to json output
+
 ## 0.15.0 (2021-03-23)
 
 * Fix reduce on empty array
