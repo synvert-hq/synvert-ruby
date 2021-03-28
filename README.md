@@ -22,6 +22,12 @@ Install it using rubygems
 $ gem install synvert
 ```
 
+then run
+
+```
+$ synvert --sync
+```
+
 ## Usage
 
 ```
@@ -38,10 +44,6 @@ Usage: synvert [project_path]
 ```
 
 e.g.
-
-```
-$ synvert --sync
-```
 
 ```
 $ synvert -r factory_girl/use_short_syntax,rails/upgrade_3_2_to_4_0 ~/Sites/railsbp/rails-bestpractices.com
