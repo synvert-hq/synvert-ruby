@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.17.0 (2021-04-19)
+
+* Run `git checkout .` before `git pull --rebase`
+
 ## 0.16.0 (2021-03-24)
 
 * Add `ruby_version` and `gem_spec` to json output
