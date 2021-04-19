@@ -19,7 +19,7 @@ module Synvert
     def sync
       if File.exist?(@snippets_path)
         FileUtils.cd @snippets_path
-        Kernel.system('git pull --rebase')
+        Kernel.system('git checkout .; git pull --rebase')
       else
         Kernel.system("git clone https://github.com/xinminlabs/synvert-snippets.git #{@snippets_path}")
       end
