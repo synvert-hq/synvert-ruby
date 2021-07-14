@@ -259,13 +259,13 @@ module Synvert
     def execute_snippet
       input = STDIN.read
       if plain_output?
-        puts "===== execute started ====="
+        puts '===== execute started ====='
         rewriter = eval(input)
         rewriter.warnings.each do |warning|
           puts '[Warn] ' + warning.message
         end
         puts rewriter.todo if rewriter.todo
-        puts "===== execute done ====="
+        puts '===== execute done ====='
       elsif json_output?
         rewriter = eval(input)
         output = {
