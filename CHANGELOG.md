@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.18.0 (2021-07-14)
+
+* Execute a snippet
+
 ## 0.17.0 (2021-04-19)
 
 * Run `git checkout .` before `git pull --rebase`
