@@ -40,6 +40,8 @@ module Synvert
         sync_snippets
       when 'generate'
         generate_snippet
+      when 'execute'
+        execute_snippet
       else
         # run
         load_rewriters
@@ -93,6 +95,9 @@ module Synvert
           end
           opts.on '--sync', 'sync snippets' do
             @options[:command] = 'sync'
+          end
+          opts.on '--execute', 'execute snippet' do
+            @options[:command] = 'execute'
           end
           opts.on '-r', '--run SNIPPET_NAME', 'run specified snippet, e.g. ruby/new_hash_syntax' do |snippet_name|
             @options[:snippet_name] = snippet_name
@@ -241,6 +246,28 @@ module Synvert
       elsif json_output?
         group, name = snippet_name.split('/')
         rewriter = Core::Rewriter.call group, name
+        output = {
+          affected_files: rewriter.affected_files.union(rewriter.sub_snippets.sum([], &:affected_files)).to_a,
+          warnings: rewriter.warnings.union(rewriter.sub_snippets.sum([], &:warnings)),
+          todo: rewriter.todo
+        }
+        puts JSON.generate(output)
+      end
+    end
+
+    # execute snippet
+    def execute_snippet
+      input = STDIN.read
+      if plain_output?
+        puts "===== execute started ====="
+        rewriter = eval(input)
+        rewriter.warnings.each do |warning|
+          puts '[Warn] ' + warning.message
+        end
+        puts rewriter.todo if rewriter.todo
+        puts "===== execute done ====="
+      elsif json_output?
+        rewriter = eval(input)
         output = {
           affected_files: rewriter.affected_files.union(rewriter.sub_snippets.sum([], &:affected_files)).to_a,
           warnings: rewriter.warnings.union(rewriter.sub_snippets.sum([], &:warnings)),
