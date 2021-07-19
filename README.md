@@ -1,6 +1,6 @@
 # Synvert
 
-[![Build Status](https://secure.travis-ci.org/xinminlabs/synvert.svg)](http://travis-ci.org/xinminlabs/synvert)
+![Main workflow](https://github.com/xinminlabs/synvert/actions/workflows/main.yml/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/xinminlabs/synvert/badge.svg?branch=master)](https://coveralls.io/r/xinminlabs/synvert)
 [![Gem Version](https://badge.fury.io/rb/synvert.svg)](http://badge.fury.io/rb/synvert)
 
