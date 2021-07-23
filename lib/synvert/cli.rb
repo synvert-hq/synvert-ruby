@@ -247,7 +247,7 @@ module Synvert
         group, name = snippet_name.split('/')
         rewriter = Core::Rewriter.call group, name
         output = {
-          affected_files: rewriter.affected_files.union(rewriter.sub_snippets.sum([], &:affected_files)).to_a,
+          affected_files: rewriter.affected_files.union(rewriter.sub_snippets.sum(Set.new, &:affected_files)).to_a,
           warnings: rewriter.warnings.union(rewriter.sub_snippets.sum([], &:warnings)),
           todo: rewriter.todo
         }
@@ -269,7 +269,7 @@ module Synvert
       elsif json_output?
         rewriter = eval(input)
         output = {
-          affected_files: rewriter.affected_files.union(rewriter.sub_snippets.sum([], &:affected_files)).to_a,
+          affected_files: rewriter.affected_files.union(rewriter.sub_snippets.sum(Set.new, &:affected_files)).to_a,
           warnings: rewriter.warnings.union(rewriter.sub_snippets.sum([], &:warnings)),
           todo: rewriter.todo
         }
