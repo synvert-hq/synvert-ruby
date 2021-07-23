@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.18.1 (2021-07-23)
+
+* Fix `affected_files` is Set
+
 ## 0.18.0 (2021-07-14)
 
 * Execute a snippet
