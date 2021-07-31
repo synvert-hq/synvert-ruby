@@ -63,7 +63,7 @@ $ docker run -v <your project path>:/app xinminlabs/awesomecode-synvert synvert 
 
 ## Documentation
 
-[http://xinminlabs.github.io/synvert/][3]
+[https://xinminlabs.github.io/synvert/][3]
 
 ## Contributing
 
@@ -75,4 +75,4 @@ $ docker run -v <your project path>:/app xinminlabs/awesomecode-synvert synvert 
 
 [1]: https://github.com/xinminlabs/synvert-core/
 [2]: https://github.com/xinminlabs/synvert-snippets/
-[3]: http://xinminlabs.github.io/synvert/
+[3]: https://xinminlabs.github.io/synvert/
