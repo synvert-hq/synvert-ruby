@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
   spec.post_install_message = 'Please run `synvert --sync` first to sync snippets remotely.'
 
-  spec.add_runtime_dependency 'synvert-core', '>= 0.49.1'
+  spec.add_runtime_dependency 'synvert-core', '>= 0.51.0'
 
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rake'
