@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.18.2 (2021-08-12)
+
+* Require `fileutils`
+
 ## 0.18.1 (2021-07-23)
 
 * Fix `affected_files` is Set
