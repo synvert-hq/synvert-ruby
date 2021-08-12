@@ -2,6 +2,7 @@
 
 require 'open-uri'
 require 'json'
+require 'fileutils'
 
 module Synvert
   # Manage synvert snippets.
