@@ -22,7 +22,7 @@ module Synvert
         FileUtils.cd @snippets_path
         Kernel.system('git checkout .; git pull --rebase')
       else
-        Kernel.system("git clone https://github.com/xinminlabs/synvert-snippets.git #{@snippets_path}")
+        Kernel.system("git clone https://github.com/xinminlabs/synvert-snippets-ruby.git #{@snippets_path}")
       end
     end
   end
