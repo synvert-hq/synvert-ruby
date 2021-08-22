@@ -27,14 +27,14 @@ $ gem install synvert
 then run
 
 ```
-$ synvert --sync
+$ synvert-ruby --sync
 ```
 
 ## Usage
 
 ```
-$ synvert -h
-Usage: synvert [project_path]
+$ synvert-ruby -h
+Usage: synvert-ruby [project_path]
     -d, --load SNIPPET_PATHS         load custom snippets, snippet paths can be local file path or remote http url
     -l, --list                       list all available snippets
     -q, --query QUERY                query specified snippets
@@ -48,19 +48,7 @@ Usage: synvert [project_path]
 e.g.
 
 ```
-$ synvert -r factory_girl/use_short_syntax,rails/upgrade_3_2_to_4_0 ~/Sites/railsbp/rails-bestpractices.com
-```
-
-## Docker
-
-We have a docker image to run synvert
-
-```
-$ docker pull xinminlabs/awesomecode-synvert
-
-$ docker run xinminlabs/awesomecode-synvert synvert --list
-
-$ docker run -v <your project path>:/app xinminlabs/awesomecode-synvert synvert --run default/check_syntax /app
+$ synvert-ruby -r factory_girl/use_short_syntax,rails/upgrade_3_2_to_4_0 ~/Sites/railsbp/rails-bestpractices.com
 ```
 
 ## Documentation
@@ -75,6 +63,6 @@ $ docker run -v <your project path>:/app xinminlabs/awesomecode-synvert synvert 
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-[1]: https://github.com/xinminlabs/synvert-core/
-[2]: https://github.com/xinminlabs/synvert-snippets/
+[1]: https://github.com/xinminlabs/synvert-core-ruby/
+[2]: https://github.com/xinminlabs/synvert-snippets-ruby/
 [3]: https://xinminlabs.github.io/synvert/
