@@ -66,7 +66,7 @@ module Synvert
     def run_option_parser(args)
       optparse =
         OptionParser.new do |opts|
-          opts.banner = 'Usage: synvert [project_path]'
+          opts.banner = 'Usage: synvert-ruby [project_path]'
           opts.on '-d',
                   '--load SNIPPET_PATHS',
                   'load custom snippets, snippet paths can be local file path or remote http url' do |snippet_paths|
