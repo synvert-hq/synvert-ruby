@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.18.3 (2021-08-22)
+
+* Update synvert-snippets url
+* Deprecate synvert, use synvert-ruby instead
+
 ## 0.18.2 (2021-08-12)
 
 * Require `fileutils`
