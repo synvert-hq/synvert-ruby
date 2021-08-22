@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.18.4 (2021-08-22)
+
+* Deprecate synvert, use synvert-ruby instead
+
 ## 0.18.3 (2021-08-22)
 
 * Update synvert-snippets url
