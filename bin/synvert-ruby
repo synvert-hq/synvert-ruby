@@ -4,7 +4,5 @@
 $LOAD_PATH.unshift(File.expand_path('../lib', __dir__))
 require 'synvert'
 
-puts "synvert is deprecated, use synvert-ruby instead."
-puts
 result = Synvert::CLI.run
 exit(result ? 0 : 1)

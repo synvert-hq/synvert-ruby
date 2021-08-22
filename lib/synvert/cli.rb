@@ -146,7 +146,7 @@ module Synvert
     # List and print all available rewriters.
     def list_available_rewriters
       if Core::Rewriter.availables.empty?
-        puts 'There is no snippet under ~/.synvert, please run `synvert --sync` to fetch snippets.'
+        puts 'There is no snippet under ~/.synvert-ruby, please run `synvert-ruby --sync` to fetch snippets.'
         return
       end
 
@@ -326,7 +326,7 @@ module Synvert
     end
 
     def default_snippets_home
-      ENV['SYNVERT_SNIPPETS_HOME'] || File.join(ENV['HOME'], '.synvert')
+      ENV['SYNVERT_SNIPPETS_HOME'] || File.join(ENV['HOME'], '.synvert-ruby')
     end
 
     def plain_output?
