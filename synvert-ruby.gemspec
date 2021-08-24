@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['flyerhzm@gmail.com']
   spec.description   = 'synvert is used to convert ruby code to better syntax.'
   spec.summary       = 'synvert = syntax + convert.'
-  spec.homepage      = 'https://github.com/xinminlabs/synvert'
+  spec.homepage      = 'https://github.com/xinminlabs/synvert-ruby'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files`.split($/)
