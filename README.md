@@ -1,8 +1,8 @@
 # Synvert
 
-<img src="https://xinminlabs.github.io/synvert/img/logo_96.png" alt="logo" width="32" height="32" />
+<img src="https://synvert.xinminlabs.com/img/logo_96.png" alt="logo" width="32" height="32" />
 
-![Main workflow](https://github.com/xinminlabs/synvert/actions/workflows/main.yml/badge.svg)
+![Main workflow](https://github.com/xinminlabs/synvert-ruby/actions/workflows/main.yml/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/xinminlabs/synvert/badge.svg?branch=master)](https://coveralls.io/r/xinminlabs/synvert)
 [![Gem Version](https://badge.fury.io/rb/synvert.svg)](http://badge.fury.io/rb/synvert)
 
@@ -53,7 +53,7 @@ $ synvert-ruby -r factory_girl/use_short_syntax,rails/upgrade_3_2_to_4_0 ~/Sites
 
 ## Documentation
 
-[https://xinminlabs.github.io/synvert/][3]
+[https://synvert.xinminlabs.com][3]
 
 ## Contributing
 
@@ -65,4 +65,4 @@ $ synvert-ruby -r factory_girl/use_short_syntax,rails/upgrade_3_2_to_4_0 ~/Sites
 
 [1]: https://github.com/xinminlabs/synvert-core-ruby/
 [2]: https://github.com/xinminlabs/synvert-snippets-ruby/
-[3]: https://xinminlabs.github.io/synvert/
+[3]: https://synvert.xinminlabs.com
