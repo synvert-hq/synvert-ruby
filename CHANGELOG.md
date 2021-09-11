@@ -1,20 +1,10 @@
 # CHANGELOG
 
-## 0.18.4 (2021-08-22)
+## 0.19.0 (2021-09-10)
 
-* Deprecate synvert, use synvert-ruby instead
-
-## 0.18.3 (2021-08-22)
-
-* Update synvert-snippets url
-* Deprecate synvert, use synvert-ruby instead
-
-## 0.18.2 (2021-08-12)
-
-* Require `fileutils`
-
-## 0.18.1 (2021-07-23)
-
+* Add `--show-run-process` option
+* Deprecate `synvert`, use `synvert-ruby` instead
+* Update `synvert-snippets` url
 * Fix `affected_files` is Set
 
 ## 0.18.0 (2021-07-14)
