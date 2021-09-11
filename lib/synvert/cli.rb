@@ -74,23 +74,23 @@ module Synvert
           opts.on '-l', '--list', 'list all available snippets' do
             @options[:command] = 'list'
           end
-          opts.on '-o', '--open SNIPPET_NAME', 'Open a snippet' do |snippet_name|
-            @options[:command] = 'open'
-            @options[:snippet_name] = snippet_name
-          end
           opts.on '-q', '--query QUERY', 'query specified snippets' do |query|
             @options[:command] = 'query'
             @options[:query] = query
-          end
-          opts.on '--skip FILE_PATTERNS',
-                  'skip specified files or directories, separated by comma, e.g. app/models/post.rb,vendor/plugins/**/*.rb' do |file_patterns|
-            @options[:skip_file_patterns] = file_patterns.split(',')
           end
           opts.on '-s',
                   '--show SNIPPET_NAME',
                   'show specified snippet description, SNIPPET_NAME is combined by group and name, e.g. ruby/new_hash_syntax' do |snippet_name|
             @options[:command] = 'show'
             @options[:snippet_name] = snippet_name
+          end
+          opts.on '-o', '--open SNIPPET_NAME', 'Open a snippet' do |snippet_name|
+            @options[:command] = 'open'
+            @options[:snippet_name] = snippet_name
+          end
+          opts.on '-g', '--generate NEW_SNIPPET_NAME', 'generate a new snippet' do |name|
+            @options[:command] = 'generate'
+            @options[:snippet_name] = name
           end
           opts.on '--sync', 'sync snippets' do
             @options[:command] = 'sync'
@@ -101,9 +101,12 @@ module Synvert
           opts.on '-r', '--run SNIPPET_NAME', 'run specified snippet, e.g. ruby/new_hash_syntax' do |snippet_name|
             @options[:snippet_name] = snippet_name
           end
-          opts.on '-g', '--generate NEW_SNIPPET_NAME', 'generate a new snippet' do |name|
-            @options[:command] = 'generate'
-            @options[:snippet_name] = name
+          opts.on '--show-run-process', 'show processing files when running a snippet' do
+            Core::Configuration.show_run_process = true
+          end
+          opts.on '--skip FILE_PATTERNS',
+                  'skip specified files or directories, separated by comma, e.g. app/models/post.rb,vendor/plugins/**/*.rb' do |file_patterns|
+            @options[:skip_file_patterns] = file_patterns.split(',')
           end
           opts.on '-f', '--format FORMAT', 'output format' do |format|
             @options[:format] = format
