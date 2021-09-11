@@ -34,7 +34,6 @@ module Synvert
         load_rewriters
         query_available_rewriters
       when 'show'
-        load_rewriters
         show_rewriter
       when 'sync'
         sync_snippets
@@ -185,7 +184,7 @@ module Synvert
       return puts 'To open a synvert snippet, set $EDITOR or $SYNVERT_EDITOR' unless editor
 
       path = File.expand_path(File.join(default_snippets_home, "lib/#{@options[:snippet_name]}.rb"))
-      if File.exist? path
+      if File.exist?(path)
         system editor, path
       else
         puts "Can't run #{editor} #{path}"
