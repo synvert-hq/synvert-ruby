@@ -155,9 +155,7 @@ module Synvert
       if plain_output?
         Core::Rewriter.availables.each do |group, rewriters|
           puts group
-          rewriters.each do |name, _rewriter|
-            puts '    ' + name
-          end
+          rewriters.each { |name, _rewriter| puts '    ' + name }
         end
         puts
       elsif json_output?
@@ -199,14 +197,10 @@ module Synvert
       Core::Rewriter.availables.each do |group, rewriters|
         if group.include? @options[:query]
           puts group
-          rewriters.each do |name, _rewriter|
-            puts '    ' + name
-          end
+          rewriters.each { |name, _rewriter| puts '    ' + name }
         elsif rewriters.keys.any? { |name| name.include? @options[:query] }
           puts group
-          rewriters.each do |name, _rewriter|
-            puts '    ' + name if name.include?(@options[:query])
-          end
+          rewriters.each { |name, _rewriter| puts '    ' + name if name.include?(@options[:query]) }
         end
       end
       puts
@@ -240,9 +234,7 @@ module Synvert
         puts "===== #{snippet_name} started ====="
         group, name = snippet_name.split('/')
         rewriter = Core::Rewriter.call group, name
-        rewriter.warnings.each do |warning|
-          puts '[Warn] ' + warning.message
-        end
+        rewriter.warnings.each { |warning| puts '[Warn] ' + warning.message }
         puts rewriter.todo if rewriter.todo
         puts "===== #{snippet_name} done ====="
       elsif json_output?
@@ -263,9 +255,7 @@ module Synvert
       if plain_output?
         puts '===== execute started ====='
         rewriter = eval(input)
-        rewriter.warnings.each do |warning|
-          puts '[Warn] ' + warning.message
-        end
+        rewriter.warnings.each { |warning| puts '[Warn] ' + warning.message }
         puts rewriter.todo if rewriter.todo
         puts '===== execute done ====='
       elsif json_output?

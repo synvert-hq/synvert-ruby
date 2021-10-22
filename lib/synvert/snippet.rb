@@ -27,11 +27,7 @@ module Synvert
     end
 
     def self.uri_open(url)
-      if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.5.0')
-        URI.open(url)
-      else
-        open(url)
-      end
+      Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.5.0') ? URI.open(url) : open(url)
     end
   end
 end
