@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.19.1 (2021-10-23)
+
+* Make URI.open work in ruby 2.4
+
 ## 0.19.0 (2021-09-10)
 
 * Add `--show-run-process` option
