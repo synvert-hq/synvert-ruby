@@ -8,7 +8,7 @@ module Synvert
   # Manage synvert snippets.
   class Snippet
     def self.fetch_core_version
-      content = URI.open('https://rubygems.org/api/v1/versions/synvert-core.json').read
+      content = uri_open('https://rubygems.org/api/v1/versions/synvert-core.json').read
       JSON.parse(content).first['number']
     end
 
@@ -23,6 +23,14 @@ module Synvert
         Kernel.system('git checkout .; git pull --rebase')
       else
         Kernel.system("git clone https://github.com/xinminlabs/synvert-snippets-ruby.git #{@snippets_path}")
+      end
+    end
+
+    def self.uri_open(url)
+      if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.5.0')
+        URI.open(url)
+      else
+        open(url)
       end
     end
   end
