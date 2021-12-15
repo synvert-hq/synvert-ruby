@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.19.2 (2021-12-15)
+
+* List sub_snippets group and name
+
 ## 0.19.1 (2021-10-23)
 
 * Make URI.open work in ruby 2.4
