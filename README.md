@@ -6,28 +6,33 @@
 [![Coverage Status](https://coveralls.io/repos/xinminlabs/synvert/badge.svg?branch=master)](https://coveralls.io/r/xinminlabs/synvert)
 [![Gem Version](https://badge.fury.io/rb/synvert.svg)](http://badge.fury.io/rb/synvert)
 
-Synvert = syntax + convert, makes it easy to convert ruby code
-automatically.
+`synvert-ruby` is a command tool to rewrite ruby code automatically, it depends on `synvert-core-ruby` and `synvert-snippets-ruby`.
 
-Synvert is composed by synvert-core and synvert-snippets.
+[synvert-core-ruby](https://github.com/xinminlabs/synvert-core-ruby) provides a set of DSLs to rewrite ruby code.
 
-[synvert-core][1] provides a dsl to convert ruby code.
-
-[synvert-snippets][2] lists all snippets to convert ruby code based on
-synvert-core.
+[synvert-snippets-ruby](https://github.com/xinminlabs/synvert-snippets-ruby) provides official snippets to rewrite ruby code.
 
 ## Installation
 
-Install it using rubygems
+To install the latest version, run
+
 
 ```
 $ gem install synvert
 ```
 
-then run
+This will also install `synvert-core-ruby`.
+
+Before using synvert, you need to sync all official snippets first.
 
 ```
 $ synvert-ruby --sync
+```
+
+Then you can use synvert to rewrite your ruby code, e.g.
+
+```
+$ synvert-ruby -r factory_bot/use_short_syntax
 ```
 
 ## Usage
@@ -38,31 +43,78 @@ Usage: synvert-ruby [project_path]
     -d, --load SNIPPET_PATHS         load custom snippets, snippet paths can be local file path or remote http url
     -l, --list                       list all available snippets
     -q, --query QUERY                query specified snippets
-        --skip FILE_PATTERNS         skip specified files or directories, separated by comma, e.g. app/models/post.rb,vendor/plugins/**/*.rb
-    -s, --show SNIPPET_NAME          show specified snippet description
+    -s, --show SNIPPET_NAME          show specified snippet description, SNIPPET_NAME is combined by group and name, e.g. ruby/new_hash_syntax
+    -o, --open SNIPPET_NAME          Open a snippet
+    -g, --generate NEW_SNIPPET_NAME  generate a new snippet
         --sync                       sync snippets
-    -r, --run SNIPPET_NAMES          run specified snippets
+        --execute                    execute snippet
+    -r, --run SNIPPET_NAME           run specified snippet, e.g. ruby/new_hash_syntax
+        --show-run-process           show processing files when running a snippet
+        --skip FILE_PATTERNS         skip specified files or directories, separated by comma, e.g. app/models/post.rb,vendor/plugins/**/*.rb
+    -f, --format FORMAT              output format
     -v, --version                    show this version
 ```
 
-e.g.
+#### Sync snippets
+
+[Official Snippets](https://github.com/xinminlabs/synvert-snippets-ruby) are available on github,
+you can sync them any time you want.
 
 ```
-$ synvert-ruby -r factory_girl/use_short_syntax,rails/upgrade_3_2_to_4_0 ~/Sites/railsbp/rails-bestpractices.com
+$ synvert-ruby --sync
 ```
 
-## Documentation
+#### List snippets
 
-[https://synvert.xinminlabs.com][3]
+List all available snippets
 
-## Contributing
+```
+$ synvert-ruby -l
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+$ synvert-ruby --list --form json
+```
 
-[1]: https://github.com/xinminlabs/synvert-core-ruby/
-[2]: https://github.com/xinminlabs/synvert-snippets-ruby/
-[3]: https://synvert.xinminlabs.com
+#### Show a snippet
+
+Describe what a snippet does.
+
+```
+$ synvert-ruby -s factory_bot/use_short_syntax
+```
+
+#### Open a snippet
+
+Open a snippet in your editor, editor is defined in
+`ENV['SNIPPET_EDITOR']` or `ENV['EDITOR']`
+
+```
+$ synvert-ruby -o factory_bot/use_short_syntax
+```
+
+#### Run a snippet
+
+Run a snippet, analyze and then rewrite code.
+
+```
+$ synvert-ruby -r factory_bot/use_short_syntax ~/Sites/xinminlabs/synvert-core-ruby
+```
+
+Load custom snippet
+
+```
+$ synvert-ruby --load ~/.custom-snippets/my-own-snippet.rb -r my-own-snippet ~/Sites/xinminlabs/synvert-core-ruby
+```
+
+Show processing files when running a snippet.
+
+```
+$ synvert-ruby -r factory_bot/use_short_syntax --show-run-process ~/Sites/xinminlabs/synvert-core-ruby
+```
+
+#### Generate a snippet
+
+Generate a new snippet
+
+```
+$ synvert-ruby -g ruby/convert_foo_to_bar
+```
