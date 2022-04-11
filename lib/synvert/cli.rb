@@ -165,15 +165,11 @@ module Synvert
         Core::Rewriter.availables.each do |group, rewriters|
           rewriters.each do |name, rewriter|
             rewriter.process_with_sandbox
-            sub_snippets = rewriter.sub_snippets.map { |sub_snippet|
-              { group: sub_snippet.group, name: sub_snippet.name }
-            }
-            item = {
-              group: group,
-              name: name,
-              description: rewriter.description,
-              sub_snippets: sub_snippets
-            }
+            sub_snippets =
+              rewriter.sub_snippets.map { |sub_snippet|
+                { group: sub_snippet.group, name: sub_snippet.name }
+              }
+            item = { group: group, name: name, description: rewriter.description, sub_snippets: sub_snippets }
             item[:ruby_version] = rewriter.ruby_version.version if rewriter.ruby_version
             item[:gem_spec] = { name: rewriter.gem_spec.name, version: rewriter.gem_spec.version } if rewriter.gem_spec
             output << item
