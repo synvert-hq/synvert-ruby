@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'optparse'
+require 'json'
 
 module Synvert
   # Synvert command line interface.
