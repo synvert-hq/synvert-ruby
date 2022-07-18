@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.19.3 (2022-07-18)
+
+* Require json
+* update `synvert-core` to 1.5.0
+
 ## 0.19.2 (2021-12-15)
 
 * List sub_snippets group and name
