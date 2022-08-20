@@ -27,12 +27,12 @@ module Synvert
 
       case @options[:command]
       when 'list'
-        load_rewriters
+        read_rewriters
         list_available_rewriters
       when 'open'
         open_rewriter
       when 'query'
-        load_rewriters
+        read_rewriters
         query_available_rewriters
       when 'show'
         show_rewriter
@@ -44,7 +44,7 @@ module Synvert
         execute_snippet
       else
         # run
-        load_rewriters
+        read_rewriters
         run_snippet
       end
       true
@@ -129,21 +129,9 @@ module Synvert
       end
     end
 
-    # Load all rewriters.
-    def load_rewriters
+    # read all rewriters.
+    def read_rewriters
       Dir.glob(File.join(default_snippets_home, 'lib/**/*.rb')).each { |file| require file }
-
-      @options[:custom_snippet_paths].each do |snippet_path|
-        if /^http/.match?(snippet_path)
-          uri = URI.parse snippet_path
-          eval(uri.read)
-        else
-          require snippet_path
-        end
-      end
-    rescue StandardError
-      FileUtils.rm_rf default_snippets_home
-      retry
     end
 
     # List and print all available rewriters.
