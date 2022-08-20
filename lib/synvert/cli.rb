@@ -2,6 +2,8 @@
 
 require 'optparse'
 require 'json'
+require 'uri'
+require 'open-uri'
 
 module Synvert
   # Synvert command line interface.
@@ -16,7 +18,7 @@ module Synvert
 
     # Initialize a CLI.
     def initialize
-      @options = { command: 'run', custom_snippet_paths: [], format: 'plain' }
+      @options = { command: 'run', format: 'plain' }
     end
 
     # Run the CLI.
@@ -43,9 +45,19 @@ module Synvert
       when 'execute'
         execute_snippet
       else
-        # run
-        read_rewriters
-        run_snippet
+        if /^http/.match?(@options[:snippet_name])
+          uri = URI.parse(@options[:snippet_name])
+          eval(uri.open.read)
+          snippet_name = get_last_snippet_name
+          run_snippet(snippet_name)
+        elsif File.exists?(@options[:snippet_name])
+          require(@options[:snippet_name])
+          snippet_name = get_last_snippet_name
+          run_snippet(snippet_name)
+        else
+          read_rewriters
+          run_snippet(@options[:snippet_name])
+        end
       end
       true
     rescue SystemExit
@@ -67,11 +79,6 @@ module Synvert
       optparse =
         OptionParser.new do |opts|
           opts.banner = 'Usage: synvert-ruby [project_path]'
-          opts.on '-d',
-                  '--load SNIPPET_PATHS',
-                  'load custom snippets, snippet paths can be local file path or remote http url' do |snippet_paths|
-            @options[:custom_snippet_paths] = snippet_paths.split(',').map(&:strip)
-          end
           opts.on '-l', '--list', 'list all available snippets' do
             @options[:command] = 'list'
           end
@@ -99,7 +106,7 @@ module Synvert
           opts.on '--execute', 'execute snippet' do
             @options[:command] = 'execute'
           end
-          opts.on '-r', '--run SNIPPET_NAME', 'run specified snippet, e.g. ruby/new_hash_syntax' do |snippet_name|
+          opts.on '-r', '--run SNIPPET_NAME', 'run specified snippet, e.g. ruby/new_hash_syntax, or remote url, or local file path' do |snippet_name|
             @options[:snippet_name] = snippet_name
           end
           opts.on '--show-run-process', 'show processing files when running a snippet' do
@@ -222,8 +229,7 @@ module Synvert
     end
 
     # run snippets
-    def run_snippet
-      snippet_name = @options[:snippet_name]
+    def run_snippet(snippet_name)
       if plain_output?
         puts "===== #{snippet_name} started ====="
         group, name = snippet_name.split('/')
@@ -325,6 +331,13 @@ module Synvert
 
     def json_output?
       @options[:format] == 'json'
+    end
+
+    # get the last registered snippet name
+    def get_last_snippet_name
+      group = Rewriter.availables.keys.last
+      name = Rewriter.availables[group].keys.last
+      return [group, name].join("/")
     end
   end
 end

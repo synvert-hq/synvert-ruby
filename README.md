@@ -40,7 +40,6 @@ $ synvert-ruby -r factory_bot/use_short_syntax
 ```
 $ synvert-ruby -h
 Usage: synvert-ruby [project_path]
-    -d, --load SNIPPET_PATHS         load custom snippets, snippet paths can be local file path or remote http url
     -l, --list                       list all available snippets
     -q, --query QUERY                query specified snippets
     -s, --show SNIPPET_NAME          show specified snippet description, SNIPPET_NAME is combined by group and name, e.g. ruby/new_hash_syntax
@@ -48,7 +47,7 @@ Usage: synvert-ruby [project_path]
     -g, --generate NEW_SNIPPET_NAME  generate a new snippet
         --sync                       sync snippets
         --execute                    execute snippet
-    -r, --run SNIPPET_NAME           run specified snippet, e.g. ruby/new_hash_syntax
+    -r, --run SNIPPET_NAME           run specified snippet, e.g. ruby/new_hash_syntax, or remote url, or local file path
         --show-run-process           show processing files when running a snippet
         --skip FILE_PATTERNS         skip specified files or directories, separated by comma, e.g. app/models/post.rb,vendor/plugins/**/*.rb
     -f, --format FORMAT              output format
@@ -99,10 +98,16 @@ Run a snippet, analyze and then rewrite code.
 $ synvert-ruby -r factory_bot/use_short_syntax ~/Sites/xinminlabs/synvert-core-ruby
 ```
 
-Load custom snippet
+run a snippet from remote url
 
 ```
-$ synvert-ruby --load ~/.custom-snippets/my-own-snippet.rb -r my-own-snippet ~/Sites/xinminlabs/synvert-core-ruby
+$ synvert-ruby -r https://raw.githubusercontent.com/xinminlabs/synvert-snippets-ruby/master/lib/factory_bot/use_short_syntax.rb ~/sites/xinminlabs/synvert-core-ruby
+```
+
+run a snippet from local path
+
+```
+$ synvert-ruby -r ~/.synvert-ruby/lib/factory_bot/use_short_syntax.rb ~/sites/xinminlabs/synvert-core-ruby
 ```
 
 Show processing files when running a snippet.
