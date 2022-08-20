@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.20.0 (2022-08-20)
+
+* Rename `load_rewriters` to `read_rewriters`
+* Run a snippet from remote url or local file path
+
 ## 0.19.3 (2022-07-18)
 
 * Require json
