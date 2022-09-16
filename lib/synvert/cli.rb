@@ -44,20 +44,12 @@ module Synvert
         generate_snippet
       when 'execute'
         execute_snippet
+      when 'test'
+        test_snippet(find_snippet_name(@options[:snippet_name]))
+      when 'run'
+        run_snippet(find_snippet_name(@options[:snippet_name]))
       else
-        if /^http/.match?(@options[:snippet_name])
-          uri = URI.parse(@options[:snippet_name])
-          eval(uri.open.read)
-          snippet_name = get_last_snippet_name
-          run_snippet(snippet_name)
-        elsif File.exists?(@options[:snippet_name])
-          require(@options[:snippet_name])
-          snippet_name = get_last_snippet_name
-          run_snippet(snippet_name)
-        else
-          read_rewriters
-          run_snippet(@options[:snippet_name])
-        end
+        # nothing to do
       end
       true
     rescue SystemExit
@@ -106,7 +98,12 @@ module Synvert
           opts.on '--execute', 'execute snippet' do
             @options[:command] = 'execute'
           end
-          opts.on '-r', '--run SNIPPET_NAME', 'run specified snippet, e.g. ruby/new_hash_syntax, or remote url, or local file path' do |snippet_name|
+          opts.on '-r', '--run SNIPPET_NAME', 'run a snippet with snippet name, e.g. ruby/new_hash_syntax, or remote url, or local file path' do |snippet_name|
+            @options[:command] = 'run'
+            @options[:snippet_name] = snippet_name
+          end
+          opts.on '-t', '--test SNIPPET_NAME', 'test a snippet with snippet name, e.g. ruby/new_hash_syntax, or remote url, or local file path' do |snippet_name|
+            @options[:command] = 'test'
             @options[:snippet_name] = snippet_name
           end
           opts.on '--show-run-process', 'show processing files when running a snippet' do
@@ -228,7 +225,24 @@ module Synvert
       end
     end
 
-    # run snippets
+    # find snippet name
+    # it can get from explicit snippet name,
+    # or from local path or http url.
+    def find_snippet_name(snippet_name)
+      if /^http/.match?(snippet_name)
+        uri = URI.parse(snippet_name)
+        eval(uri.open.read)
+        get_last_snippet_name
+      elsif File.exists?(snippet_name)
+        require(snippet_name)
+        get_last_snippet_name
+      else
+        read_rewriters
+        snippet_name
+      end
+    end
+
+    # run a snippet
     def run_snippet(snippet_name)
       if plain_output?
         puts "===== #{snippet_name} started ====="
@@ -249,6 +263,14 @@ module Synvert
         }
         puts JSON.generate(output)
       end
+    end
+
+    # test a snippet
+    def test_snippet(snippet_name)
+      group, name = snippet_name.split('/')
+      rewriter = Core::Rewriter.fetch(group, name)
+      results = rewriter.test
+      puts JSON.generate(results)
     end
 
     # execute snippet
