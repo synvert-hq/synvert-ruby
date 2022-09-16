@@ -45,9 +45,11 @@ module Synvert
       when 'execute'
         execute_snippet
       when 'test'
-        test_snippet(find_snippet_name(@options[:snippet_name]))
+        group, name = find_snippet_name(@options[:snippet_name])
+        test_snippet(group, name)
       when 'run'
-        run_snippet(find_snippet_name(@options[:snippet_name]))
+        group, name = find_snippet_name(@options[:snippet_name])
+        run_snippet(group, name)
       else
         # nothing to do
       end
@@ -238,23 +240,21 @@ module Synvert
         get_last_snippet_name
       else
         read_rewriters
-        snippet_name
+        snippet_name.split('/')
       end
     end
 
     # run a snippet
-    def run_snippet(snippet_name)
+    def run_snippet(group, name)
       if plain_output?
-        puts "===== #{snippet_name} started ====="
-        group, name = snippet_name.split('/')
+        puts "===== #{group}/#{name} started ====="
         rewriter = Core::Rewriter.call group, name
         rewriter.warnings.each do |warning|
           puts '[Warn] ' + warning.message
         end
         puts rewriter.todo if rewriter.todo
-        puts "===== #{snippet_name} done ====="
+        puts "===== #{group}/#{name} done ====="
       elsif json_output?
-        group, name = snippet_name.split('/')
         rewriter = Core::Rewriter.call group, name
         output = {
           affected_files: rewriter.affected_files.union(rewriter.sub_snippets.sum(Set.new, &:affected_files)).to_a,
@@ -266,8 +266,7 @@ module Synvert
     end
 
     # test a snippet
-    def test_snippet(snippet_name)
-      group, name = snippet_name.split('/')
+    def test_snippet(group, name)
       rewriter = Core::Rewriter.fetch(group, name)
       results = rewriter.test
       puts JSON.generate(results)
@@ -359,7 +358,7 @@ module Synvert
     def get_last_snippet_name
       group = Rewriter.availables.keys.last
       name = Rewriter.availables[group].keys.last
-      return [group, name].join("/")
+      return group, name
     end
   end
 end
