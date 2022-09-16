@@ -43,12 +43,12 @@ module Synvert
       when 'generate'
         generate_snippet
       when 'execute'
-        execute_snippet
+        execute_snippet(@options[:execute_command])
       when 'test'
-        group, name = find_snippet_name(@options[:snippet_name])
+        group, name = get_snippet_name(@options[:snippet_name])
         test_snippet(group, name)
       when 'run'
-        group, name = find_snippet_name(@options[:snippet_name])
+        group, name = get_snippet_name(@options[:snippet_name])
         run_snippet(group, name)
       else
         # nothing to do
@@ -97,8 +97,9 @@ module Synvert
           opts.on '--sync', 'sync snippets' do
             @options[:command] = 'sync'
           end
-          opts.on '--execute', 'execute snippet' do
+          opts.on '--execute', 'execute snippet' do |execute_command|
             @options[:command] = 'execute'
+            @options[:execute_command] = execute_command
           end
           opts.on '-r', '--run SNIPPET_NAME', 'run a snippet with snippet name, e.g. ruby/new_hash_syntax, or remote url, or local file path' do |snippet_name|
             @options[:command] = 'run'
@@ -227,10 +228,10 @@ module Synvert
       end
     end
 
-    # find snippet name
+    # get snippet name
     # it can get from explicit snippet name,
     # or from local path or http url.
-    def find_snippet_name(snippet_name)
+    def get_snippet_name(snippet_name)
       if /^http/.match?(snippet_name)
         uri = URI.parse(snippet_name)
         eval(uri.open.read)
@@ -239,9 +240,15 @@ module Synvert
         require(snippet_name)
         get_last_snippet_name
       else
-        require(File.join(default_snippets_home, 'lib', "#{snippet_name}.rb")
+        require(File.join(default_snippets_home, 'lib', "#{snippet_name}.rb"))
         snippet_name.split('/')
       end
+    end
+
+    # get snippet name by user inputs
+    def get_snippet_name_by_input(input)
+      rewriter = eval(input)
+      get_last_snippet_name
     end
 
     # run a snippet
@@ -273,24 +280,12 @@ module Synvert
     end
 
     # execute snippet
-    def execute_snippet
-      input = STDIN.read
-      if plain_output?
-        puts '===== execute started ====='
-        rewriter = eval(input)
-        rewriter.warnings.each do |warning|
-          puts '[Warn] ' + warning.message
-        end
-        puts rewriter.todo if rewriter.todo
-        puts '===== execute done ====='
-      elsif json_output?
-        rewriter = eval(input)
-        output = {
-          affected_files: rewriter.affected_files.union(rewriter.sub_snippets.sum(Set.new, &:affected_files)).to_a,
-          warnings: rewriter.warnings.union(rewriter.sub_snippets.sum([], &:warnings)),
-          todo: rewriter.todo
-        }
-        puts JSON.generate(output)
+    def execute_snippet(execute_command)
+      group, name = get_snippet_name_by_input(STDIN.read)
+      if execute_command == 'test'
+        test_snippet(group, name)
+      else
+        run_snippet(group, name)
       end
     end
 
