@@ -239,7 +239,7 @@ module Synvert
         require(snippet_name)
         get_last_snippet_name
       else
-        read_rewriters
+        require(File.join(default_snippets_home, 'lib', "#{snippet_name}.rb")
         snippet_name.split('/')
       end
     end
