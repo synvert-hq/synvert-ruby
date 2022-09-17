@@ -47,9 +47,11 @@ Usage: synvert-ruby [project_path]
     -g, --generate NEW_SNIPPET_NAME  generate a new snippet
         --sync                       sync snippets
         --execute                    execute snippet
-    -r, --run SNIPPET_NAME           run specified snippet, e.g. ruby/new_hash_syntax, or remote url, or local file path
+    -r, --run SNIPPET_NAME           run a snippet with snippet name, e.g. ruby/new_hash_syntax, or remote url, or local file path
+    -t, --test SNIPPET_NAME          test a snippet with snippet name, e.g. ruby/new_hash_syntax, or remote url, or local file path
         --show-run-process           show processing files when running a snippet
-        --skip FILE_PATTERNS         skip specified files or directories, separated by comma, e.g. app/models/post.rb,vendor/plugins/**/*.rb
+        --only-paths DIRECTORIES     only specified files or directories, separated by comma, e.g. app/models,app/controllers
+        --skip-paths FILE_PATTERNS   skip specified files or directories, separated by comma, e.g. vendor/,lib/**/*.rb
     -f, --format FORMAT              output format
     -v, --version                    show this version
 ```
@@ -98,16 +100,28 @@ Run a snippet, analyze and then rewrite code.
 $ synvert-ruby -r factory_bot/use_short_syntax ~/Sites/xinminlabs/synvert-core-ruby
 ```
 
-run a snippet from remote url
+Run a snippet from remote url
 
 ```
 $ synvert-ruby -r https://raw.githubusercontent.com/xinminlabs/synvert-snippets-ruby/master/lib/factory_bot/use_short_syntax.rb ~/sites/xinminlabs/synvert-core-ruby
 ```
 
-run a snippet from local path
+Run a snippet from local path
 
 ```
 $ synvert-ruby -r ~/.synvert-ruby/lib/factory_bot/use_short_syntax.rb ~/sites/xinminlabs/synvert-core-ruby
+```
+
+Skip paths
+
+```
+$ synvert-ruby -r factory_bot/use_short_syntax --skip-paths vendor/ ~/sites/xinminlabs/synvert-core-ruby
+```
+
+Only paths
+
+```
+$ synvert-ruby -r factory_bot/use_short_syntax --only-paths app/models/ ~/sites/xinminlabs/synvert-core-ruby
 ```
 
 Show processing files when running a snippet.
