@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 1.0.0 (2022-09-17)
+
+* Test a snippet
+* Require single rewriter instead of loading all rewriters
+* Execute command can be either run or test
+* Add `skip_path` and `only_paths` options
+
 ## 0.20.0 (2022-08-20)
 
 * Rename `load_rewriters` to `read_rewriters`

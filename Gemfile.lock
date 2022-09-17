@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    synvert (0.20.0)
-      synvert-core (>= 1.7.0)
+    synvert (1.0.0)
+      synvert-core (>= 1.8.0)
 
 GEM
   remote: https://rubygems.org/
