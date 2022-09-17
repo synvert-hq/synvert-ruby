@@ -117,7 +117,7 @@ module Synvert
             @options[:only_paths] = directories
           end
           opts.on '--skip-paths FILE_PATTERNS',
-                  'skip specified files or directories, separated by comma, e.g. app/models/post.rb,vendor/plugins/**/*.rb' do |file_patterns|
+                  'skip specified files or directories, separated by comma, e.g. vendor/,lib/**/*.rb' do |file_patterns|
             @options[:skip_paths] = file_patterns
           end
           opts.on '-f', '--format FORMAT', 'output format' do |format|
