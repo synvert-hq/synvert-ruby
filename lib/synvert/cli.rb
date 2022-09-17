@@ -112,9 +112,13 @@ module Synvert
           opts.on '--show-run-process', 'show processing files when running a snippet' do
             Core::Configuration.show_run_process = true
           end
-          opts.on '--skip FILE_PATTERNS',
+          opts.on '--only-paths DIRECTORIES',
+                  'only specified files or directories, separated by comma, e.g. app/models,app/controllers' do |directories|
+            @options[:only_paths] = directories
+          end
+          opts.on '--skip-paths FILE_PATTERNS',
                   'skip specified files or directories, separated by comma, e.g. app/models/post.rb,vendor/plugins/**/*.rb' do |file_patterns|
-            @options[:skip_file_patterns] = file_patterns.split(',')
+            @options[:skip_paths] = file_patterns
           end
           opts.on '-f', '--format FORMAT', 'output format' do |format|
             @options[:format] = format
@@ -125,14 +129,12 @@ module Synvert
           end
         end
       paths = optparse.parse(args)
-      Core::Configuration.path = paths.first || Dir.pwd
-      if @options[:skip_file_patterns] && !@options[:skip_file_patterns].empty?
-        skip_files =
-          @options[:skip_file_patterns].map do |file_pattern|
-            full_file_pattern = File.join(Core::Configuration.path, file_pattern)
-            Dir.glob(full_file_pattern)
-          end.flatten
-        Core::Configuration.skip_files = skip_files
+      Core::Configuration.root_path = paths.first || Dir.pwd
+      if @options[:only_paths] && !@options[:only_paths].empty?
+        Core::Configuration.only_paths = @options[:only_paths].split(",").map { |only_path| only_path.strip }
+      end
+      if @options[:skip_paths] && !@options[:skip_paths].empty?
+        Core::Configuration.skip_paths = @options[:skip_paths].split(",").map { |skip_path| skip_path.strip }
       end
     end
 
