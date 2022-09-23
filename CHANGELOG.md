@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.0.1 (2022-09-23)
+
+* Execute with EXECUTE_COMMAND
+
 ## 1.0.0 (2022-09-17)
 
 * Test a snippet
