@@ -97,7 +97,7 @@ module Synvert
           opts.on '--sync', 'sync snippets' do
             @options[:command] = 'sync'
           end
-          opts.on '--execute', 'execute snippet' do |execute_command|
+          opts.on '--execute EXECUTE_COMMAND', 'execute snippet' do |execute_command|
             @options[:command] = 'execute'
             @options[:execute_command] = execute_command
           end
