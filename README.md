@@ -56,7 +56,7 @@ Usage: synvert-ruby [project_path]
     -v, --version                    show this version
 ```
 
-#### Sync snippets
+### Sync snippets
 
 [Official Snippets](https://github.com/xinminlabs/synvert-snippets-ruby) are available on github,
 you can sync them any time you want.
@@ -65,7 +65,7 @@ you can sync them any time you want.
 $ synvert-ruby --sync
 ```
 
-#### List snippets
+### List snippets
 
 List all available snippets
 
@@ -75,7 +75,7 @@ $ synvert-ruby -l
 $ synvert-ruby --list --format json
 ```
 
-#### Show a snippet
+### Show a snippet
 
 Describe what a snippet does.
 
@@ -83,7 +83,7 @@ Describe what a snippet does.
 $ synvert-ruby -s factory_bot/use_short_syntax
 ```
 
-#### Open a snippet
+### Open a snippet
 
 Open a snippet in your editor, editor is defined in
 `ENV['SNIPPET_EDITOR']` or `ENV['EDITOR']`
@@ -92,7 +92,7 @@ Open a snippet in your editor, editor is defined in
 $ synvert-ruby -o factory_bot/use_short_syntax
 ```
 
-#### Run a snippet
+### Run a snippet
 
 Run a snippet, analyze and then rewrite code.
 
@@ -130,7 +130,7 @@ Show processing files when running a snippet.
 $ synvert-ruby -r factory_bot/use_short_syntax --show-run-process ~/Sites/xinminlabs/synvert-core-ruby
 ```
 
-#### Generate a snippet
+### Generate a snippet
 
 Generate a new snippet
 
