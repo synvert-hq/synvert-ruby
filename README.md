@@ -72,7 +72,7 @@ List all available snippets
 ```
 $ synvert-ruby -l
 
-$ synvert-ruby --list --form json
+$ synvert-ruby --list --format json
 ```
 
 #### Show a snippet
