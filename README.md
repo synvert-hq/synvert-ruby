@@ -1,4 +1,4 @@
-# Synvert
+# synvert-ruby
 
 <img src="https://synvert.net/img/logo_96.png" alt="logo" width="32" height="32" />
 
