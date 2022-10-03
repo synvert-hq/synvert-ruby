@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.1.0 (2022-10-03))
+
+* Fix sub snippet not found
+* Support sub snippets in `test`
+
 ## 1.0.1 (2022-09-23)
 
 * Execute with EXECUTE_COMMAND
