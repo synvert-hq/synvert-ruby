@@ -281,6 +281,9 @@ module Synvert
     def test_snippet(group, name)
       rewriter = Core::Rewriter.fetch(group, name)
       results = rewriter.test
+      rewriter.sub_snippets.each do |sub_snippet|
+        results += sub_snippet.test_results
+      end
       puts JSON.generate(results)
     end
 
