@@ -43,11 +43,14 @@ module Synvert
       when 'generate'
         generate_snippet
       when 'execute'
+        read_rewriters
         execute_snippet(@options[:execute_command])
       when 'test'
+        read_rewriters
         group, name = get_snippet_name(@options[:snippet_name])
         test_snippet(group, name)
       when 'run'
+        read_rewriters
         group, name = get_snippet_name(@options[:snippet_name])
         run_snippet(group, name)
       else
