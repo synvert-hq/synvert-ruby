@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    synvert (1.1.0)
+    synvert (1.1.1)
       synvert-core (>= 1.9.2)
 
 GEM
