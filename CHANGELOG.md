@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.1 (2022-10-05)
+
+* Fix get_last_snippet_name, eval snippet to get rewriter
+
 ## 1.1.0 (2022-10-03))
 
 * Fix sub snippet not found
