@@ -47,12 +47,12 @@ module Synvert
         execute_snippet(@options[:execute_command])
       when 'test'
         read_rewriters
-        group, name = get_snippet_name(@options[:snippet_name])
-        test_snippet(group, name)
+        rewriter = eval_snippet(@options[:snippet_name])
+        test_snippet(rewriter)
       when 'run'
         read_rewriters
-        group, name = get_snippet_name(@options[:snippet_name])
-        run_snippet(group, name)
+        rewriter = eval_snippet(@options[:snippet_name])
+        run_snippet(rewriter)
       else
         # nothing to do
       end
@@ -233,41 +233,38 @@ module Synvert
       end
     end
 
-    # get snippet name
-    # it can get from explicit snippet name,
+    # eval snippet by name
+    # it can eval by explicit snippet name,
     # or from local path or http url.
-    def get_snippet_name(snippet_name)
+    def eval_snippet(snippet_name)
       if /^http/.match?(snippet_name)
         uri = URI.parse(snippet_name)
         eval(uri.open.read)
-        get_last_snippet_name
       elsif File.exists?(snippet_name)
-        require(snippet_name)
-        get_last_snippet_name
+        eval(File.read(snippet_name))
       else
         require(File.join(default_snippets_home, 'lib', "#{snippet_name}.rb"))
-        snippet_name.split('/')
+        group, name = snippet_name.split('/')
+        Core::Rewriter.fetch(group, name)
       end
     end
 
-    # get snippet name by user inputs
-    def get_snippet_name_by_input(input)
-      rewriter = eval(input)
-      get_last_snippet_name
+    # eval snippet name by user input
+    def eval_snippet_name_by_input(input)
+      eval(input)
     end
 
     # run a snippet
-    def run_snippet(group, name)
+    def run_snippet(rewriter)
+      rewriter.process
       if plain_output?
-        puts "===== #{group}/#{name} started ====="
-        rewriter = Core::Rewriter.call group, name
+        puts "===== #{rewriter.group}/#{rewriter.name} started ====="
         rewriter.warnings.each do |warning|
           puts '[Warn] ' + warning.message
         end
         puts rewriter.todo if rewriter.todo
-        puts "===== #{group}/#{name} done ====="
+        puts "===== #{rewriter.group}/#{rewriter.name} done ====="
       elsif json_output?
-        rewriter = Core::Rewriter.call group, name
         output = {
           affected_files: rewriter.affected_files.union(rewriter.sub_snippets.sum(Set.new, &:affected_files)).to_a,
           warnings: rewriter.warnings.union(rewriter.sub_snippets.sum([], &:warnings)),
@@ -278,8 +275,7 @@ module Synvert
     end
 
     # test a snippet
-    def test_snippet(group, name)
-      rewriter = Core::Rewriter.fetch(group, name)
+    def test_snippet(rewriter)
       results = rewriter.test
       rewriter.sub_snippets.each do |sub_snippet|
         results += sub_snippet.test_results
@@ -289,11 +285,11 @@ module Synvert
 
     # execute snippet
     def execute_snippet(execute_command)
-      group, name = get_snippet_name_by_input(STDIN.read)
+      rewriter = eval_snippet_name_by_input(STDIN.read)
       if execute_command == 'test'
-        test_snippet(group, name)
+        test_snippet(rewriter)
       else
-        run_snippet(group, name)
+        run_snippet(rewriter)
       end
     end
 
@@ -355,13 +351,6 @@ module Synvert
 
     def json_output?
       @options[:format] == 'json'
-    end
-
-    # get the last registered snippet name
-    def get_last_snippet_name
-      group = Rewriter.availables.keys.last
-      name = Rewriter.availables[group].keys.last
-      return group, name
     end
   end
 end
