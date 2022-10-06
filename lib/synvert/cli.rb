@@ -238,7 +238,7 @@ module Synvert
     # or from local path or http url.
     def eval_snippet(snippet_name)
       if /^http/.match?(snippet_name)
-        uri = URI.parse(snippet_name)
+        uri = URI.parse(Utils.format_url(snippet_name))
         eval(uri.open.read)
       elsif File.exists?(snippet_name)
         eval(File.read(snippet_name))

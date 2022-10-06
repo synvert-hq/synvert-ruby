@@ -4,7 +4,7 @@ require 'spec_helper'
 
 module Synvert
   describe Snippet do
-    let(:snippets_path) { File.join(File.dirname(__FILE__), '.synvert') }
+    let(:snippets_path) { File.join(File.dirname(__FILE__), '.synvert-ruby') }
     let(:snippet) { Snippet.new(snippets_path) }
     after { FileUtils.rmdir(snippets_path) if File.exist?(snippets_path) }
 
