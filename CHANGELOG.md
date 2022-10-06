@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.2 (2022-10-06)
+
+* Convert github url to github raw url
+
 ## 1.1.1 (2022-10-05)
 
 * Fix get_last_snippet_name, eval snippet to get rewriter
