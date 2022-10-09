@@ -45,10 +45,10 @@ module Synvert
       when 'execute'
         execute_snippet(@options[:execute_command])
       when 'test'
-        rewriter = eval_snippet(@options[:snippet_name])
+        rewriter = Synvert::Core::Utils.eval_snippet(@options[:snippet_name])
         test_snippet(rewriter)
       when 'run'
-        rewriter = eval_snippet(@options[:snippet_name])
+        rewriter = Synvert::Core::Utils.eval_snippet(@options[:snippet_name])
         run_snippet(rewriter)
       else
         # nothing to do
@@ -227,22 +227,6 @@ module Synvert
       if Gem::Version.new(core_version) > Gem::Version.new(Synvert::Core::VERSION)
         puts "synvert-core is updated, installing synvert-core #{core_version}"
         system('gem install synvert-core')
-      end
-    end
-
-    # eval snippet by name
-    # it can eval by explicit snippet name,
-    # or from local path or http url.
-    def eval_snippet(snippet_name)
-      if /^http/.match?(snippet_name)
-        uri = URI.parse(Utils.format_url(snippet_name))
-        eval(uri.open.read)
-      elsif File.exists?(snippet_name)
-        eval(File.read(snippet_name))
-      else
-        require(File.join(default_snippets_home, 'lib', "#{snippet_name}.rb"))
-        group, name = snippet_name.split('/')
-        Core::Rewriter.fetch(group, name)
       end
     end
 
