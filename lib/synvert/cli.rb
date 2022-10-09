@@ -237,15 +237,16 @@ module Synvert
 
     # run a snippet
     def run_snippet(rewriter)
-      rewriter.process
       if plain_output?
         puts "===== #{rewriter.group}/#{rewriter.name} started ====="
+        rewriter.process
         rewriter.warnings.each do |warning|
           puts '[Warn] ' + warning.message
         end
         puts rewriter.todo if rewriter.todo
         puts "===== #{rewriter.group}/#{rewriter.name} done ====="
       elsif json_output?
+        rewriter.process
         output = {
           affected_files: rewriter.affected_files.union(rewriter.sub_snippets.sum(Set.new, &:affected_files)).to_a,
           warnings: rewriter.warnings.union(rewriter.sub_snippets.sum([], &:warnings)),
@@ -258,9 +259,6 @@ module Synvert
     # test a snippet
     def test_snippet(rewriter)
       results = rewriter.test
-      rewriter.sub_snippets.each do |sub_snippet|
-        results += sub_snippet.test_results
-      end
       puts JSON.generate(results)
     end
 
