@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.1.3 (2022-10-09)
+
+* No need to read rewriters before run or test a snippet
+* Reuse `Synvert::Core::Utils.eval_snippet`
+* `rewriter.test` already returns all results
+
 ## 1.1.2 (2022-10-06)
 
 * Convert github url to github raw url
