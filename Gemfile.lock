@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     synvert (1.1.3)
-      synvert-core (>= 1.10.1)
+      synvert-core (>= 1.11.0)
 
 GEM
   remote: https://rubygems.org/
@@ -38,6 +38,7 @@ GEM
       erubis
     node_query (1.7.0)
       activesupport (< 7.0.0)
+    parallel (1.22.1)
     parser (3.1.2.1)
       ast (~> 2.4.1)
     parser_node_ext (0.4.0)
@@ -64,11 +65,12 @@ GEM
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
     sync (0.5.0)
-    synvert-core (1.10.1)
+    synvert-core (1.11.0)
       activesupport (< 7.0.0)
       erubis
       node_mutation
       node_query
+      parallel
       parser
       parser_node_ext
     term-ansicolor (1.7.1)
