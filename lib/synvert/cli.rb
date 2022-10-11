@@ -120,6 +120,9 @@ module Synvert
           opts.on '-f', '--format FORMAT', 'output format' do |format|
             @options[:format] = format
           end
+          opts.on '--number-of-workers NUMBER_OF_WORKERS', 'set the number of workers, if it is greater than 1, it tests snippet in parallel' do |number_of_workers|
+            Core::Configuration.number_of_workers = number_of_workers.to_i
+          end
           opts.on '-v', '--version', 'show this version' do
             puts "#{VERSION} (with synvert-core #{Core::VERSION} and parser #{Parser::VERSION})"
             exit
