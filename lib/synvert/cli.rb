@@ -61,9 +61,6 @@ module Synvert
       puts "file #{e.diagnostic.location.source_buffer.name}"
       puts "line #{e.diagnostic.location.line}"
       false
-    rescue Synvert::Core::RewriterNotFound => e
-      puts e.message
-      false
     end
 
     private
