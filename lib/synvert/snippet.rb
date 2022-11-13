@@ -2,7 +2,6 @@
 
 require 'open-uri'
 require 'json'
-require 'fileutils'
 
 module Synvert
   # Manage synvert snippets.
@@ -19,8 +18,9 @@ module Synvert
     # synchronize snippets from github.
     def sync
       if File.exist?(@snippets_path)
-        FileUtils.cd @snippets_path
-        Kernel.system('git checkout . && git pull --rebase')
+        Dir.chdir(@snippets_path) do
+          Kernel.system('git checkout . && git pull --rebase')
+        end
       else
         Kernel.system("git clone https://github.com/xinminlabs/synvert-snippets-ruby.git #{@snippets_path}")
       end

@@ -4,6 +4,7 @@ require 'optparse'
 require 'json'
 require 'uri'
 require 'open-uri'
+require 'fileutils'
 
 module Synvert
   # Synvert command line interface.
