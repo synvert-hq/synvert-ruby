@@ -147,7 +147,7 @@ module Synvert
     # List and print all available rewriters.
     def list_available_rewriters
       if Core::Rewriter.availables.empty?
-        puts 'There is no snippet under ~/.synvert-ruby, please run `synvert-ruby --sync` to fetch snippets.'
+        puts "There is no snippet under #{default_snippets_name}, please run `synvert-ruby --sync` to fetch snippets."
         return
       end
 
@@ -322,7 +322,9 @@ module Synvert
     end
 
     def default_snippets_home
-      ENV['SYNVERT_SNIPPETS_HOME'] || File.join(ENV['HOME'], '.synvert-ruby')
+      # ENV['HOME'] may use \ as file separator,
+      # but File.join always uses / as file separator.
+      ENV['SYNVERT_SNIPPETS_HOME'] || File.join(ENV['HOME'].gsub("\\", "/"), '.synvert-ruby')
     end
 
     def plain_output?
