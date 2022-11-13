@@ -27,7 +27,7 @@ module Synvert
 
       it 'git pull snippets' do
         FileUtils.mkdir snippets_path
-        expect(Kernel).to receive(:system).with('git checkout .; git pull --rebase')
+        expect(Kernel).to receive(:system).with('git checkout . && git pull --rebase')
         snippet.sync
         FileUtils.cd File.dirname(__FILE__)
       end
