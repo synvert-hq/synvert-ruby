@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.2 (2022-11-13)
+
+* Fix `default_snippets_home` in windows
+
 ## 1.2.1 (2022-11-13)
 
 * Concat multiple git commands with &&
