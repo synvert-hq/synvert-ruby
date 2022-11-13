@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.1 (2022-11-13)
+
+* Concat multiple git commands with &&
+
 ## 1.2.0 (2022-10-11)
 
 * Add `--number-of-workers` option
