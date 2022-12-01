@@ -23,7 +23,8 @@ $ gem install synvert
 
 This will also install `synvert-core-ruby`.
 
-Before using synvert, you need to sync all official snippets first.
+Synvert is completely working with remote snippets on github,
+but you can sync all official snippets locally to make it run faster.
 
 ```
 $ synvert-ruby --sync
