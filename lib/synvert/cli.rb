@@ -2,8 +2,6 @@
 
 require 'optparse'
 require 'json'
-require 'uri'
-require 'open-uri'
 require 'fileutils'
 
 module Synvert
@@ -147,7 +145,7 @@ module Synvert
     # List and print all available rewriters.
     def list_available_rewriters
       if Core::Rewriter.availables.empty?
-        puts "There is no snippet under #{default_snippets_name}, please run `synvert-ruby --sync` to fetch snippets."
+        puts "There is no snippet under #{default_snippets_home}, please run `synvert-ruby --sync` to fetch snippets."
         return
       end
 
@@ -224,11 +222,6 @@ module Synvert
     def sync_snippets
       Snippet.new(default_snippets_home).sync
       puts 'synvert snippets are synced'
-      core_version = Snippet.fetch_core_version
-      if Gem::Version.new(core_version) > Gem::Version.new(Synvert::Core::VERSION)
-        puts "synvert-core is updated, installing synvert-core #{core_version}"
-        system('gem install synvert-core')
-      end
     end
 
     # eval snippet name by user input
