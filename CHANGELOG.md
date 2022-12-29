@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.2.3 (2022-12-29)
+
+* Do not install synvert-core after syncing snippet
+* Update `synvert-core` to 1.16.0
+
 ## 1.2.2 (2022-11-13)
 
 * Fix `default_snippets_home` in windows
@@ -50,7 +55,7 @@
 ## 0.19.3 (2022-07-18)
 
 * Require json
-* update `synvert-core` to 1.5.0
+* Update `synvert-core` to 1.5.0
 
 ## 0.19.2 (2021-12-15)
 
