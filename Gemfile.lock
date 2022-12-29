@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     synvert (1.2.2)
-      synvert-core (>= 1.12.0)
+      synvert-core (>= 1.16.0)
 
 GEM
   remote: https://rubygems.org/
@@ -33,15 +33,15 @@ GEM
       concurrent-ruby (~> 1.0)
     json (2.5.1)
     minitest (5.16.3)
-    node_mutation (1.7.1)
+    node_mutation (1.8.1)
       activesupport (< 7.0.0)
       erubis
-    node_query (1.10.0)
+    node_query (1.11.0)
       activesupport (< 7.0.0)
     parallel (1.22.1)
     parser (3.1.2.1)
       ast (~> 2.4.1)
-    parser_node_ext (0.4.1)
+    parser_node_ext (0.5.1)
       parser
     public_suffix (4.0.6)
     rake (13.0.6)
@@ -65,14 +65,14 @@ GEM
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
     sync (0.5.0)
-    synvert-core (1.14.1)
+    synvert-core (1.16.0)
       activesupport (< 7.0.0)
       erubis
-      node_mutation
-      node_query
+      node_mutation (>= 1.8.1)
+      node_query (>= 1.11.0)
       parallel
       parser
-      parser_node_ext
+      parser_node_ext (>= 0.4.1)
     term-ansicolor (1.7.1)
       tins (~> 1.0)
     thor (1.1.0)
@@ -89,6 +89,7 @@ GEM
 PLATFORMS
   x86_64-darwin-20
   x86_64-darwin-21
+  x86_64-darwin-22
   x86_64-linux
 
 DEPENDENCIES
