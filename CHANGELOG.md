@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.4 (2023-01-21)
+
+* Update ``synvert-core`` to 1.17.0
+
 ## 1.2.3 (2022-12-29)
 
 * Do not install synvert-core after syncing snippet
