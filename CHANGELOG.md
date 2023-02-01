@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.2.5 (2023-02-01)
+
+* Remove `rewriter.todo`
+* Update ``synvert-core`` to 1.18.0
+
 ## 1.2.4 (2023-01-21)
 
 * Update ``synvert-core`` to 1.17.0
