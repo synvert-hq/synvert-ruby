@@ -2,12 +2,12 @@ PATH
   remote: .
   specs:
     synvert (1.2.4)
-      synvert-core (>= 1.17.0)
+      synvert-core (>= 1.18.0)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (6.1.7.1)
+    activesupport (6.1.7.2)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
@@ -16,7 +16,7 @@ GEM
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     ast (2.4.2)
-    concurrent-ruby (1.1.10)
+    concurrent-ruby (1.2.0)
     coveralls (0.8.23)
       json (>= 1.8, < 3)
       simplecov (~> 0.16.1)
@@ -39,7 +39,7 @@ GEM
     parallel (1.22.1)
     parser (3.2.0.0)
       ast (~> 2.4.1)
-    parser_node_ext (0.6.1)
+    parser_node_ext (0.9.0)
       parser
     public_suffix (4.0.6)
     rake (13.0.6)
@@ -63,20 +63,20 @@ GEM
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
     sync (0.5.0)
-    synvert-core (1.17.0)
+    synvert-core (1.18.0)
       activesupport (< 7.0.0)
       erubis
       node_mutation (>= 1.8.2)
       node_query (>= 1.12.0)
       parallel
       parser
-      parser_node_ext (>= 0.6.1)
+      parser_node_ext (>= 0.9.0)
     term-ansicolor (1.7.1)
       tins (~> 1.0)
     thor (1.1.0)
     tins (1.29.1)
       sync
-    tzinfo (2.0.5)
+    tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     webmock (3.14.0)
       addressable (>= 2.8.0)
