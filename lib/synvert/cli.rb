@@ -237,14 +237,12 @@ module Synvert
         rewriter.warnings.each do |warning|
           puts '[Warn] ' + warning.message
         end
-        puts rewriter.todo if rewriter.todo
         puts "===== #{rewriter.group}/#{rewriter.name} done ====="
       elsif json_output?
         rewriter.process
         output = {
           affected_files: rewriter.affected_files.union(rewriter.sub_snippets.sum(Set.new, &:affected_files)).to_a,
-          warnings: rewriter.warnings.union(rewriter.sub_snippets.sum([], &:warnings)),
-          todo: rewriter.todo
+          warnings: rewriter.warnings.union(rewriter.sub_snippets.sum([], &:warnings))
         }
         puts JSON.generate(output)
       end
