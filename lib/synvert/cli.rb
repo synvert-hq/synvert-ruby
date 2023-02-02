@@ -246,12 +246,20 @@ module Synvert
         }
         puts JSON.generate(output)
       end
+    rescue StandardError => e
+      if plain_output?
+        puts "Error: #{e.message}"
+      else
+        puts JSON.generate(error: e.message)
+      end
     end
 
     # test a snippet
     def test_snippet(rewriter)
       results = rewriter.test
       puts JSON.generate(results)
+    rescue StandardError => e
+      puts JSON.generate(error: e.message)
     end
 
     # execute snippet
