@@ -60,6 +60,8 @@ module Synvert
       puts "file #{e.diagnostic.location.source_buffer.name}"
       puts "line #{e.diagnostic.location.line}"
       false
+    rescue StandardError
+      false
     end
 
     private
@@ -252,6 +254,7 @@ module Synvert
       else
         puts JSON.generate(error: e.message)
       end
+      raise
     end
 
     # test a snippet
@@ -260,6 +263,7 @@ module Synvert
       puts JSON.generate(results)
     rescue StandardError => e
       puts JSON.generate(error: e.message)
+      raise
     end
 
     # execute snippet
