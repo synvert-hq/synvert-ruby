@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.6 (2023-02-02)
+
+* Output error message
+
 ## 1.2.5 (2023-02-01)
 
 * Remove `rewriter.todo`
