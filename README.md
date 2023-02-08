@@ -57,6 +57,7 @@ Usage: synvert-ruby [project_path]
         --number-of-workers NUMBER_OF_WORKERS
                                      set the number of workers, if it is greater than 1, it tests snippet in parallel
         --double-quote               prefer double quote, it uses single quote by default
+        --tab-width TAB_WIDTH        prefer tab width, it uses 2 by default
     -v, --version                    show this version
 ```
 
