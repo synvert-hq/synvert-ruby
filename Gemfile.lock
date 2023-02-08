@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     synvert (1.2.6)
-      synvert-core (>= 1.18.0)
+      synvert-core (>= 1.20.0)
 
 GEM
   remote: https://rubygems.org/
@@ -63,7 +63,7 @@ GEM
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
     sync (0.5.0)
-    synvert-core (1.18.0)
+    synvert-core (1.20.0)
       activesupport (< 7.0.0)
       erubis
       node_mutation (>= 1.8.2)
