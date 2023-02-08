@@ -127,6 +127,9 @@ module Synvert
           opts.on '--double-quote', 'prefer double quote, it uses single quote by default' do |double_quote|
             Core::Configuration.single_quote = false
           end
+          opts.on '--tab-width TAB_WIDTH', 'prefer tab width, it uses 2 by default' do |tab_width|
+            Core::Configuration.tab_width = tab_width
+          end
           opts.on '-v', '--version', 'show this version' do
             puts "#{VERSION} (with synvert-core #{Core::VERSION} and parser #{Parser::VERSION})"
             exit
