@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.4.0 (2023-02-08)
+
+* Add `--tab-width` flag
+* Update `synvert-core` to 1.21.0
+
 ## 1.3.0 (2023-02-08)
 
 * Add `--double-quote` flag
