@@ -47,13 +47,16 @@ Usage: synvert-ruby [project_path]
     -o, --open SNIPPET_NAME          Open a snippet
     -g, --generate NEW_SNIPPET_NAME  generate a new snippet
         --sync                       sync snippets
-        --execute                    execute snippet
+        --execute EXECUTE_COMMAND    execute snippet
     -r, --run SNIPPET_NAME           run a snippet with snippet name, e.g. ruby/new_hash_syntax, or remote url, or local file path
     -t, --test SNIPPET_NAME          test a snippet with snippet name, e.g. ruby/new_hash_syntax, or remote url, or local file path
         --show-run-process           show processing files when running a snippet
         --only-paths DIRECTORIES     only specified files or directories, separated by comma, e.g. app/models,app/controllers
         --skip-paths FILE_PATTERNS   skip specified files or directories, separated by comma, e.g. vendor/,lib/**/*.rb
     -f, --format FORMAT              output format
+        --number-of-workers NUMBER_OF_WORKERS
+                                     set the number of workers, if it is greater than 1, it tests snippet in parallel
+        --double-quote               prefer double quote, it uses single quote by default
     -v, --version                    show this version
 ```
 
