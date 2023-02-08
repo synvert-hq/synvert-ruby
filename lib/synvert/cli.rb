@@ -124,6 +124,9 @@ module Synvert
           opts.on '--number-of-workers NUMBER_OF_WORKERS', 'set the number of workers, if it is greater than 1, it tests snippet in parallel' do |number_of_workers|
             Core::Configuration.number_of_workers = number_of_workers.to_i
           end
+          opts.on '--double-quote', 'prefer double quote, it uses single quote by default' do |double_quote|
+            Core::Configuration.single_quote = false
+          end
           opts.on '-v', '--version', 'show this version' do
             puts "#{VERSION} (with synvert-core #{Core::VERSION} and parser #{Parser::VERSION})"
             exit
