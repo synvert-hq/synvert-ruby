@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.4.1 (2023-02-10)
+
+* Make sure `tab_width` is an Integer
+* Update `synvert-core` to 1.21.1
+
 ## 1.4.0 (2023-02-08)
 
 * Add `--tab-width` flag
