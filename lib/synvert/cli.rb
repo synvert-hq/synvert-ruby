@@ -99,11 +99,15 @@ module Synvert
             @options[:command] = 'execute'
             @options[:execute_command] = execute_command
           end
-          opts.on '-r', '--run SNIPPET_NAME', 'run a snippet with snippet name, e.g. ruby/new_hash_syntax, or remote url, or local file path' do |snippet_name|
+          opts.on '-r',
+                  '--run SNIPPET_NAME',
+                  'run a snippet with snippet name, e.g. ruby/new_hash_syntax, or remote url, or local file path' do |snippet_name|
             @options[:command] = 'run'
             @options[:snippet_name] = snippet_name
           end
-          opts.on '-t', '--test SNIPPET_NAME', 'test a snippet with snippet name, e.g. ruby/new_hash_syntax, or remote url, or local file path' do |snippet_name|
+          opts.on '-t',
+                  '--test SNIPPET_NAME',
+                  'test a snippet with snippet name, e.g. ruby/new_hash_syntax, or remote url, or local file path' do |snippet_name|
             @options[:command] = 'test'
             @options[:snippet_name] = snippet_name
           end
@@ -121,7 +125,8 @@ module Synvert
           opts.on '-f', '--format FORMAT', 'output format' do |format|
             @options[:format] = format
           end
-          opts.on '--number-of-workers NUMBER_OF_WORKERS', 'set the number of workers, if it is greater than 1, it tests snippet in parallel' do |number_of_workers|
+          opts.on '--number-of-workers NUMBER_OF_WORKERS',
+                  'set the number of workers, if it is greater than 1, it tests snippet in parallel' do |number_of_workers|
             Core::Configuration.number_of_workers = number_of_workers.to_i
           end
           opts.on '--double-quote', 'prefer double quote, it uses single quote by default' do |double_quote|
