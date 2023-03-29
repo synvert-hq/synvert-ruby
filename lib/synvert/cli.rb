@@ -123,7 +123,7 @@ module Synvert
           opts.on '--number-of-workers NUMBER_OF_WORKERS', 'set the number of workers, if it is greater than 1, it tests snippet in parallel' do |number_of_workers|
             Core::Configuration.number_of_workers = number_of_workers.to_i
           end
-          opts.on '--double-quote', 'prefer double quote, it uses single quote by default' do |double_quote|
+          opts.on '--double-quote', 'prefer double quote, it uses single quote by default' do |_double_quote|
             Core::Configuration.single_quote = false
           end
           opts.on '--tab-width TAB_WIDTH', 'prefer tab width, it uses 2 by default' do |tab_width|
