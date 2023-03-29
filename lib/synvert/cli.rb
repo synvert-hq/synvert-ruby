@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'optparse'
-require 'json'
 require 'fileutils'
 
 module Synvert
@@ -181,7 +180,7 @@ module Synvert
           end
         end
 
-        puts JSON.generate(output)
+        puts output.to_json
       end
     end
 
@@ -252,13 +251,13 @@ module Synvert
           affected_files: rewriter.affected_files.union(rewriter.sub_snippets.sum(Set.new, &:affected_files)).to_a,
           warnings: rewriter.warnings.union(rewriter.sub_snippets.sum([], &:warnings))
         }
-        puts JSON.generate(output)
+        puts output.to_json
       end
     rescue StandardError => e
       if plain_output?
         puts "Error: #{e.message}"
       else
-        puts JSON.generate(error: e.message)
+        puts({ error: e.message }.to_json)
       end
       raise
     end
@@ -266,9 +265,9 @@ module Synvert
     # test a snippet
     def test_snippet(rewriter)
       results = rewriter.test
-      puts JSON.generate(results)
+      puts results.to_json
     rescue StandardError => e
-      puts JSON.generate(error: e.message)
+      puts({ error: e.message }.to_json)
       raise
     end
 
