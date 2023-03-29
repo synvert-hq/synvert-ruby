@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.4.2 (2023-03-29)
+
+* Use `to_json` instead of `JSON.generate`
+* Update `synvert-core` to 1.22.0
+
 ## 1.4.1 (2023-02-10)
 
 * Make sure `tab_width` is an Integer
