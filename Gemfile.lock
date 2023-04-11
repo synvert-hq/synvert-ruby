@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     synvert (1.4.2)
-      synvert-core (>= 1.22.0)
+      synvert-core (>= 1.22.1)
 
 GEM
   remote: https://rubygems.org/
@@ -33,7 +33,7 @@ GEM
       concurrent-ruby (~> 1.0)
     json (2.5.1)
     minitest (5.18.0)
-    node_mutation (1.12.2)
+    node_mutation (1.13.0)
       erubis
     node_query (1.12.0)
     parallel (1.22.1)
@@ -63,9 +63,9 @@ GEM
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
     sync (0.5.0)
-    synvert-core (1.22.0)
+    synvert-core (1.22.1)
       activesupport (< 7.0.0)
-      node_mutation (>= 1.12.1)
+      node_mutation (>= 1.13.0)
       node_query (>= 1.12.0)
       parallel
       parser
