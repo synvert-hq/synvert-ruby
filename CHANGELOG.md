@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.4.3 (2023-04-11)
+
+* Uutput backtrace when `ENV['DEBUG']` is true
+* Update `synvert-core` to 1.22.1
+
 ## 1.4.2 (2023-03-29)
 
 * Use `to_json` instead of `JSON.generate`
