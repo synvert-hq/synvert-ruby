@@ -259,6 +259,9 @@ module Synvert
         puts output.to_json
       end
     rescue StandardError => e
+      if ENV['DEBUG']
+        puts e.backtrace.join("\n")
+      end
       if plain_output?
         puts "Error: #{e.message}"
       else
@@ -272,6 +275,9 @@ module Synvert
       results = rewriter.test
       puts results.to_json
     rescue StandardError => e
+      if ENV['DEBUG']
+        puts e.backtrace.join("\n")
+      end
       puts({ error: e.message }.to_json)
       raise
     end
