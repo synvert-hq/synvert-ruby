@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     synvert (1.4.3)
-      synvert-core (>= 1.22.1)
+      synvert-core (>= 1.28.0)
 
 GEM
   remote: https://rubygems.org/
@@ -27,20 +27,19 @@ GEM
       rexml
     diff-lcs (1.4.4)
     docile (1.4.0)
-    erubis (2.7.0)
     hashdiff (1.0.1)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     json (2.5.1)
     minitest (5.18.0)
-    node_mutation (1.13.0)
-      erubis
-    node_query (1.12.0)
+    node_mutation (1.18.3)
+    node_query (1.13.2)
     parallel (1.22.1)
     parser (3.2.1.1)
       ast (~> 2.4.1)
-    parser_node_ext (1.0.0)
+    parser_node_ext (1.1.1)
       parser
+    prettier_print (1.2.1)
     public_suffix (4.0.6)
     rake (13.0.6)
     rexml (3.2.5)
@@ -63,13 +62,19 @@ GEM
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
     sync (0.5.0)
-    synvert-core (1.22.1)
+    syntax_tree (6.1.1)
+      prettier_print (>= 1.2.0)
+    syntax_tree_ext (0.3.1)
+      syntax_tree
+    synvert-core (1.28.0)
       activesupport (< 7.0.0)
-      node_mutation (>= 1.13.0)
-      node_query (>= 1.12.0)
+      node_mutation (>= 1.18.2)
+      node_query (>= 1.13.2)
       parallel
       parser
-      parser_node_ext (>= 1.0.0)
+      parser_node_ext (>= 1.1.1)
+      syntax_tree
+      syntax_tree_ext (>= 0.3.1)
     term-ansicolor (1.7.1)
       tins (~> 1.0)
     thor (1.1.0)
