@@ -15,7 +15,7 @@ jobs:
         ruby-version: ['2.7', '3.0', '3.1', '3.2']
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
@@ -29,8 +29,8 @@ jobs:
     needs: test
     name: Update gh-pages to docs
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 18
       - name: Install required npm dependencies
