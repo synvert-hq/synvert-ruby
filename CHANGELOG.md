@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.4.4 (2023-06-06)
+
+* Update `synvert-core` to 1.28.0
+
 ## 1.4.3 (2023-04-11)
 
 * Uutput backtrace when `ENV['DEBUG']` is true
