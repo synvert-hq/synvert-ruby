@@ -2,6 +2,7 @@
 
 require 'optparse'
 require 'fileutils'
+require 'parser'
 
 module Synvert
   # Synvert command line interface.
