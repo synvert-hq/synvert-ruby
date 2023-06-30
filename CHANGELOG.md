@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.4.5 (2024-07-01)
+
+* Explicitly require `parser`
+
 ## 1.4.4 (2023-06-06)
 
 * Update `synvert-core` to 1.28.0
