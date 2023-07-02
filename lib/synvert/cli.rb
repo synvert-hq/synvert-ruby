@@ -42,11 +42,14 @@ module Synvert
       when 'generate'
         generate_snippet
       when 'execute'
+        read_helpers
         execute_snippet(@options[:execute_command])
       when 'test'
+        read_helpers
         rewriter = Synvert::Core::Utils.eval_snippet(@options[:snippet_name])
         test_snippet(rewriter)
       when 'run'
+        read_helpers
         rewriter = Synvert::Core::Utils.eval_snippet(@options[:snippet_name])
         run_snippet(rewriter)
       else
@@ -153,6 +156,11 @@ module Synvert
     # read all rewriters.
     def read_rewriters
       Dir.glob(File.join(default_snippets_home, 'lib/**/*.rb')).each { |file| require file }
+    end
+
+    # read all helpers.
+    def read_helpers
+      Dir.glob(File.join(default_snippets_home, 'lib/helpers/**/*.rb')).each { |file| require file }
     end
 
     # List and print all available rewriters.
