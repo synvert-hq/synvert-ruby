@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.4.5 (2023-07-03)
+
+* Update `synvert-core` to 1.28.3
+
 ## 1.4.6 (2023-07-03)
 
 * Read helpers before execute/test/run a snippet
