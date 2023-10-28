@@ -6,4 +6,5 @@ require 'synvert/core'
 
 module Synvert
   autoload :CLI, 'synvert/cli'
+  autoload :Command, 'synvert/command'
 end
