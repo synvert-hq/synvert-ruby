@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 1.5.0 (2023-10-28)
+
+* Update `synvert-core` to 1.29.3
+* Remove `bin/synvert`
+* Add `guard` for test
+* Abstract `Synvert::Command`
+
 ## 1.4.5 (2023-07-03)
 
 * Update `synvert-core` to 1.28.3
