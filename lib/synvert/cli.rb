@@ -40,14 +40,14 @@ module Synvert
       when 'sync'
         Command.sync_snippets
       when 'generate'
-        Comamnd.generate_snippet(@options[:snippet_name])
+        Command.generate_snippet(@options[:snippet_name])
       when 'execute'
         Command.read_helpers
         rewriter = eval_snippet_name_by_input(STDIN.read)
         if @options[:execute_command] == 'test'
-          Comamnd.test_snippet(rewriter)
+          Command.test_snippet(rewriter)
         else
-          Comamnd.run_snippet(rewriter, @options[:format])
+          Command.run_snippet(rewriter, @options[:format])
         end
       when 'test'
         Command.read_helpers
