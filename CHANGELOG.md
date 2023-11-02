@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.5.1 (2023-11-02)
+
+* Fix typos
+
 ## 1.5.0 (2023-10-28)
 
 * Update `synvert-core` to 1.29.3
