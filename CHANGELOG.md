@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.6.0 (2024-01-09)
+
+* Add `--loose` flag
+* Update `synvert-core` to 1.30.2
+
 ## 1.5.1 (2023-11-02)
 
 * Fix typos
