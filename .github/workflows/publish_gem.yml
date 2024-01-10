@@ -6,18 +6,21 @@ on:
       - '*'
 
 jobs:
-  build:
+  push:
+    name: Push gem to RubyGems.org
     runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: write
+
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.3
-      - name: Build Gem
-        run: gem build synvert-ruby.gemspec
-      - name: Publish to RubyGems
-        run: gem push *.gem
-        env:
-          RUBYGEMS_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
+          bundler-cache: true
+          ruby-version: ruby
+
+      - uses: rubygems/release-gem@v1
 
