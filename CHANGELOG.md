@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.6.1 (2024-01-10)
+
+* Add `Dockerfile`
+* Publish docker image on github actions
+
 ## 1.6.0 (2024-01-09)
 
 * Add `--loose` flag
