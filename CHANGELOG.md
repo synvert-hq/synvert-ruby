@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.6.2 (2024-01-10)
+
+* Add `git` to docker image for sync
+
 ## 1.6.1 (2024-01-10)
 
 * Add `Dockerfile`
