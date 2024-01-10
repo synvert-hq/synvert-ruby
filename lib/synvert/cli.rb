@@ -29,7 +29,7 @@ module Synvert
       case @options[:command]
       when 'list'
         Command.read_rewriters
-        Command.list_available_rewriters(@options[:foramt])
+        Command.list_available_rewriters(@options[:format])
       when 'open'
         Command.open_rewriter(@options[:snippet_name])
       when 'query'
