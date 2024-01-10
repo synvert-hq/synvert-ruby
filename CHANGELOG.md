@@ -1,4 +1,8 @@
-# CHANGELOG
+# CHANGELOGconfig
+
+## 1.6.3 (2024-01-11)
+
+* Fix typo
 
 ## 1.6.2 (2024-01-10)
 
