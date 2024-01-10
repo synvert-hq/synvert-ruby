@@ -1,0 +1,23 @@
+name: Publish Gem
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3
+      - name: Build Gem
+        run: gem build synvert-ruby.gemspec
+      - name: Publish to RubyGems
+        run: gem push *.gem --key rubygems_api_key
+        env:
+          RUBYGEMS_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
+
