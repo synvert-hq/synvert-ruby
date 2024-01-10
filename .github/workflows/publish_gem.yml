@@ -19,7 +19,8 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.3
+          bundler-cache: true
+          ruby-version: ruby
 
       - uses: rubygems/release-gem@v1
 
