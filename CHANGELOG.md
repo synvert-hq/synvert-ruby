@@ -51,7 +51,7 @@
 
 ## 1.4.3 (2023-04-11)
 
-* Uutput backtrace when `ENV['DEBUG']` is true
+* Output backtrace when `ENV['DEBUG']` is true
 * Update `synvert-core` to 1.22.1
 
 ## 1.4.2 (2023-03-29)
@@ -98,7 +98,7 @@
 
 ## 1.2.1 (2022-11-13)
 
-* Concat multiple git commands with &&
+* Concatenation multiple git commands with &&
 
 ## 1.2.0 (2022-10-11)
 
@@ -203,7 +203,7 @@
 
 ## 0.10.0 (2021-02-07)
 
-* Use new `Core::Confiruation`
+* Use new `Core::Configuration`
 * Use require instead of eval in order to preserve normal Ruby semantics
 
 ## 0.9.0
@@ -243,7 +243,7 @@
 ## 0.0.16
 
 * Add -v, --version cli option.
-* Ouput file and line number if there's syntax error.
+* Output file and line number if there's syntax error.
 * Add check_syntax snippet.
 
 ## 0.0.15
@@ -277,7 +277,7 @@
 ## 0.0.10
 
 * Add not ast node operator
-* Replace with multipe line code
+* Replace with multiple line code
 * Add RSpec new syntax snippet
 
 ## 0.0.9
