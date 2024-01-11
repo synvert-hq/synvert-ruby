@@ -1,5 +1,9 @@
 # CHANGELOGconfig
 
+## 1.6.4 (2024-01-11)
+
+* Bypass docker cache
+
 ## 1.6.3 (2024-01-11)
 
 * Fix typo
