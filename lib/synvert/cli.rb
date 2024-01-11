@@ -143,7 +143,8 @@ module Synvert
           opts.on '--tab-width TAB_WIDTH', 'prefer tab width, it uses 2 by default' do |tab_width|
             Core::Configuration.tab_width = tab_width.to_i
           end
-          opts.on '--loose', 'loose mode, it ignores ruby version and gem version check, it uses strict mode by default' do |_loose|
+          opts.on '--loose',
+                  'loose mode, it ignores ruby version and gem version check, it uses strict mode by default' do |_loose|
             Core::Configuration.strict = false
           end
           opts.on '-v', '--version', 'show this version' do
