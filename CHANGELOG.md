@@ -1,5 +1,10 @@
 # CHANGELOGconfig
 
+## 1.7.0 (2024-01-14)
+
+* Add `--test-result` flag
+* Update `synvert-core` to 1.31.0
+
 ## 1.6.4 (2024-01-11)
 
 * Bypass docker cache
