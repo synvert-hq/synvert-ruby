@@ -146,6 +146,9 @@ module Synvert
           opts.on '--loose', 'loose mode, it ignores ruby version and gem version check, it uses strict mode by default' do |_loose|
             Core::Configuration.strict = false
           end
+          opts.on '--test-result TEST_RESULT', 'result format of test, it can be actions or new_source, action is by default' do |test_result|
+            Core::Configuration.test_result = test_result
+          end
           opts.on '-v', '--version', 'show this version' do
             puts "#{VERSION} (with synvert-core #{Core::VERSION} and parser #{Parser::VERSION})"
             exit
