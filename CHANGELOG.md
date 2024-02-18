@@ -1,4 +1,9 @@
-# CHANGELOGconfig
+# CHANGELOG
+
+## 1.8.0 (2024-02-18)
+
+* Add `--dont-respect-gitignore` flag
+* Update `synvert-core` to 1.33.0
 
 ## 1.7.0 (2024-01-14)
 
