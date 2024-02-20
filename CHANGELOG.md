@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.9.0 (2024-02-20)
+
+* Fix query available rewriters
+* Query available rewriters supports json format
+
 ## 1.8.0 (2024-02-18)
 
 * Add `--dont-respect-gitignore` flag
