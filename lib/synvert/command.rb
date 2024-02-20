@@ -77,17 +77,17 @@ module Synvert
       end
 
       # Query and print available rewriters.
-      def query_available_rewriters
+      def query_available_rewriters(query)
         Core::Rewriter.availables.each do |group, rewriters|
-          if group.include? @options[:query]
+          if group.include?(query)
             puts group
             rewriters.each do |name, _rewriter|
               puts '    ' + name
             end
-          elsif rewriters.keys.any? { |name| name.include? @options[:query] }
+          elsif rewriters.keys.any? { |name| name.include?(query) }
             puts group
             rewriters.each do |name, _rewriter|
-              puts '    ' + name if name.include?(@options[:query])
+              puts '    ' + name if name.include?(query)
             end
           end
         end
