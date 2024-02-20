@@ -34,7 +34,7 @@ module Synvert
         Command.open_rewriter(@options[:snippet_name])
       when 'query'
         Command.read_rewriters
-        Command.query_available_rewriters(@options[:query])
+        Command.query_available_rewriters(@options[:query], @options[:format])
       when 'show'
         Command.show_rewriter(@options[:snippet_name])
       when 'sync'

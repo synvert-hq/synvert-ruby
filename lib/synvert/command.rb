@@ -77,21 +77,24 @@ module Synvert
       end
 
       # Query and print available rewriters.
-      def query_available_rewriters(query)
-        Core::Rewriter.availables.each do |group, rewriters|
-          if group.include?(query)
-            puts group
-            rewriters.each do |name, _rewriter|
-              puts '    ' + name
-            end
-          elsif rewriters.keys.any? { |name| name.include?(query) }
-            puts group
-            rewriters.each do |name, _rewriter|
-              puts '    ' + name if name.include?(query)
+      def query_available_rewriters(query, format)
+        if format == 'json'
+          puts available_rewriters.select { |rewriter| rewriter[:group].include?(query) || rewriter[:name].include?(query) }.to_json
+        else
+          Core::Rewriter.availables.each do |group, rewriters|
+            if group.include?(query)
+              puts group
+              rewriters.each do |name, _rewriter|
+                puts '    ' + name
+              end
+            elsif rewriters.keys.any? { |name| name.include?(query) }
+              puts group
+              rewriters.each do |name, _rewriter|
+                puts '    ' + name if name.include?(query)
+              end
             end
           end
         end
-        puts
       end
 
       # Show and print one rewriter.
