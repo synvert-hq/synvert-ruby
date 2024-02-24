@@ -199,6 +199,35 @@ module Synvert
         raise
       end
 
+      def test_snippet_in_bundle_gems(rewriter)
+        Dir.chdir(Core::Configuration.root_path) do
+          bundle_list_output = `/bin/bash -c -l 'BUNDLE_GEMFILE=./Gemfile bundle list'`
+          raise bundle_list_output unless bundle_list_output.start_with?('Gems included by the bundle:')
+
+          bundle_list_output.lines.each do |line|
+            next unless line.start_with?('  * ')
+
+            _, gem_name, gem_version_with_parentheses = line.split(' ')
+            path = `/bin/bash -c -l 'BUNDLE_GEMFILE=./Gemfile bundle info #{gem_name} --path'`.strip
+
+            Core::Configuration.root_path = path
+            rewriter.reset
+            test_results = rewriter.test
+            affected_file_paths = test_results.filter { |result| result.affected? }.map { |result| result.file_path }
+            if affected_file_paths.size > 0
+              puts "#{gem_name} #{gem_version_with_parentheses}"
+              affected_file_paths.each { |affected_file_path| puts "    #{affected_file_path}" }
+            end
+          end
+        end
+      rescue StandardError => e
+        if ENV['DEBUG']
+          puts e.backtrace.join("\n")
+        end
+        puts "Error: #{e.message}"
+        raise
+      end
+
       def default_snippets_home
         # ENV['HOME'] may use \ as file separator,
         # but File.join always uses / as file separator.

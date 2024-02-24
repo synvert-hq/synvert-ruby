@@ -57,6 +57,10 @@ module Synvert
         Command.read_helpers
         rewriter = Synvert::Core::Utils.eval_snippet(@options[:snippet_name])
         Command.run_snippet(rewriter, @options[:format])
+      when 'test_bundle_gems'
+        Command.read_helpers
+        rewriter = Synvert::Core::Utils.eval_snippet(@options[:snippet_name])
+        Command.test_snippet_in_bundle_gems(rewriter)
       else
         # nothing to do
       end
@@ -154,6 +158,9 @@ module Synvert
           opts.on '--test-result TEST_RESULT',
                   'result format of test, it can be actions or new_source, action is by default' do |test_result|
             Core::Configuration.test_result = test_result
+          end
+          opts.on '--check-bundle-gems', 'check code in all bundle gems' do
+            @options[:command] = 'test_bundle_gems'
           end
           opts.on '-v', '--version', 'show this version' do
             puts "#{VERSION} (with synvert-core #{Core::VERSION} and parser #{Parser::VERSION})"
