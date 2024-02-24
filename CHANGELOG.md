@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.10.0 (2024-02-24)
+
+* Add `--check-bundle-gems` flag to check code in all bundle gems
+* Update `synvert-core` to 1.33.2
+
 ## 1.9.0 (2024-02-20)
 
 * Fix query available rewriters
