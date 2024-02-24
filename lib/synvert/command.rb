@@ -213,7 +213,8 @@ module Synvert
             Core::Configuration.root_path = path
             rewriter.reset
             test_results = rewriter.test
-            affected_file_paths = test_results.filter { |result| result.affected? }.map { |result| result.file_path }
+            affected_file_paths = test_results.filter { |result| result.affected? }
+                                              .map { |result| result.file_path }
             if affected_file_paths.size > 0
               puts "#{gem_name} #{gem_version_with_parentheses}"
               affected_file_paths.each { |affected_file_path| puts "    #{affected_file_path}" }
