@@ -179,10 +179,10 @@ module Synvert
         if ENV['DEBUG']
           puts e.backtrace.join("\n")
         end
-        if plain_output?
-          puts "Error: #{e.message}"
-        else
+        if format == 'json'
           puts({ error: e.message }.to_json)
+        else
+          puts "Error: #{e.message}"
         end
         raise
       end
