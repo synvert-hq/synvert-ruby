@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.10.1 (2024-03-06)
+
+* Fix undefined `plain_output?`
+* Update `synvert-core` to 1.34.0
+
 ## 1.10.0 (2024-02-24)
 
 * Add `--check-bundle-gems` flag to check code in all bundle gems
