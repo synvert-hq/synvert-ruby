@@ -163,7 +163,7 @@ module Synvert
             @options[:command] = 'test_bundle_gems'
           end
           opts.on '-v', '--version', 'show this version' do
-            puts "#{VERSION} (with synvert-core #{Core::VERSION} and parser #{Parser::VERSION})"
+            puts "#{VERSION} (with synvert-core #{Core::VERSION}"
             exit
           end
         end
