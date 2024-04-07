@@ -3,7 +3,7 @@
 <img src="https://synvert.net/img/logo_96.png" alt="logo" width="32" height="32" />
 
 [![AwesomeCode Status for synvert-hq/synvert-ruby](https://awesomecode.io/projects/47cd9805-171c-4c61-b927-baa46cd4020a/status)](https://awesomecode.io/repos/synvert-hq/synvert-ruby)
-![Main workflow](https://github.com/synvert-hq/synvert-ruby/actions/workflows/main.yml/badge.svg)
+[![Build Status](https://github.com/synvert-hq/synvert-ruby/actions/workflows/main.yml/badge.svg)](https://github.com/synvert-hq/synvert-ruby/actions/workflows/main.yml)
 [![Gem Version](https://badge.fury.io/rb/synvert.svg)](http://badge.fury.io/rb/synvert)
 
 `synvert-ruby` is a command tool to rewrite ruby code automatically, it depends on `synvert-core-ruby` and `synvert-snippets-ruby`.
