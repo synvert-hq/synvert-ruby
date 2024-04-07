@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.10.2 (2024-04-07)
+
+* Update `synvert-core` to 1.35.0
+
 ## 1.10.1 (2024-03-06)
 
 * Fix undefined `plain_output?`
