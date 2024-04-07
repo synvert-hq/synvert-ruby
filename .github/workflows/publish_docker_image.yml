@@ -27,5 +27,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: xinminlabs/synvert-ruby:${{ steps.get_tag.outputs.TAG_NAME }}
-
+          tags: flyerhzm/synvert-ruby:${{ steps.get_tag.outputs.TAG_NAME }}

@@ -12,7 +12,7 @@ module Synvert
     describe '.sync_snippets' do
       it 'git clones snippets' do
         expect(Kernel).to receive(:system).with(
-          "git clone https://github.com/xinminlabs/synvert-snippets-ruby.git #{snippets_path}"
+          "git clone https://github.com/synvert-hq/synvert-snippets-ruby.git #{snippets_path}"
         )
         described_class.sync_snippets
       end

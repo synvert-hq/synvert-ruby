@@ -2,15 +2,15 @@
 
 <img src="https://synvert.net/img/logo_96.png" alt="logo" width="32" height="32" />
 
-[![AwesomeCode Status for xinminlabs/synvert-ruby](https://awesomecode.io/projects/47cd9805-171c-4c61-b927-baa46cd4020a/status)](https://awesomecode.io/repos/xinminlabs/synvert-ruby)
-![Main workflow](https://github.com/xinminlabs/synvert-ruby/actions/workflows/main.yml/badge.svg)
+[![AwesomeCode Status for synvert-hq/synvert-ruby](https://awesomecode.io/projects/47cd9805-171c-4c61-b927-baa46cd4020a/status)](https://awesomecode.io/repos/synvert-hq/synvert-ruby)
+![Main workflow](https://github.com/synvert-hq/synvert-ruby/actions/workflows/main.yml/badge.svg)
 [![Gem Version](https://badge.fury.io/rb/synvert.svg)](http://badge.fury.io/rb/synvert)
 
 `synvert-ruby` is a command tool to rewrite ruby code automatically, it depends on `synvert-core-ruby` and `synvert-snippets-ruby`.
 
-[synvert-core-ruby](https://github.com/xinminlabs/synvert-core-ruby) provides a set of DSLs to rewrite ruby code.
+[synvert-core-ruby](https://github.com/synvert-hq/synvert-core-ruby) provides a set of DSLs to rewrite ruby code.
 
-[synvert-snippets-ruby](https://github.com/xinminlabs/synvert-snippets-ruby) provides official snippets to rewrite ruby code.
+[synvert-snippets-ruby](https://github.com/synvert-hq/synvert-snippets-ruby) provides official snippets to rewrite ruby code.
 
 ## Installation
 
@@ -63,7 +63,7 @@ Usage: synvert-ruby [project_path]
 
 ### Sync snippets
 
-[Official Snippets](https://github.com/xinminlabs/synvert-snippets-ruby) are available on github,
+[Official Snippets](https://github.com/synvert-hq/synvert-snippets-ruby) are available on github,
 you can sync them any time you want.
 
 ```
@@ -102,37 +102,37 @@ $ synvert-ruby -o factory_bot/use_short_syntax
 Run a snippet, analyze and then rewrite code.
 
 ```
-$ synvert-ruby -r factory_bot/use_short_syntax ~/Sites/xinminlabs/synvert-core-ruby
+$ synvert-ruby -r factory_bot/use_short_syntax ~/Sites/synvert-hq/synvert-core-ruby
 ```
 
 Run a snippet from remote url
 
 ```
-$ synvert-ruby -r https://raw.githubusercontent.com/xinminlabs/synvert-snippets-ruby/master/lib/factory_bot/use_short_syntax.rb ~/sites/xinminlabs/synvert-core-ruby
+$ synvert-ruby -r https://raw.githubusercontent.com/synvert-hq/synvert-snippets-ruby/master/lib/factory_bot/use_short_syntax.rb ~/sites/synvert-hq/synvert-core-ruby
 ```
 
 Run a snippet from local path
 
 ```
-$ synvert-ruby -r ~/.synvert-ruby/lib/factory_bot/use_short_syntax.rb ~/sites/xinminlabs/synvert-core-ruby
+$ synvert-ruby -r ~/.synvert-ruby/lib/factory_bot/use_short_syntax.rb ~/sites/synvert-hq/synvert-core-ruby
 ```
 
 Skip paths
 
 ```
-$ synvert-ruby -r factory_bot/use_short_syntax --skip-paths vendor/ ~/sites/xinminlabs/synvert-core-ruby
+$ synvert-ruby -r factory_bot/use_short_syntax --skip-paths vendor/ ~/sites/synvert-hq/synvert-core-ruby
 ```
 
 Only paths
 
 ```
-$ synvert-ruby -r factory_bot/use_short_syntax --only-paths app/models/ ~/sites/xinminlabs/synvert-core-ruby
+$ synvert-ruby -r factory_bot/use_short_syntax --only-paths app/models/ ~/sites/synvert-hq/synvert-core-ruby
 ```
 
 Show processing files when running a snippet.
 
 ```
-$ synvert-ruby -r factory_bot/use_short_syntax --show-run-process ~/Sites/xinminlabs/synvert-core-ruby
+$ synvert-ruby -r factory_bot/use_short_syntax --show-run-process ~/Sites/synvert-hq/synvert-core-ruby
 ```
 
 ### Generate a snippet

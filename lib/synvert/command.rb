@@ -10,7 +10,7 @@ module Synvert
             Kernel.system('git checkout . && git pull --rebase')
           end
         else
-          Kernel.system("git clone https://github.com/xinminlabs/synvert-snippets-ruby.git #{default_snippets_home}")
+          Kernel.system("git clone https://github.com/synvert-hq/synvert-snippets-ruby.git #{default_snippets_home}")
         end
         puts 'synvert snippets are synced'
       end
