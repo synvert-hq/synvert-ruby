@@ -81,8 +81,7 @@ module Synvert
         if format == 'json'
           puts available_rewriters.select { |rewriter|
                  rewriter[:group].include?(query) || rewriter[:name].include?(query)
-               }
-.to_json
+               }.to_json
         else
           Core::Rewriter.availables.each do |group, rewriters|
             if group.include?(query)
