@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     synvert (1.10.2)
-      synvert-core (>= 1.33.2)
+      synvert-core (>= 1.35.1)
 
 GEM
   remote: https://rubygems.org/
@@ -55,7 +55,7 @@ GEM
       parser
     prettier_print (1.2.1)
     prism (0.25.0)
-    prism_ext (0.3.0)
+    prism_ext (0.3.1)
       prism
     pry (0.14.2)
       coderay (~> 1.1)
@@ -83,17 +83,17 @@ GEM
       prettier_print (>= 1.2.0)
     syntax_tree_ext (0.8.1)
       syntax_tree
-    synvert-core (1.35.0)
+    synvert-core (1.35.1)
       activesupport (< 7.0.0)
-      node_mutation (>= 1.24.1)
-      node_query (>= 1.15.1)
+      node_mutation (>= 1.24.3)
+      node_query (>= 1.15.2)
       parallel
       parser
-      parser_node_ext (>= 1.2.2)
+      parser_node_ext (>= 1.3.0)
       prism
-      prism_ext (>= 0.2.3)
+      prism_ext (>= 0.3.1)
       syntax_tree
-      syntax_tree_ext (>= 0.7.2)
+      syntax_tree_ext (>= 0.8.1)
     thor (1.3.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
