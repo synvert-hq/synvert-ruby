@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.10.3 (2024-04-15)
+
+* Update `synvert-core` to 1.35.1
+* Fix `--version` output
+
 ## 1.10.2 (2024-04-07)
 
 * Update `synvert-core` to 1.35.0
