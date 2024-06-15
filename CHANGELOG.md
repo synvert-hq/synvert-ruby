@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.10.4 (2024-06-15)
+
+* Update `synvert-core` to 2.0.2
+* No need to require bundler
+* Add `configure(parser: Synvert::PRISM_PARSER)` to generated snippet
+
 ## 1.10.3 (2024-04-15)
 
 * Update `synvert-core` to 1.35.1
