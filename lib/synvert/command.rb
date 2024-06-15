@@ -118,6 +118,8 @@ module Synvert
           # frozen_string_literal: true
 
           Synvert::Rewriter.new '#{group}', '#{name}' do
+            configure(parser: Synvert::PRISM_PARSER)
+
             description <<~EOS
               It converts Foo to Bar
 
