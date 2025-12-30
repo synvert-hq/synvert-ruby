@@ -7,5 +7,7 @@ gemspec
 
 gem 'guard'
 gem 'guard-rspec'
+gem 'benchmark'
+gem 'logger'
 gem 'rake'
 gem 'rspec'
