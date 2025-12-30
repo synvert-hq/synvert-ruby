@@ -1,4 +1,4 @@
-FROM ruby:3.3-alpine
+FROM ruby:4.0-alpine
 
 RUN apk update && apk add --no-cache git
 
