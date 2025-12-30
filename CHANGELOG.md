@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.11.0 (2025-12-30)
+
+* Support ruby 4.0
+* Update synvert-core to 2.3.0
+* Drop ruby 2.7, 3.0, 3.1 support
+
 ## 1.10.4 (2024-06-15)
 
 * Update `synvert-core` to 2.0.2
