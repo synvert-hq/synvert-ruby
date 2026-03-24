@@ -26,6 +26,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: test
+    if: github.event_name == 'push'
     name: Update gh-pages to docs
     steps:
       - uses: actions/checkout@v3
