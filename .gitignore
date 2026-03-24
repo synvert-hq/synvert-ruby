@@ -16,3 +16,4 @@ test/version_tmp
 tmp
 _site
 .vscode
+.DS_Store
